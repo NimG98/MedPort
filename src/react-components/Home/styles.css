@@ -46,14 +46,19 @@
     padding-right: 1px;
 }
 
-/* .ant-col div {
-    background: rgb(0, 146, 255) none repeat scroll 0% 0%;
-    padding: 8px 0px;
-    height: 100%;
-} */
-
 .ant-card {
-    /* background: rgb(180, 204, 255); */
-    background: rgb(51, 248, 222);
+    /* background: rgb(170, 250, 170); */
+    /* background: rgb(51, 248, 222); */
+    /* background: rgb(162, 255, 243); */
+    /* background-color: rgb(203, 236, 255); */
+    /* background-color: #66c2ff;    
+    background-color: #ecc6c6; */
+    background-color: #004d99;
+    color: rgb(255, 255, 255);
     height: 100%;
+}
+
+.ant-card-head-title {
+    text-align: center;
+    color: white;
 }

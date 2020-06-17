@@ -4,7 +4,8 @@ import "./styles.css";
 import 'antd/dist/antd.css';
 
 import Header from './../Header';
-import bgImage from "./static/doctor-patient2.jpg";
+// import bgImage from "./static/doctor-patient2.jpg";
+import bgImage from "./static/doctor-patient-online.png";
 import { Card, Row, Col } from "antd";
 
 /* Component for the Home page */
