@@ -1,0 +1,64 @@
+@import '~antd/dist/antd.css';
+
+.home__bg {
+    width: 100%;
+    height: 100%;
+}
+
+.home__bg-image {
+    background-color: rgb(215, 255, 154);
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.home__bg-image:before
+{
+    content: "";
+    display: block;
+    padding-top: 65%;
+}
+
+.home__bg-image img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top:      0;
+    left:     0;
+    bottom:   0;
+    right:    0;
+}
+
+
+.ant-row {
+    display: flex;
+    margin-left: -8px;
+    margin-right: -8px;
+}
+
+.ant-col {
+    display: inline-block;
+    width: 100%;
+}
+
+.paddedColumn {
+    padding-left: 1px; 
+    padding-right: 1px;
+}
+
+.ant-card {
+    /* background: rgb(170, 250, 170); */
+    /* background: rgb(51, 248, 222); */
+    /* background: rgb(162, 255, 243); */
+    /* background-color: rgb(203, 236, 255); */
+    /* background-color: #66c2ff;    
+    background-color: #ecc6c6; */
+    background-color: #004d99;
+    color: rgb(255, 255, 255);
+    height: 100%;
+}
+
+.ant-card-head-title {
+    text-align: center;
+    color: white;
+}
