@@ -2,7 +2,9 @@ import React from "react";
 
 import "./styles.css";
 
-// import DoctorSignUp from "./../DoctorSignUp";
+// importing components
+import Header from "../Header";
+import DoctorSignUp from "./../DoctorSignUp";
 
 /* Component for user registration */
 class SignUp extends React.Component {
@@ -37,8 +39,8 @@ class SignUp extends React.Component {
 						// referral
 						0: <p>Enter Referral Code.</p>,
 						// doctor
-						// 1: <DoctorSignUp appComponent={this.props.appComponent} />,
-						1: <p>Doctor SignUp</p>,
+						1: <DoctorSignUp appComponent={this.props.appComponent} />,
+						//1: <p>Doctor SignUp</p>,
 						// secretary
 						2: <p>Secretary Signup</p>,
 						// patient
@@ -56,7 +58,7 @@ class SignUp extends React.Component {
 	
 	// sets statusIndex to the next status value
 	// for testing
-	nextStatus (statusIndex) {
+	nextStatus(statusIndex) {
 		this.setStatus((this.state.statusIndex + 1) % 4);
 	}
 }
