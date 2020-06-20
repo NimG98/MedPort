@@ -3,7 +3,6 @@ import React from "react";
 import "./styles.css";
 
 // importing components
-import Header from "../Header";
 import DoctorSignUp from "./../DoctorSignUp";
 
 /* Component for user registration */
@@ -18,6 +17,9 @@ class SignUp extends React.Component {
 		this.state = {
 			statusIndex: 0,
 		};
+		
+		// binding functions
+		this.getSignUpForm = this.getSignUpForm.bind(this);
 	}
 	
 	render() {
@@ -31,24 +33,19 @@ class SignUp extends React.Component {
 	}
 	
 	// returns the appropriate signup form based on the statusIndex
-	getSignUpForm(index) {
-		return(
-			<React.Fragment>
-				{
-					{
-						// referral
-						0: <p>Enter Referral Code.</p>,
-						// doctor
-						1: <DoctorSignUp appComponent={this.props.appComponent} />,
-						//1: <p>Doctor SignUp</p>,
-						// secretary
-						2: <p>Secretary Signup</p>,
-						// patient
-						3: <p>Patient Signup.</p>,
-					}[index]
-				}
-			</React.Fragment>
-		)
+	getSignUpForm = (index) => {
+		
+		return {
+			// referral
+			0: <p>Enter Referral Code.</p>,
+			// doctor
+			1: <DoctorSignUp appComponent={this.props.appComponent} />,
+			//1: <p>Doctor SignUp</p>,
+			// secretary
+			2: <p>Secretary Signup</p>,
+			// patient
+			3: <p>Patient Signup.</p>,
+		}[index]
 	}
 	
 	// sets the statusIndex value
