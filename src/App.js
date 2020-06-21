@@ -26,7 +26,7 @@ class App extends React.Component {
             <Route exact path='/' render={() => 
                             (<Home state={this.state}/>)}/>
             <Route exact path='/signup' render={() => 
-                            (<SignUp appComponent={this} state={this.state}/>)}/>
+                            (<SignUp appComponent={this} />)}/>
           </Switch>
         </BrowserRouter>
       </div>
