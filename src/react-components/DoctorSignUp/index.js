@@ -4,9 +4,10 @@ import "./styles.css";
 
 // importing components
 import DoctorSignUpForm from "./../DoctorSignUpForm";
+import InstitutionSelector from "./../InstitutionSelector";
 
 // importing actions/required methods
-// import { addDoctor } from "../../actions/app";
+import { addDoctor } from "../../actions/app";
 
 // doctor signup component (controls the multi-step registration process)
 class DoctorSignUp extends React.Component {
@@ -61,17 +62,21 @@ class DoctorSignUp extends React.Component {
 		return {
 			// doctor registration
 			0: <DoctorSignUpForm 
-				firstName={this.state.firstName}
-				lastName={this.state.lastName}
-				email={this.state.email}
-				password={this.state.password}
-				MID={this.state.MID}
-				institutionID={this.state.institutionID}
-				handleChange={this.handleInputChange}
-				next={this.nextStatus}
+					firstName={this.state.firstName}
+					lastName={this.state.lastName}
+					email={this.state.email}
+					password={this.state.password}
+					MID={this.state.MID}
+					institutionID={this.state.institutionID}
+					handleChange={this.handleInputChange}
+					next={this.nextStatus}
 			   />,
 			// institution selection
-			1: <p>Institution Selection</p>,
+			1: <InstitutionSelector 
+					institutionID={this.institutionID}
+					appComponent={this.props.appComponent}
+					handleChange={this.handleInputChange}
+			   />,
 			// institution registration
 			2: <p>Institution Registation</p>,
 		}[index];
