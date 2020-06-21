@@ -1,8 +1,12 @@
 import React from 'react';
+import { uid } from 'react-uid';
 
 import './styles.css';
 
+// importing actions/required methods
+import { getInstitutions } from "../../actions/app";
 
+// component for selecting a preexisiting institution
 class InstitutionSelector extends React.Component {
 	
 	render() {
@@ -10,29 +14,39 @@ class InstitutionSelector extends React.Component {
 		const {
 			institutionID,
 			appComponent,
-			handleChange
+			handleChange,
+			submit
 		} = this.props;
+		
+		const institutions = getInstitutions(appComponent);
 		
 		return (
 			<div className="InstitutionSelector">
 				<h3>Select your institution.</h3>
 				<select
+					name="institutionID"
 					value={institutionID}
-					onChange={this.submit}
+					defaultValue={"Default"}
+					onChange={handleChange}
 			    >
-					<option name="institionID" value="1">Credit Valley Hospital</option>
-					<option name="institionID" value="2">Mississauga Hospital</option>
-					<option name="institionID" value="3">Trillium Hospital</option>
+				{/* default selector value*/}
+					<option value="Default" disabled>Choose Here</option>
+				
+				{/* iterates over institutions array and displays options */}
+				{institutions.map(institution => (
+					<option 
+						key={uid(institution)} 
+						value={institution.id}>
+						{institution.name}
+					</option>
+				))}
+				
 				</select>
+				<button type="submit" onClick={submit}>Submit</button>
 			</div>
 		);
 	}
 	
-	// for testing
-	submit(event) {
-		console.log('Submission');
-		console.log(event.target.value);
-	}
 }
 
 export default InstitutionSelector;

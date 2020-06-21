@@ -32,6 +32,8 @@ class DoctorSignUp extends React.Component {
 		this.getSignUpForm = this.getSignUpForm.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.nextStatus = this.nextStatus.bind(this);
+		this.createDoctor = this.createDoctor.bind(this);
+		this.submit = this.submit.bind(this);
 	}
 	
 	render() {
@@ -76,6 +78,7 @@ class DoctorSignUp extends React.Component {
 					institutionID={this.institutionID}
 					appComponent={this.props.appComponent}
 					handleChange={this.handleInputChange}
+					submit={this.submit}
 			   />,
 			// institution registration
 			2: <p>Institution Registation</p>,
@@ -88,6 +91,22 @@ class DoctorSignUp extends React.Component {
 		this.setState({
 			statusIndex: newIndex
 		});
+	}
+	
+	createDoctor = () => {
+		return({
+			firstName: this.state.firstName,
+			lastName: this.state.lastName,
+			email: this.state.email,
+			password: this.state.password,
+			MID: this.state.MID,
+			institutionID: this.state.institutionID,
+		});
+	}
+	
+	// submit new doctor information
+	submit() {
+		addDoctor(this.props.appComponent, this.createDoctor());
 	}
 	
 }

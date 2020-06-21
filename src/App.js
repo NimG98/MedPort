@@ -4,20 +4,29 @@ import './App.css';
 
 import Home from './react-components/Home';
 import SignUp from './react-components/SignUp';
+import Header from './react-components/Header';
 
 class App extends React.Component {
 
-  state = {}
+  state = {
+	  doctors: [ 
+		{ id: 1, firstName: 'Bob', lastName: 'Builder', MID: 123456,  email: 'b.build@fake.com', password: 'abcdef'}
+	  ],
+	  institutions: [
+		{ id: 1, name: 'Credit Valley Hospital', address: 'xxx Credit Valley Blvd', postalCode: 'B5C 4J6', phoneNumber: '9055558523'}
+	  ],
+  }
 
   render(){
     return (
       <div className="App">
+	    <Header />
         <BrowserRouter>
           <Switch>
             <Route exact path='/' render={() => 
                             (<Home state={this.state}/>)}/>
             <Route exact path='/signup' render={() => 
-                            (<SignUp state={this.state}/>)}/>
+                            (<SignUp appComponent={this} state={this.state}/>)}/>
           </Switch>
         </BrowserRouter>
       </div>
