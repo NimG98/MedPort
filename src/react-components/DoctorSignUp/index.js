@@ -6,9 +6,10 @@ import "./styles.css";
 // importing components
 import DoctorSignUpForm from "./../DoctorSignUpForm";
 import InstitutionSelector from "./../InstitutionSelector";
+import InstitutionCreationForm from "./../InstitutionCreationForm";
 
 // importing actions/required methods
-import { addDoctor } from "../../actions/app";
+import { addDoctor, createDoctorID } from "../../actions/app";
 
 // doctor signup component (controls the multi-step registration process)
 class DoctorSignUp extends React.Component {
@@ -33,7 +34,9 @@ class DoctorSignUp extends React.Component {
 		this.getSignUpForm = this.getSignUpForm.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.nextStatus = this.nextStatus.bind(this);
+		this.previousStatus = this.previousStatus.bind(this);
 		this.createDoctor = this.createDoctor.bind(this);
+		this.setInstitutionID = this.setInstitutionID.bind(this);
 		this.submit = this.submit.bind(this);
 	}
 	
@@ -59,6 +62,15 @@ class DoctorSignUp extends React.Component {
 		});
 	}
 	
+	// allows InstitutionCreationForm to set the institutionID directly
+	setInstitutionID(id) {
+		console.log("ID: " + id);
+		
+		this.setState({
+			institutionID: id
+		});
+	}
+	
 	// returns the appropriate signup form based on the statusIndex
 	getSignUpForm = (index) => {
 		
@@ -80,9 +92,15 @@ class DoctorSignUp extends React.Component {
 					appComponent={this.props.appComponent}
 					handleChange={this.handleInputChange}
 					submit={this.submit}
+					next={this.nextStatus}
 			   />,
 			// institution registration
-			2: <p>Institution Registation</p>,
+			2: <InstitutionCreationForm
+					setInstitutionID={this.setInstitutionID}
+					appComponent={this.props.appComponent}
+					back={this.previousStatus}
+					submit={this.submit}
+				/>,
 		}[index];
 	}
 	
@@ -94,8 +112,19 @@ class DoctorSignUp extends React.Component {
 		});
 	}
 	
+	// sets statusIndex to the previous value, unless zero
+	previousStatus() {
+		if (this.state.statusIndex) {
+			const newIndex = this.state.statusIndex - 1;
+			this.setState({
+				statusIndex: newIndex
+			});
+		}
+	}
+	
 	createDoctor = () => {
 		return({
+			id: createDoctorID(this.props.appComponent),
 			firstName: this.state.firstName,
 			lastName: this.state.lastName,
 			email: this.state.email,
