@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from "react-router";
 
 import "./styles.css";
 
@@ -107,8 +108,10 @@ class DoctorSignUp extends React.Component {
 	// submit new doctor information
 	submit() {
 		addDoctor(this.props.appComponent, this.createDoctor());
+		// navigate back to login page
+		this.props.history.push('/');
 	}
 	
 }
 
-export default DoctorSignUp;
+export default withRouter(DoctorSignUp);
