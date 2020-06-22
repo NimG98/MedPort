@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import "./styles.css";
 
@@ -12,7 +13,6 @@ class DoctorSignUpForm extends React.Component {
 			email,
 			password,
 			MID,
-			institutionID,
 			handleChange,
 			next
 		} = this.props;
@@ -55,7 +55,9 @@ class DoctorSignUpForm extends React.Component {
 					value={password}
 					onChange={handleChange}  />
 					
-				<button>Login</button>
+				<Link to="/">	
+					<button>Login</button>
+				</Link>
 				
 				<button onClick={next}>Next</button>
 			</div>

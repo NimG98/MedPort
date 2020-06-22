@@ -91,6 +91,7 @@ class DoctorSignUp extends React.Component {
 					handleChange={this.handleInputChange}
 					submit={this.submit}
 					next={this.nextStatus}
+					back={this.previousStatus}
 			   />,
 			// institution registration
 			2: <InstitutionCreationForm

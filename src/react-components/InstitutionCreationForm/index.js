@@ -27,10 +27,7 @@ class InstitutionCreationForm extends React.Component {
 	render() {
 		
 		const {
-				setInstitutionID,
-				appComponent,
 				back,
-				submit,
 			} = this.props;
 		
 		return(

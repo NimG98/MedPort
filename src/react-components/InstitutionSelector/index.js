@@ -16,7 +16,8 @@ class InstitutionSelector extends React.Component {
 			appComponent,
 			handleChange,
 			submit,
-			next
+			next,
+			back
 		} = this.props;
 		
 		const institutions = getInstitutions(appComponent);
@@ -43,6 +44,7 @@ class InstitutionSelector extends React.Component {
 				))}
 				
 				</select>
+				<button onClick={back}>Back</button>
 				<button onClick={submit}>Submit</button>
 				<button onClick={next}>Create an Institution</button>
 			</div>
