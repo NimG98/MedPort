@@ -10,6 +10,7 @@ import InstitutionCreationForm from "./../InstitutionCreationForm";
 
 // importing actions/required methods
 import { addDoctor, createDoctorID } from "../../actions/app";
+import { redirect } from "../../actions/router";
 
 // doctor signup component (controls the multi-step registration process)
 class DoctorSignUp extends React.Component {
@@ -62,7 +63,6 @@ class DoctorSignUp extends React.Component {
 	
 	// allows InstitutionCreationForm to set the institutionID directly
 	setInstitutionID(id) {
-		console.log("ID: " + id);
 		
 		this.setState({
 			institutionID: id
@@ -136,7 +136,7 @@ class DoctorSignUp extends React.Component {
 	submit() {
 		addDoctor(this.props.appComponent, this.createDoctor());
 		// navigate back to login page
-		this.props.history.replace('/');
+		redirect(this, '/');
 	}
 	
 }
