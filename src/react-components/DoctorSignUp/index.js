@@ -42,8 +42,6 @@ class DoctorSignUp extends React.Component {
 	
 	render() {
 		
-		const { appComponent } = this.props;
-		
 		return (
 			<div className="DoctorSignUp">
 				{this.getSignUpForm(this.state.statusIndex)}
@@ -138,7 +136,7 @@ class DoctorSignUp extends React.Component {
 	submit() {
 		addDoctor(this.props.appComponent, this.createDoctor());
 		// navigate back to login page
-		this.props.history.push('/');
+		this.props.history.replace('/');
 	}
 	
 }
