@@ -15,6 +15,13 @@ class App extends React.Component {
 	  institutions: [
 		{ id: 1, name: 'Credit Valley Hospital', address: 'xxx Credit Valley Blvd', postalCode: 'B5C 4J6', phoneNumber: '9055558523'}
 	  ],
+	  // P - patient, S - secretary
+	  referrals: {
+			// code: doctorID
+			'P001': 1,
+			// code: institutionID
+			'S001': 1,
+	  },
   }
 
   render(){
