@@ -20,7 +20,6 @@ class App extends React.Component {
   render(){
     return (
       <div className="App">
-	    <Header />
         <BrowserRouter>
           <Switch>
             <Route exact path='/' render={() => 
