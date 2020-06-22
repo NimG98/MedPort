@@ -4,6 +4,7 @@ import "./styles.css";
 
 // importing components
 import DoctorSignUp from "./../DoctorSignUp";
+import ReferralForm from "../ReferralForm";
 
 /* Component for user registration */
 class SignUp extends React.Component {
@@ -20,12 +21,14 @@ class SignUp extends React.Component {
 		
 		// binding functions
 		this.getSignUpForm = this.getSignUpForm.bind(this);
+		this.setStatus = this.setStatus.bind(this);
 	}
 	
 	render() {
 		return (
 			<div className="SignUp">
 				{this.getSignUpForm(this.state.statusIndex)}
+				{this.state.statusIndex ? null: <button onClick={ () => this.nextStatus(this.state.statusIndex) }>Are you a Physician?</button>}
 				{/* for testing */}
 				<button onClick={ () => this.nextStatus(this.state.statusIndex) }>{this.status[this.state.statusIndex]}</button>
 			</div>
@@ -37,10 +40,12 @@ class SignUp extends React.Component {
 		
 		return {
 			// referral
-			0: <p>Enter Referral Code.</p>,
+			0: <ReferralForm 
+					appComponent={this.props.appComponent} 
+					setStatus={this.setStatus}
+				/>,
 			// doctor
 			1: <DoctorSignUp appComponent={this.props.appComponent} />,
-			//1: <p>Doctor SignUp</p>,
 			// secretary
 			2: <p>Secretary Signup</p>,
 			// patient

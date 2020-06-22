@@ -13,6 +13,19 @@ export const addDoctor = (app, doctor) => {
 
 };
 
+// returns new id, incremented from existing doctor objects
+export const createDoctorID = (app) => {
+	const doctors = app.state.doctors
+	
+	if (doctors.length) {
+		const lastID = doctors[doctors.length - 1].id;
+		return (lastID + 1);
+	}
+	
+	return 1;
+	
+}
+
 // returns the insitutions list from the app component state
 export const getInstitutions = (app) => {
 	// this would be an api call to the backend
@@ -33,19 +46,6 @@ export const addInstitution = (app, institution) => {
 	});
 }
 
-// returns new id, incremented from existing doctor objects
-export const createDoctorID = (app) => {
-	const doctors = app.state.doctors
-	
-	if (doctors.length) {
-		const lastID = doctors[doctors.length - 1].id;
-		return (lastID + 1);
-	}
-	
-	return 1;
-	
-}
-
 // returns new id, incremented from existing institution objects
 export const createInstitutionID = (app) => {
 	const institutions = app.state.institutions;
@@ -57,4 +57,15 @@ export const createInstitutionID = (app) => {
 	
 	return 1;
 	
+}
+
+// returns referrer ID from referral code in app component state
+export const submitReferralCode = (app, code) => {
+	// this would be an api call to the backend
+
+	const formattedCode = code.toUpperCase();
+	
+	const refferrerID = app.state.referrals[formattedCode];
+	
+	return refferrerID;
 }
