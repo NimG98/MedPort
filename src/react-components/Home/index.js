@@ -18,13 +18,13 @@ class Home extends React.Component {
         <div className="home__bg-image">
           <img alt={"lobgImagego"} src={bgImage}/>
         </div>
-        <Row gutter={16}>
+        <Row>
           {/* <Col span={8}><div >Hello</div></Col>
           <Col span={8}><div >Hello</div></Col>
           <Col span={8}><div >Hello</div></Col> */}
 
-          <Col span={8} className="paddedColumn">
-            <Card title="Feature 1" bordered={false}>
+          <Col span={8}>
+            <Card title="Feature 1" bordered={false} className="roundedCardLeft">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
             incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis 
             nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
@@ -33,7 +33,7 @@ class Home extends React.Component {
             sunt in culpa qui officia deserunt mollit anim id est laborum.
             </Card>
           </Col>
-          <Col span={8} className="paddedColumn">
+          <Col span={8}>
             <Card title="Feature 2" bordered={false}>
             Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium 
             doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore 
@@ -42,8 +42,8 @@ class Home extends React.Component {
             fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
             </Card>
           </Col>
-          <Col span={8} className="paddedColumn">
-            <Card title="Feature 3" bordered={false}>
+          <Col span={8}>
+            <Card title="Feature 3" bordered={false} className="roundedCardRight">
             Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam 
             nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
             </Card>

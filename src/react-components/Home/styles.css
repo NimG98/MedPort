@@ -32,8 +32,7 @@
 
 .ant-row {
     display: flex;
-    margin-left: -8px;
-    margin-right: -8px;
+    padding: 0px 30px 20px 30px;
 }
 
 .ant-col {
@@ -41,18 +40,18 @@
     width: 100%;
 }
 
-.paddedColumn {
+/* .paddedColumn {
     padding-left: 1px; 
     padding-right: 1px;
-}
+}*/
 
 .ant-card {
     /* background: rgb(170, 250, 170); */
     /* background: rgb(51, 248, 222); */
     /* background: rgb(162, 255, 243); */
     /* background-color: rgb(203, 236, 255); */
-    /* background-color: #66c2ff;    
-    background-color: #ecc6c6; */
+    /* background-color: #66c2ff; */ 
+    /* background-color: #ecc6c6; */
     background-color: #004d99;
     color: rgb(255, 255, 255);
     height: 100%;
@@ -61,4 +60,14 @@
 .ant-card-head-title {
     text-align: center;
     color: white;
+}
+
+.roundedCardLeft {
+    border-top-left-radius: 10%;
+    border-bottom-left-radius: 10%;
+}
+
+.roundedCardRight {
+    border-top-right-radius: 10%;
+    border-bottom-right-radius: 10%;
 }
