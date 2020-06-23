@@ -59,6 +59,33 @@ export const createInstitutionID = (app) => {
 	
 }
 
+// adds a new patient to the app component state
+export const addPatient = (app, patient) => {
+	// this would be an api call to the backend
+	
+	const newPatients = app.state.patients.concat(patient);
+	
+	app.setState({
+		patients: newPatients
+	});
+	
+	console.log(newPatients);
+
+};
+
+// returns new id, incremented from existing patient objects
+export const createPatientID = (app) => {
+	const patients = app.state.patients
+	
+	if (patients.length) {
+		const lastID = patients[patients.length - 1].id;
+		return (lastID + 1);
+	}
+	
+	return 1;
+	
+}
+
 // returns referrer ID from referral code in app component state
 export const submitReferralCode = (app, code) => {
 	// this would be an api call to the backend
@@ -68,4 +95,24 @@ export const submitReferralCode = (app, code) => {
 	const refferrerID = app.state.referrals[formattedCode];
 	
 	return refferrerID;
+}
+
+// removes a particular referral code from the app component state
+export const removeReferralCode = (app, code) => {
+	// this would be an api call to the backend
+	
+	const referrals = app.state.referrals;
+	
+	if (referrals[code]) {
+		const newReferrals = Object.assign({}, referrals);
+		
+		delete newReferrals[code];
+		
+		console.log(app.state.referrals);
+		console.log(newReferrals);
+		
+		app.setState({
+			referrals: newReferrals
+		});
+	}
 }

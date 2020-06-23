@@ -4,7 +4,7 @@ import './App.css';
 
 import Home from './react-components/Home';
 import SignUp from './react-components/SignUp';
-import Header from './react-components/Header';
+// import Header from './react-components/Header';
 
 class App extends React.Component {
 
@@ -14,6 +14,9 @@ class App extends React.Component {
 	  ],
 	  institutions: [
 		{ id: 1, name: 'Credit Valley Hospital', address: 'xxx Credit Valley Blvd', postalCode: 'B5C 4J6', phoneNumber: '9055558523'}
+	  ],
+	  patients: [
+		  {id: 1, firstName: 'Jane', lastName: 'Doe', address: '123 Main St', postalCode: 'H3B 2JC', HCN: '5555555123XX', email: 'jdoe@example.com', password: '12345', doctorID: 1}
 	  ],
 	  // P - patient, S - secretary
 	  referrals: {
@@ -27,6 +30,7 @@ class App extends React.Component {
   render(){
     return (
       <div className="App">
+		// <Header />
         <BrowserRouter>
           <Switch>
             <Route exact path='/' render={() => 

@@ -5,6 +5,7 @@ import "./styles.css";
 // importing components
 import DoctorSignUp from "./../DoctorSignUp";
 import ReferralForm from "../ReferralForm";
+import PatientSignUpForm from "../PatientSignUpForm";
 
 /* Component for user registration */
 class SignUp extends React.Component {
@@ -17,7 +18,7 @@ class SignUp extends React.Component {
 		
 		this.state = {
 			statusIndex: 0,
-			referrerId: '',
+			referrerID: '',
 		};
 		
 		// binding functions
@@ -30,7 +31,7 @@ class SignUp extends React.Component {
 		return (
 			<div className="SignUp">
 				{this.getSignUpForm(this.state.statusIndex)}
-				{this.state.statusIndex ? null: <button onClick={ () => this.nextStatus() }>Are you a Physician?</button>}
+				{this.state.statusIndex ? null: <button onClick={ () => this.setStatus(1) }>Are you a Physician?</button>}
 				{/* for testing */}
 				<button onClick={ () => this.nextStatus() }>{this.status[this.state.statusIndex]}</button>
 			</div>
@@ -52,7 +53,10 @@ class SignUp extends React.Component {
 			// secretary
 			2: <p>Secretary Signup</p>,
 			// patient
-			3: <p>Patient Signup.</p>,
+			3: <PatientSignUpForm 
+					referrerID={this.state.referrerID}
+					appComponent={this.props.appComponent}
+				/>,
 		}[index]
 	}
 	
@@ -70,7 +74,7 @@ class SignUp extends React.Component {
 	// sets the referrerId value
 	setReferrerID(id) {
 		this.setState({
-			referrerId: id
+			referrerID: id
 		});
 	}
 }
