@@ -32,54 +32,63 @@ class PatientSignUpForm extends React.Component {
 	render() {
 		return (
 			<div className="PatientSignUpForm">
-				<label>First Name</label>
-				<input 
-					type='text' 
-					name='firstName' 
-					value={this.state.firstName}
-					onChange={this.handleInputChange} />
-						
-				<label>Last Name</label>
-				<input 
-					type='text' 
-					name='lastName' 
-					value={this.state.lastName}
-					onChange={this.handleInputChange} />
-						
-				<label>Address</label>
-				<input 
-					type='text' 
-					name='address' 
-					value={this.state.address}
-					onChange={this.handleInputChange} />
-						
-				<label>Postal Code</label>
-				<input 
-					type='text' 
-					name='postalCode' 
-					value={this.state.postalCode}
-					onChange={this.handleInputChange} />
-						
-				<label>Health Card Number</label>
-				<input 
-					type='text' 
-					name='HCN' 
-					value={this.state.HCN}
-					onChange={this.handleInputChange} />
-						
-				<label>Email</label>
-				<input 
-					type='email' 
-					name='email' 
-					value={this.state.email}
-					onChange={this.handleInputChange} />
-						
-				<label>Password</label>
-				<input 
-					type='password' 
-					name='password' 
-					value={this.state.password}
-					onChange={this.handleInputChange} />
+				<div className="container">
+					<label>First Name</label>
+					<input 
+						type='text' 
+						name='firstName' 
+						placeholder='First Name'
+						value={this.state.firstName}
+						onChange={this.handleInputChange} />
+							
+					<label>Last Name</label>
+					<input 
+						type='text' 
+						name='lastName' 
+						placeholder='Last Name'
+						value={this.state.lastName}
+						onChange={this.handleInputChange} />
+							
+					<label>Address</label>
+					<input 
+						type='text' 
+						name='address' 
+						placeholder='Address'
+						value={this.state.address}
+						onChange={this.handleInputChange} />
+							
+					<label>Postal Code</label>
+					<input 
+						type='text' 
+						name='postalCode' 
+						placeholder='Postal Code'
+						value={this.state.postalCode}
+						onChange={this.handleInputChange} />
+							
+					<label>Health Card Number</label>
+					<input 
+						type='text' 
+						name='HCN' 
+						placeholder='Health Card Number'
+						value={this.state.HCN}
+						onChange={this.handleInputChange} />
+							
+					<label>Email</label>
+					<input 
+						type='email' 
+						name='email' 
+						placeholder='Email'
+						value={this.state.email}
+						onChange={this.handleInputChange} />
+							
+					<label>Password</label>
+					<input 
+						type='password' 
+						name='password' 
+						placeholder='Password'
+						value={this.state.password}
+						onChange={this.handleInputChange} />
+				</div>
 					
 				<Link to="/">
 					<button className="login">Login</button>
