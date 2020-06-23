@@ -10,11 +10,18 @@
 	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
+.ReferralForm .title {
+	font-weight: bold;
+	margin-left: 20px;
+	margin-top: 30px;
+	padding-top: 10px;
+}
+
 .ReferralForm .container {
 	display: grid;
 	margin-bottom: 10px;
-	margin-top: 30px;
-	padding-top: 10px;
+	/* margin-top: 30px;
+	padding-top: 10px; */
 }
 
 .ReferralForm .container input {

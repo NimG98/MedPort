@@ -34,8 +34,12 @@ class ReferralForm extends React.Component {
 			<div className="ReferralForm">
 				{this.state.error ? <h2>{this.state.errorCode}</h2> : null}
 				
+				<div className="title">
+					<h2><b>Enter Referral Code</b></h2>
+				</div>
+				
 				<div className="container">
-					<label>Enter Referral Code</label>
+					{/* <label>Enter Referral Code</label> */}
 					<input 
 						type='text' 
 						name='code' 
