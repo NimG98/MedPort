@@ -45,7 +45,7 @@ class ReferralForm extends React.Component {
 				</div>
 					
 				<Link to="/">	
-					<button className="back" >Back</button>
+					<button className="login" >Login</button>
 				</Link>
 					
 				<button className="next" onClick={this.submit} >Next</button>
@@ -68,8 +68,6 @@ class ReferralForm extends React.Component {
 	
 	/* 
 		retrieves referrerID based on referral code and redirects to appropriate signup page
-		
-		TODO: pass referral code to next signup component 
 	*/
 	submit() {
 		const code = this.state.code;
