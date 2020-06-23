@@ -32,6 +32,10 @@ class PatientSignUpForm extends React.Component {
 	render() {
 		return (
 			<div className="PatientSignUpForm">
+				<div className="title">
+					<h2><b>Patient Sign Up</b></h2>
+				</div>
+			
 				<div className="container">
 					<label>First Name</label>
 					<input 
