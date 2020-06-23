@@ -3,7 +3,10 @@
 	margin: auto;
 	border-radius: 5px;
 	padding-bottom: 10px;
+	/* style 1 */
 	background-color: #f5f5f5;
+	/* style 2 */
+	/* background-color: #1F90CC; */
 	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
@@ -23,13 +26,19 @@
 }
 
 .ReferralForm .container input:focus {
+	/* style 1 */
 	border: 1px solid #1890ff;
+	/* style 2 */
+	/* border: 1px solid #DA1C4B; */
 }
 
 .ReferralForm .container label {
 	margin-left: 20px;
 	font-weight: bold;
+	/* style 1 */
 	color: #212529;
+	/* style 2 */
+	/* color: #ffffff; */
 }
 
 .ReferralForm button {
@@ -51,7 +60,10 @@
 }
 
 .ReferralForm button:focus {
+	/* style 1 */
 	border: 1px solid #1890ff;
+	/* style 2 */
+	/* border: 1px solid #DA1C4B; */
 }
 
 .ReferralForm .login {
