@@ -63,11 +63,13 @@
 }
 
 .roundedCardLeft {
-    border-top-left-radius: 10%;
-    border-bottom-left-radius: 10%;
+    border-top-left-radius: 5%;
+    border-bottom-left-radius: 5%;
+    border-right: 1px solid white;
 }
 
 .roundedCardRight {
-    border-top-right-radius: 10%;
-    border-bottom-right-radius: 10%;
+    border-top-right-radius: 5%;
+    border-bottom-right-radius: 5%;
+    border-left: 1px solid white;
 }
