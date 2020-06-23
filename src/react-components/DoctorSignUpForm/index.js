@@ -19,47 +19,49 @@ class DoctorSignUpForm extends React.Component {
 		
 		return (
 			<div className="DoctorSignUpForm">
-				<label>First Name</label>
-				<input 
-					type='text' 
-					name='firstName' 
-					value={firstName}
-					onChange={handleChange} />
+				<div className="container">
+					<label>First Name</label>
+					<input 
+						type='text' 
+						name='firstName' 
+						value={firstName}
+						onChange={handleChange} />
 				
-				<label>Last Name</label>					
-				<input 
-					type='text' 
-					name='lastName' 
-					value={lastName}
-					onChange={handleChange} /> 
-					
-				<label>Medical ID Number</label>
-				<input 
-					type='text' 
-					name='MID'
-					value={MID}
-					pattern='[0-9]*'
-					onChange={(e) => this.numberChangeHandler(e, handleChange)} />
+					<label>Last Name</label>					
+					<input 
+						type='text' 
+						name='lastName' 
+						value={lastName}
+						onChange={handleChange} /> 
+								
+					<label>Medical ID Number</label>
+					<input 
+						type='text' 
+						name='MID'
+						value={MID}
+						pattern='[0-9]*'
+						onChange={(e) => this.numberChangeHandler(e, handleChange)} />
+			
+					<label>Email</label>
+					<input 
+						type='email' 
+						name='email' 
+						value={email}
+						onChange={handleChange} />
 				
-				<label>Email</label>
-				<input 
-					type='email' 
-					name='email' 
-					value={email}
-					onChange={handleChange} />
-				
-				<label>Password</label>
-				<input 
-					type='password' 
-					name='password' 
-					value={password}
-					onChange={handleChange}  />
+					<label>Password</label>
+					<input 
+						type='password' 
+						name='password' 
+						value={password}
+						onChange={handleChange}  />
+				</div>
 					
 				<Link to="/">	
-					<button>Login</button>
+					<button className="login">Login</button>
 				</Link>
 				
-				<button onClick={next}>Next</button>
+				<button onClick={next} className="next">Next</button>
 			</div>
 		);
 	}
