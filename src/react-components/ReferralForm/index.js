@@ -72,14 +72,22 @@ class ReferralForm extends React.Component {
 		TODO: pass referral code to next signup component 
 	*/
 	submit() {
-		const referrerID = submitReferralCode(this.props.appComponent, this.state.code);
+		const code = this.state.code;
+		
+		const referrerID = submitReferralCode(this.props.appComponent, code);
 		
 		if (referrerID) {
 			
-			if (this.state.code.startsWith('S')) {
+			if (code.startsWith('S')) {
+				// sets the referrerID
+				this.props.setReferrerID(referrerID);
+				
 				// secretary referral code
 				this.props.setStatus(2);
-			} else if (this.state.code.startsWith('P')) {
+			} else if (code.startsWith('P')) {
+				// sets the referrerID
+				this.props.setReferrerID(referrerID);
+				
 				// patient referral code
 				this.props.setStatus(3);
 			} else {

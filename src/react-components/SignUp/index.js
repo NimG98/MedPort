@@ -17,20 +17,22 @@ class SignUp extends React.Component {
 		
 		this.state = {
 			statusIndex: 0,
+			referrerId: '',
 		};
 		
 		// binding functions
 		this.getSignUpForm = this.getSignUpForm.bind(this);
 		this.setStatus = this.setStatus.bind(this);
+		this.setReferrerID = this.setReferrerID.bind(this);
 	}
 	
 	render() {
 		return (
 			<div className="SignUp">
 				{this.getSignUpForm(this.state.statusIndex)}
-				{this.state.statusIndex ? null: <button onClick={ () => this.nextStatus(this.state.statusIndex) }>Are you a Physician?</button>}
+				{this.state.statusIndex ? null: <button onClick={ () => this.nextStatus() }>Are you a Physician?</button>}
 				{/* for testing */}
-				<button onClick={ () => this.nextStatus(this.state.statusIndex) }>{this.status[this.state.statusIndex]}</button>
+				<button onClick={ () => this.nextStatus() }>{this.status[this.state.statusIndex]}</button>
 			</div>
 		);
 	}
@@ -43,6 +45,7 @@ class SignUp extends React.Component {
 			0: <ReferralForm 
 					appComponent={this.props.appComponent} 
 					setStatus={this.setStatus}
+					setReferrerID={this.setReferrerID}
 				/>,
 			// doctor
 			1: <DoctorSignUp appComponent={this.props.appComponent} />,
@@ -60,8 +63,15 @@ class SignUp extends React.Component {
 	
 	// sets statusIndex to the next status value
 	// for testing
-	nextStatus(statusIndex) {
+	nextStatus() {
 		this.setStatus((this.state.statusIndex + 1) % 4);
+	}
+	
+	// sets the referrerId value
+	setReferrerID(id) {
+		this.setState({
+			referrerId: id
+		});
 	}
 }
 
