@@ -68,8 +68,6 @@ export const addPatient = (app, patient) => {
 	app.setState({
 		patients: newPatients
 	});
-	
-	console.log(newPatients);
 
 };
 
@@ -107,9 +105,6 @@ export const removeReferralCode = (app, code) => {
 		const newReferrals = Object.assign({}, referrals);
 		
 		delete newReferrals[code];
-		
-		console.log(app.state.referrals);
-		console.log(newReferrals);
 		
 		app.setState({
 			referrals: newReferrals
