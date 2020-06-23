@@ -32,36 +32,46 @@ class InstitutionCreationForm extends React.Component {
 		
 		return(
 			<div className="InstitutionCreationForm">
-				<label>Name</label>
-				<input 
-					type='text' 
-					name='name' 
-					value={this.state.name}
-					onChange={this.handleInputChange} />
-				
-				<label>Address</label>					
-				<input 
-					type='text' 
-					name='address' 
-					value={this.state.address}
-					onChange={this.handleInputChange} /> 
+				<div className="title">
+					<h2><b>Create an Institution</b></h2>
+				</div>
+			
+				<div className="container">
+					<label>Name</label>
+					<input 
+						type='text' 
+						name='name' 
+						placeholder='Name'
+						value={this.state.name}
+						onChange={this.handleInputChange} />
 					
-				<label>Postal Code</label>
-				<input 
-					type='text' 
-					name='postalCode'
-					value={this.state.postalCode}
-					onChange={this.handleInputChange} />
+					<label>Address</label>					
+					<input 
+						type='text' 
+						name='address' 
+						placeholder='Address'
+						value={this.state.address}
+						onChange={this.handleInputChange} /> 
+						
+					<label>Postal Code</label>
+					<input 
+						type='text' 
+						name='postalCode'
+						placeholder='Postal Code'
+						value={this.state.postalCode}
+						onChange={this.handleInputChange} />
+					
+					<label>Phone Number</label>
+					<input 
+						type='tel' 
+						name='phoneNumber' 
+						placeholder='Phone Number'
+						value={this.state.phoneNumber}
+						onChange={this.handleInputChange} />
+				</div>
 				
-				<label>Phone Number</label>
-				<input 
-					type='tel' 
-					name='phoneNumber' 
-					value={this.state.phoneNumber}
-					onChange={this.handleInputChange} />
-				
-				<button onClick={back}>Back</button>
-				<button onClick={this.submit}>Submit</button>
+				<button className="back" onClick={back}>Back</button>
+				<button className="submit" onClick={this.submit}>Submit</button>
 			</div>
 		);
 	}
