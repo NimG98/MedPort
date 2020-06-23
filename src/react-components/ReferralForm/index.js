@@ -26,22 +26,29 @@ class ReferralForm extends React.Component {
 	
 	render() {
 		
+		const {
+			setStatus,
+		} = this.props;
+		
 		return (
 			<div className="ReferralForm">
 				{this.state.error ? <h2>{this.state.errorCode}</h2> : null}
-			
-				<label>Enter Referral Code</label>
-				<input 
-					type='text' 
-					name='code' 
-					value={this.state.code}
-					onChange={this.handleInputChange} />
+				
+				<div className="container">
+					<label>Enter Referral Code</label>
+					<input 
+						type='text' 
+						name='code' 
+						placeholder='Referral Code'
+						value={this.state.code}
+						onChange={this.handleInputChange} />
+				</div>
 					
 				<Link to="/">	
-					<button>Login</button>
+					<button className="back" >Back</button>
 				</Link>
 					
-				<button onClick={this.submit} >Submit</button>
+				<button className="next" onClick={this.submit} >Next</button>
 			</div>
 		)
 	}
