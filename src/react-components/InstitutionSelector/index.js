@@ -24,29 +24,40 @@ class InstitutionSelector extends React.Component {
 		
 		return (
 			<div className="InstitutionSelector">
-				<h3>Select your institution.</h3>
-				<select
-					name="institutionID"
-					value={institutionID}
-					defaultValue={"Default"}
-					onChange={handleChange}
-			    >
-				{/* default selector value*/}
-					<option value="Default" disabled>Choose Here</option>
+				<div className="main_form">
+					<div className="title">
+						<h2><b>Select Your Institution</b></h2>
+					</div>
 				
-				{/* iterates over institutions array and displays options */}
-				{institutions.map(institution => (
-					<option 
-						key={uid(institution)} 
-						value={institution.id}>
-						{institution.name}
-					</option>
-				))}
+					<div className="container">
+						<select
+							name="institutionID"
+							value={institutionID}
+							defaultValue={"Default"}
+							onChange={handleChange}
+						>
+							{/* default selector value*/}
+							<option value="Default" disabled>Choose Here</option>
+							
+							{/* iterates over institutions array and displays options */}
+							{institutions.map(institution => (
+								<option 
+									key={uid(institution)} 
+									value={institution.id}>
+									{institution.name}
+								</option>
+							))}
+						</select>
+					</div>
+					
+					<button className="back" onClick={back}>Back</button>
+					<button className="submit" onClick={submit}>Submit</button>
+				</div>
 				
-				</select>
-				<button onClick={back}>Back</button>
-				<button onClick={submit}>Submit</button>
-				<button onClick={next}>Create an Institution</button>
+				<div className="secondary_form">
+					<h3>Can't find your institution? </h3>
+					<button className="create" onClick={next}>Create</button>
+				</div>
 			</div>
 		);
 	}
