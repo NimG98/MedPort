@@ -34,25 +34,32 @@ class ReferralForm extends React.Component {
 			<div className="ReferralForm">
 				{this.state.error ? <h2>{this.state.errorCode}</h2> : null}
 				
-				<div className="title">
-					<h2><b>Enter Referral Code</b></h2>
+				<div className="main_form">
+					<div className="title">
+						<h2><b>Enter Referral Code</b></h2>
+					</div>
+					
+					<div className="container">
+						{/* <label>Enter Referral Code</label> */}
+						<input 
+							type='text' 
+							name='code' 
+							placeholder='Referral Code'
+							value={this.state.code}
+							onChange={this.handleInputChange} />
+					</div>
+						
+					<Link to="/">	
+						<button className="login" >Login</button>
+					</Link>
+						
+					<button className="next" onClick={this.submit} >Next</button>
 				</div>
 				
-				<div className="container">
-					{/* <label>Enter Referral Code</label> */}
-					<input 
-						type='text' 
-						name='code' 
-						placeholder='Referral Code'
-						value={this.state.code}
-						onChange={this.handleInputChange} />
+				<div className="secondary_form">
+					<h3>Are you a Doctor? </h3>
+					<button className="signup" onClick={() => setStatus(1)}>Sign Up</button>
 				</div>
-					
-				<Link to="/">	
-					<button className="login" >Login</button>
-				</Link>
-					
-				<button className="next" onClick={this.submit} >Next</button>
 			</div>
 		)
 	}

@@ -31,7 +31,7 @@ class SignUp extends React.Component {
 		return (
 			<div className="SignUp">
 				{this.getSignUpForm(this.state.statusIndex)}
-				{this.state.statusIndex ? null: <button onClick={ () => this.setStatus(1) }>Are you a Physician?</button>}
+				{/* this.state.statusIndex ? null: <button onClick={ () => this.setStatus(1) }>Are you a Physician?</button> */}
 				{/* for testing */}
 				<button onClick={ () => this.nextStatus() }>{this.status[this.state.statusIndex]}</button>
 			</div>
