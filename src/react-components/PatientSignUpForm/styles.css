@@ -1,6 +1,7 @@
 .PatientSignUpForm {
 	max-width: 280px;
 	margin: auto;
+	margin-bottom: 15px;
 	border-radius: 5px;
 	padding-bottom: 10px;
 	/* style 1 */
