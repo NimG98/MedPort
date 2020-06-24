@@ -14,15 +14,10 @@ class Home extends React.Component {
     return (
       <div className="home__bg">
         <Header />
-        {/* <img alt={"lobgImagego"} src={bgImage} className="home__bg-image"/> */}
-        <div className="home__bg-image">
-          <img alt={"lobgImagego"} src={bgImage}/>
-        </div>
-        <Row>
-          {/* <Col span={8}><div >Hello</div></Col>
-          <Col span={8}><div >Hello</div></Col>
-          <Col span={8}><div >Hello</div></Col> */}
-
+        <Row className="login-background">
+          <img alt={"lobgImagego"} src={bgImage} className="home__bg-image"/>
+        </Row>
+        <Row className="featureDisplay">
           <Col span={8}>
             <Card title="Feature 1" bordered={false} className="roundedCardLeft">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 

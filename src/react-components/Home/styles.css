@@ -30,20 +30,15 @@
 }
 
 
-.ant-row {
-    display: flex;
+.featureDisplay {
+    /* display: flex; */
     padding: 0px 30px 20px 30px;
 }
 
-.ant-col {
+/* .ant-col {
     display: inline-block;
     width: 100%;
-}
-
-/* .paddedColumn {
-    padding-left: 1px; 
-    padding-right: 1px;
-}*/
+} */
 
 .ant-card {
     /* background: rgb(170, 250, 170); */
@@ -55,6 +50,7 @@
     background-color: #004d99;
     color: rgb(255, 255, 255);
     height: 100%;
+    /* text-align: center; */
 }
 
 .ant-card-head-title {
