@@ -28,13 +28,16 @@ class DoctorSignUpForm extends React.Component {
 					<input 
 						type='text' 
 						name='firstName' 
+						placeholder='First Name'
 						value={firstName}
-						onChange={handleChange} />
+						onChange={handleChange} 
+						required />
 				
 					<label>Last Name</label>					
 					<input 
 						type='text' 
 						name='lastName' 
+						placeholder='Last Name'
 						value={lastName}
 						onChange={handleChange} /> 
 								
@@ -42,6 +45,7 @@ class DoctorSignUpForm extends React.Component {
 					<input 
 						type='text' 
 						name='MID'
+						placeholder='Medical ID Number'
 						value={MID}
 						pattern='[0-9]*'
 						onChange={(e) => this.numberChangeHandler(e, handleChange)} />
@@ -50,6 +54,7 @@ class DoctorSignUpForm extends React.Component {
 					<input 
 						type='email' 
 						name='email' 
+						placeholder='Email'
 						value={email}
 						onChange={handleChange} />
 				
@@ -57,6 +62,7 @@ class DoctorSignUpForm extends React.Component {
 					<input 
 						type='password' 
 						name='password' 
+						placeholder='Password'
 						value={password}
 						onChange={handleChange}  />
 				</div>
@@ -65,7 +71,7 @@ class DoctorSignUpForm extends React.Component {
 					<button className="login">Login</button>
 				</Link>
 				
-				<button onClick={next} className="next">Next</button>
+				<button type="submit" onClick={next} className="next">Next</button>
 			</div>
 		);
 	}
