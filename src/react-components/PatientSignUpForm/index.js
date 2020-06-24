@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import "./styles.css";
 
 // importing actions/required methods
-import { addPatient, createPatientID, removeReferralCode } from "../../actions/app";
+import { addPatient, createPatientID} from "../../actions/app";
 import { redirect } from "../../actions/router";
 
 class PatientSignUpForm extends React.Component {
@@ -134,7 +134,7 @@ class PatientSignUpForm extends React.Component {
 		
 		addPatient(this.props.appComponent, patient);
 		
-		// removeReferralCode(this.props.appComponent, 'P001');
+		this.props.deleteCode();
 		
 		redirect(this, "/");
 	}

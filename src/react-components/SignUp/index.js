@@ -4,36 +4,30 @@ import "./styles.css";
 
 // importing components
 import DoctorSignUp from "./../DoctorSignUp";
-import ReferralForm from "../ReferralForm";
-import PatientSignUpForm from "../PatientSignUpForm";
+import ReferralSignUp from "../ReferralSignUp";
 
 /* Component for user registration */
 class SignUp extends React.Component {
 	
 	// list of all possible status values
-	status = ['referral', 'doctor', 'secretary', 'patient'];
+	status = ['referral', 'doctor'];
 	
 	constructor(props) {
 		super(props);
 		
 		this.state = {
 			statusIndex: 0,
-			referrerID: '',
 		};
 		
 		// binding functions
 		this.getSignUpForm = this.getSignUpForm.bind(this);
 		this.setStatus = this.setStatus.bind(this);
-		this.setReferrerID = this.setReferrerID.bind(this);
 	}
 	
 	render() {
 		return (
 			<div className="SignUp">
 				{this.getSignUpForm(this.state.statusIndex)}
-				{/* this.state.statusIndex ? null: <button onClick={ () => this.setStatus(1) }>Are you a Physician?</button> */}
-				{/* for testing */}
-				<button onClick={ () => this.nextStatus() }>{this.status[this.state.statusIndex]}</button>
 			</div>
 		);
 	}
@@ -43,20 +37,12 @@ class SignUp extends React.Component {
 		
 		return {
 			// referral
-			0: <ReferralForm 
+			0: <ReferralSignUp
 					appComponent={this.props.appComponent} 
-					setStatus={this.setStatus}
-					setReferrerID={this.setReferrerID}
+					doctorSignUp={() => this.setStatus(1)}
 				/>,
 			// doctor
 			1: <DoctorSignUp appComponent={this.props.appComponent} />,
-			// secretary
-			2: <p>Secretary Signup</p>,
-			// patient
-			3: <PatientSignUpForm 
-					referrerID={this.state.referrerID}
-					appComponent={this.props.appComponent}
-				/>,
 		}[index]
 	}
 	
@@ -64,19 +50,7 @@ class SignUp extends React.Component {
 	setStatus (value) {
 		this.setState({ statusIndex: value });
 	}
-	
-	// sets statusIndex to the next status value
-	// for testing
-	nextStatus() {
-		this.setStatus((this.state.statusIndex + 1) % 4);
-	}
-	
-	// sets the referrerId value
-	setReferrerID(id) {
-		this.setState({
-			referrerID: id
-		});
-	}
+
 }
 
 export default SignUp;

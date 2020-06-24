@@ -1,6 +1,7 @@
-.ReferralForm .main_form {
+.ReferralSignUpForm .main_form {
 	max-width: 280px;
 	margin: auto;
+	margin-bottom: 15px;
 	border-radius: 5px;
 	padding-bottom: 10px;
 	/* style 1 */
@@ -10,21 +11,21 @@
 	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
-.ReferralForm .main_form .title {
+.ReferralSignUpForm .main_form .title {
 	font-weight: bold;
 	margin-left: 20px;
 	margin-top: 30px;
 	padding-top: 10px;
 }
 
-.ReferralForm .main_form .container {
+.ReferralSignUpForm .main_form .container {
 	display: grid;
 	margin-bottom: 10px;
 	/* margin-top: 30px;
 	padding-top: 10px; */
 }
 
-.ReferralForm .main_form .container input {
+.ReferralSignUpForm .main_form .container input {
 	border: 1px solid;
 	border-color: #ced4da;
 	border-radius: 3px;
@@ -32,14 +33,14 @@
 	margin-left: 20px;
 }
 
-.ReferralForm .main_form .container input:focus {
+.ReferralSignUpForm .main_form .container input:focus {
 	/* style 1 */
 	border: 1px solid #1890ff;
 	/* style 2 */
 	/* border: 1px solid #DA1C4B; */
 }
 
-.ReferralForm .main_form .container label {
+.ReferralSignUpForm .main_form .container label {
 	margin-left: 20px;
 	font-weight: bold;
 	/* style 1 */
@@ -48,7 +49,7 @@
 	/* color: #ffffff; */
 }
 
-.ReferralForm button {
+.ReferralSignUpForm button {
 	/* styling */
 	padding-right: 6px;
 	padding-left: 6px;
@@ -61,32 +62,33 @@
 	box-shadow: 0 2px 4px 0 rgba(0,0,0,0.15);
 }
 
-.ReferralForm button:hover {
+.ReferralSignUpForm button:hover {
 	color: #077bff;
 	background-color: #e1e1e1;
 }
 
-.ReferralForm button:focus {
+.ReferralSignUpForm button:focus {
 	/* style 1 */
 	border: 1px solid #1890ff;
 	/* style 2 */
 	/* border: 1px solid #DA1C4B; */
 }
 
-.ReferralForm .main_form .login {
+.ReferralSignUpForm .main_form .login {
 	margin-left: 10px;
 }
 
-.ReferralForm .main_form .next {
+.ReferralSignUpForm .main_form .next {
 	float: right;
 	margin-right: 10px;
 }
 
-.ReferralForm .secondary_form {
+.ReferralSignUpForm .secondary_form {
 	max-width: 280px;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 20px;
+	margin-bottom: 15px;
 	border-radius: 5px;
 	padding-bottom: 15px;
 	padding-top: 15px;
@@ -97,12 +99,12 @@
 	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
-.ReferralForm .secondary_form h3 {
+.ReferralSignUpForm .secondary_form h3 {
 	margin-left: 10px;
 	display: inline;
 }
 
-.ReferralForm .secondary_form .signup {
+.ReferralSignUpForm .secondary_form .signup {
 	margin-right: 10px;
 	float: right;
 }
