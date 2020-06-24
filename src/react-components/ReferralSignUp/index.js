@@ -6,6 +6,7 @@ import "./styles.css";
 // importing components
 import ReferralSignUpForm from "../ReferralSignUpForm";
 import PatientSignUpForm from "../PatientSignUpForm";
+import SecretarySignUpForm from "../SecretarySignUpForm";
 
 // importing actions/required methods
 import { submitReferralCode, removeReferralCode } from "../../actions/app";
@@ -77,7 +78,11 @@ class ReferralSignUp extends React.Component {
 					appComponent={this.props.appComponent}
 				/>,
 			// secretary
-			2: <p>Secretary Signup</p>,
+			2: <SecretarySignUpForm 
+					deleteCode={this.deleteCode}
+					referrerID={this.state.referrerID}
+					appComponent={this.props.appComponent}
+				/>,
 		}[index]
 	}
 	

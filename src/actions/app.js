@@ -84,6 +84,31 @@ export const createPatientID = (app) => {
 	
 }
 
+// adds a new secretary to the app component state
+export const addSecretary = (app, secretary) => {
+	// this would be an api call to the backend
+	
+	const newSecretaries = app.state.secretaries.concat(secretary);
+	
+	app.setState({
+		secretaries: newSecretaries
+	});
+
+};
+
+// returns new id, incremented from existing secretary objects
+export const createSecretaryID = (app) => {
+	const secretaries = app.state.secretaries;
+	
+	if (secretaries.length) {
+		const lastID = secretaries[secretaries.length - 1].id;
+		return (lastID + 1);
+	}
+	
+	return 1;
+	
+}
+
 // returns referrer ID from referral code in app component state
 export const submitReferralCode = (app, code) => {
 	// this would be an api call to the backend
