@@ -5,7 +5,7 @@ import 'antd/dist/antd.css';
 
 import Header from './../Header';
 import LoginForm from './../LoginForm';
-import bgImage from "./static/doctor-patient-online.png";
+import bgImage from "./static/doctor-patient-online2.png";
 import { Card, Row, Col } from "antd";
 
 /* Component for the Home page */
