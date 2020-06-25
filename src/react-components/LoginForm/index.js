@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Row, Card, Form, Input, Button} from "antd";
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
@@ -68,7 +69,7 @@ class LoginForm extends React.Component {
                 </Card>
                 <Card className="signup-card">
                     <p>Don't have an account?
-                        <a className="signup-redirect" href=""> Sign up</a>
+                        <Link to="/signup" className="signup-redirect"> Sign up</Link>
                     </p>
                 </Card>
             </Row>
