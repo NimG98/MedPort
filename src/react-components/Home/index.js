@@ -8,12 +8,29 @@ import LoginForm from './../LoginForm';
 import bgImage from "./static/doctor-patient-online2.png";
 import { Card, Row, Col } from "antd";
 
+import { validateLogin } from "../../actions/app";
+
 /* Component for the Home page */
 class Home extends React.Component {
 
-  // const login = (username, password) => {
-  //   const isValid = 
-  // }
+  constructor(props) {
+    super(props);
+  }
+
+  login = loginValues => {
+    const username = loginValues.username;
+    const password = loginValues.password;
+    console.log('Received values of form: ', username, password);
+    const isValid = validateLogin(this.props.appComponent, username, password);
+
+    if(isValid){
+      // need to update location to logged-in dashboard here
+      window.location.href = "/";
+      console.log("Login was successful!");
+    } else {
+      console.log("Invalid credentials");
+    }
+  }
 
   render() {
     return (
@@ -22,8 +39,7 @@ class Home extends React.Component {
         <Row className="login-background">
           <img alt={"lobgImagego"} src={bgImage} className="home__bg-image"/>
           <LoginForm
-            // onSubmit={login}
-            // error={errorMessage}
+            onFinish={this.login}
           />
         </Row>
         <Row className="featureDisplay">

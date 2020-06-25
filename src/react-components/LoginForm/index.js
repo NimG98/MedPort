@@ -9,24 +9,24 @@ import 'antd/dist/antd.css';
 
 class LoginForm extends React.Component {
     
-    onFinish = values => {
-        console.log('Received values of form: ', values);
-    };
-
+    constructor(props) {
+        super(props);
+    }
     
     render() {
+
         return (
             <Row className="loginForm">
                 <Card className="login-card">
                     <Form
                         name="login"
                         className="login-form"
-                        onFinish={this.onFinish}
+                        onFinish={this.props.onFinish}
                         layout="vertical"
                     >
                         <Form.Item
                             name="username"
-                            label="Username"
+                            label="Username:"
                             rules={[
                                 {
                                     required: true,
@@ -41,7 +41,7 @@ class LoginForm extends React.Component {
                         </Form.Item>
                         <Form.Item
                             name="password"
-                            label="Password"
+                            label="Password:"
                             rules={[
                                 {
                                     required: true,
