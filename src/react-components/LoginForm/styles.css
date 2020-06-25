@@ -1,0 +1,42 @@
+@import '~antd/dist/antd.css';
+
+.loginForm {
+    margin-right: 10px;
+    margin-top: 10px;
+    max-width: 400px;
+    margin-bottom: 30px;
+}
+
+.loginForm .ant-card {
+    margin-top: 20px;
+    width: 100%;
+    margin-right: 30px;
+    text-align: center;
+}
+
+.loginForm .ant-card-body {
+    padding: 24px 24px 20px 24px;
+}
+
+.forgot-password {
+    margin: 0px;
+    /* text-align: center; */
+}
+
+.login-form-item {
+    margin-bottom: 10px;
+}
+.login-form-button {
+    width: 100%;
+}
+
+.signup-card .ant-card-body {
+    padding: 20px 24px 20px 24px;
+}
+
+.signup-card p {
+    margin-bottom: 0px;
+}
+.signup-redirect {
+    font-weight: 600;
+}

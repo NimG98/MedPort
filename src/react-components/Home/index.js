@@ -4,18 +4,27 @@ import "./styles.css";
 import 'antd/dist/antd.css';
 
 import Header from './../Header';
-// import bgImage from "./static/doctor-patient2.jpg";
+import LoginForm from './../LoginForm';
 import bgImage from "./static/doctor-patient-online.png";
 import { Card, Row, Col } from "antd";
 
 /* Component for the Home page */
 class Home extends React.Component {
+
+  // const login = (username, password) => {
+  //   const isValid = 
+  // }
+
   render() {
     return (
       <div className="home__bg">
         <Header />
         <Row className="login-background">
           <img alt={"lobgImagego"} src={bgImage} className="home__bg-image"/>
+          <LoginForm
+            // onSubmit={login}
+            // error={errorMessage}
+          />
         </Row>
         <Row className="featureDisplay">
           <Col span={8}>
