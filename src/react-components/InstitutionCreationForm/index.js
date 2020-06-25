@@ -31,7 +31,7 @@ class InstitutionCreationForm extends React.Component {
 			} = this.props;
 		
 		return(
-			<div className="InstitutionCreationForm">
+			<form className="InstitutionCreationForm" onSubmit={this.submit}>
 				<div className="title">
 					<h2><b>Create an Institution</b></h2>
 				</div>
@@ -43,7 +43,8 @@ class InstitutionCreationForm extends React.Component {
 						name='name' 
 						placeholder='Name'
 						value={this.state.name}
-						onChange={this.handleInputChange} />
+						onChange={this.handleInputChange} 
+						required />
 					
 					<label>Address</label>					
 					<input 
@@ -51,7 +52,8 @@ class InstitutionCreationForm extends React.Component {
 						name='address' 
 						placeholder='Address'
 						value={this.state.address}
-						onChange={this.handleInputChange} /> 
+						onChange={this.handleInputChange} 
+						required /> 
 						
 					<label>Postal Code</label>
 					<input 
@@ -59,7 +61,8 @@ class InstitutionCreationForm extends React.Component {
 						name='postalCode'
 						placeholder='Postal Code'
 						value={this.state.postalCode}
-						onChange={this.handleInputChange} />
+						onChange={this.handleInputChange} 
+						required />
 					
 					<label>Phone Number</label>
 					<input 
@@ -67,12 +70,13 @@ class InstitutionCreationForm extends React.Component {
 						name='phoneNumber' 
 						placeholder='Phone Number'
 						value={this.state.phoneNumber}
-						onChange={this.handleInputChange} />
+						onChange={this.handleInputChange} 
+						required />
 				</div>
 				
 				<button className="back" onClick={back}>Back</button>
-				<button className="submit" onClick={this.submit}>Submit</button>
-			</div>
+				<button type="submit" className="submit">Submit</button>
+			</form>
 		);
 	}
 	

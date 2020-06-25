@@ -3,7 +3,8 @@ import React from "react";
 import "./styles.css";
 
 // importing components
-import DoctorSignUp from "./../DoctorSignUp";
+import Header from "../Header";
+import DoctorSignUp from "../DoctorSignUp";
 import ReferralSignUp from "../ReferralSignUp";
 
 /* Component for user registration */
@@ -27,6 +28,7 @@ class SignUp extends React.Component {
 	render() {
 		return (
 			<div className="SignUp">
+				<Header />
 				{this.getSignUpForm(this.state.statusIndex)}
 			</div>
 		);
