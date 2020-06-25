@@ -1,0 +1,85 @@
+.PatientSignUpForm {
+	max-width: 280px;
+	margin: auto;
+	margin-bottom: 15px;
+	border-radius: 5px;
+	padding-bottom: 10px;
+	/* style 1 */
+	background-color: #f5f5f5;
+	/* style 2 */
+	/* background-color: #1F90CC; */
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.PatientSignUpForm .title {
+	font-weight: bold;
+	margin-left: 20px;
+	margin-top: 30px;
+	padding-top: 10px;
+}
+
+.PatientSignUpForm .container {
+	display: grid;
+	margin-bottom: 10px;
+	/* margin-top: 30px; */
+	/* padding-top: 10px; */
+}
+
+.PatientSignUpForm .container input {
+	border: 1px solid;
+	border-color: #ced4da;
+	border-radius: 3px;
+	width: 240px;
+	margin-left: 20px;
+}
+
+.PatientSignUpForm .container input:focus {
+	/* style 1 */
+	border: 1px solid #1890ff;
+	/* style 2 */
+	/* border: 1px solid #DA1C4B; */
+}
+
+.PatientSignUpForm .container label {
+	margin-left: 20px;
+	margin-top: 5px;
+	font-weight: bold;
+	/* style 1 */
+	color: #212529;
+	/* style 2 */
+	/* color: #ffffff; */
+}
+
+.PatientSignUpForm button {
+	/* styling */
+	padding-right: 6px;
+	padding-left: 6px;
+	border-radius: 3px;
+	border: 1px solid transparent;
+	
+	/* colors */
+	color: #828282;
+	background-color: #e8e8e8;
+	box-shadow: 0 2px 4px 0 rgba(0,0,0,0.15);
+}
+
+.PatientSignUpForm button:hover {
+	color: #077bff;
+	background-color: #e1e1e1;
+}
+
+.PatientSignUpForm button:focus {
+	/* style 1 */
+	border: 1px solid #1890ff;
+	/* style 2 */
+	/* border: 1px solid #DA1C4B; */
+}
+
+.PatientSignUpForm .login {
+	margin-left: 10px;
+}
+
+.PatientSignUpForm .submit {
+	float: right;
+	margin-right: 10px;
+}
