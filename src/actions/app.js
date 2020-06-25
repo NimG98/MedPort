@@ -141,7 +141,7 @@ export const removeReferralCode = (app, code) => {
 // and that the user's password is correct
 export const validateLogin = (app, username, password) => {
 	// this would be an api call to the backend
-	const isValid = false;
+	var isValid = false;
 
 	const users = app.state.doctors.concat(app.state.patients, app.state.secretaries);
 
