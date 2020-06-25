@@ -136,3 +136,23 @@ export const removeReferralCode = (app, code) => {
 		});
 	}
 }
+
+// Validates if the username is associated with a registered user,
+// and that the user's password is correct
+export const validateLogin = (app, username, password) => {
+	// this would be an api call to the backend
+	var isValid = false;
+
+	const users = app.state.doctors.concat(app.state.patients, app.state.secretaries);
+
+	for(var i=0; i<users.length; i++){
+		if(users[i].email === username) {
+			if(users[i].password === password) {
+				isValid = true;
+				break;
+			}
+		}
+	}
+
+	return isValid;
+}
