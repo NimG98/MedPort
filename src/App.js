@@ -36,7 +36,7 @@ class App extends React.Component {
         <BrowserRouter>
           <Switch>
             <Route exact path='/' render={() => 
-                            (<Home state={this.state}/>)}/>
+                            (<Home appComponent={this}/>)}/>
             <Route exact path='/signup' render={() => 
                             (<SignUp appComponent={this} />)}/>
           </Switch>
