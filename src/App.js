@@ -4,6 +4,8 @@ import './App.css';
 
 import Home from './react-components/Home';
 import SignUp from './react-components/SignUp';
+import Dashboard from './react-components/Dashboard';
+
 // import Header from './react-components/Header';
 
 class App extends React.Component {
@@ -39,6 +41,8 @@ class App extends React.Component {
                             (<Home appComponent={this}/>)}/>
             <Route exact path='/signup' render={() => 
                             (<SignUp appComponent={this} />)}/>
+			<Route exact path='/dashboard' render={() => 
+                            (<Dashboard appComponent={this} />)}/>
           </Switch>
         </BrowserRouter>
       </div>

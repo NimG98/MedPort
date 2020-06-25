@@ -24,8 +24,8 @@ class Home extends React.Component {
     const isValid = validateLogin(this.props.appComponent, username, password);
 
     if(isValid){
-      // need to update location to logged-in dashboard here
-      window.location.href = "/";
+      document.cookie = "LoggedInSession=Valid; " + "path=/";
+      window.location.href = "/dashboard";
       console.log("Login was successful!");
     } else {
       console.log("Invalid credentials");
