@@ -18,7 +18,7 @@ class DoctorSignUpForm extends React.Component {
 		} = this.props;
 		
 		return (
-			<div className="DoctorSignUpForm">
+			<form className="DoctorSignUpForm" onSubmit={next}>
 				<div className="title">
 					<h2><b>Doctor Sign Up</b></h2>
 				</div>
@@ -39,7 +39,8 @@ class DoctorSignUpForm extends React.Component {
 						name='lastName' 
 						placeholder='Last Name'
 						value={lastName}
-						onChange={handleChange} /> 
+						onChange={handleChange} 
+						required /> 
 								
 					<label>Medical ID Number</label>
 					<input 
@@ -48,7 +49,8 @@ class DoctorSignUpForm extends React.Component {
 						placeholder='Medical ID Number'
 						value={MID}
 						pattern='[0-9]*'
-						onChange={(e) => this.numberChangeHandler(e, handleChange)} />
+						onChange={(e) => this.numberChangeHandler(e, handleChange)} 
+						required />
 			
 					<label>Email</label>
 					<input 
@@ -56,7 +58,8 @@ class DoctorSignUpForm extends React.Component {
 						name='email' 
 						placeholder='Email'
 						value={email}
-						onChange={handleChange} />
+						onChange={handleChange} 
+						required />
 				
 					<label>Password</label>
 					<input 
@@ -64,15 +67,16 @@ class DoctorSignUpForm extends React.Component {
 						name='password' 
 						placeholder='Password'
 						value={password}
-						onChange={handleChange}  />
+						onChange={handleChange}  
+						required />
 				</div>
 					
 				<Link to="/">	
 					<button className="login">Login</button>
 				</Link>
 				
-				<button type="submit" onClick={next} className="next">Next</button>
-			</div>
+				<button type="submit" className="next">Next</button>
+			</form>
 		);
 	}
 	

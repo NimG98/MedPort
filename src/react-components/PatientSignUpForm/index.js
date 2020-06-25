@@ -31,7 +31,7 @@ class PatientSignUpForm extends React.Component {
 	
 	render() {
 		return (
-			<div className="PatientSignUpForm">
+			<form className="PatientSignUpForm" onSubmit={this.submit}>
 				<div className="title">
 					<h2><b>Patient Sign Up</b></h2>
 				</div>
@@ -43,7 +43,8 @@ class PatientSignUpForm extends React.Component {
 						name='firstName' 
 						placeholder='First Name'
 						value={this.state.firstName}
-						onChange={this.handleInputChange} />
+						onChange={this.handleInputChange} 
+						required />
 							
 					<label>Last Name</label>
 					<input 
@@ -51,7 +52,8 @@ class PatientSignUpForm extends React.Component {
 						name='lastName' 
 						placeholder='Last Name'
 						value={this.state.lastName}
-						onChange={this.handleInputChange} />
+						onChange={this.handleInputChange} 
+						required />
 							
 					<label>Address</label>
 					<input 
@@ -59,7 +61,8 @@ class PatientSignUpForm extends React.Component {
 						name='address' 
 						placeholder='Address'
 						value={this.state.address}
-						onChange={this.handleInputChange} />
+						onChange={this.handleInputChange} 
+						required />
 							
 					<label>Postal Code</label>
 					<input 
@@ -67,7 +70,8 @@ class PatientSignUpForm extends React.Component {
 						name='postalCode' 
 						placeholder='Postal Code'
 						value={this.state.postalCode}
-						onChange={this.handleInputChange} />
+						onChange={this.handleInputChange} 
+						required />
 							
 					<label>Health Card Number</label>
 					<input 
@@ -75,7 +79,8 @@ class PatientSignUpForm extends React.Component {
 						name='HCN' 
 						placeholder='Health Card Number'
 						value={this.state.HCN}
-						onChange={this.handleInputChange} />
+						onChange={this.handleInputChange} 
+						required />
 							
 					<label>Email</label>
 					<input 
@@ -83,7 +88,8 @@ class PatientSignUpForm extends React.Component {
 						name='email' 
 						placeholder='Email'
 						value={this.state.email}
-						onChange={this.handleInputChange} />
+						onChange={this.handleInputChange} 
+						required />
 							
 					<label>Password</label>
 					<input 
@@ -91,16 +97,17 @@ class PatientSignUpForm extends React.Component {
 						name='password' 
 						placeholder='Password'
 						value={this.state.password}
-						onChange={this.handleInputChange} />
+						onChange={this.handleInputChange} 
+						required />
 				</div>
 					
 				<Link to="/">
 					<button className="login">Login</button>
 				</Link>	
 				
-				<button className="submit" onClick={this.submit}>Submit</button>
+				<button type="submit" className="submit">Submit</button>
 				
-			</div>
+			</form>
 		);
 	}
 	
