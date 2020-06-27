@@ -1,0 +1,46 @@
+.h1, h1 {
+    font-size: 2.0rem !important;
+}
+
+a {
+    color: white !important;
+}
+
+.size-1 {
+
+    width: 600px;
+    border: 1px solid #CCC;
+    box-shadow: 0 1px 5px #CCC;
+    border-radius: 5px;
+    font-family: verdana;
+    margin: 25px auto;
+    overflow: hidden;
+    height: 300px;
+    background-color: #f1f2f2;
+    margin: 50px;
+
+
+}
+
+.size-2 {
+
+    width: 1200px;
+    border: 1px solid #CCC;
+    box-shadow: 0 1px 5px #CCC;
+    border-radius: 5px;
+    font-family: verdana;
+    margin: 25px auto;
+    overflow: hidden;
+    height: 350px;
+    background-color: #f1f2f2;
+
+}
+
+
+
+
+
+
+
+
+

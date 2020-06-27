@@ -1,0 +1,27 @@
+.nav {
+    z-index: 1; 
+    padding: 1px;
+    position: absolute;
+    border: 10px;
+    left: 0;
+    height: 100%;
+    width: 200px;
+    
+	/* background-color: rgb(203, 236, 255); */
+	/* background-color: rgb(176, 224, 252); */
+	/* background-color: #007bff; */
+	/* background-color: #1e80e2;
+	background-color: #249CCC; */
+    background-color: #1F90CC;
+    
+}
+
+li{
+    padding: 5px;
+}
+
+.col-background-t{
+    height: 500px;
+    position: sticky;
+    background-color: tomato;
+}
