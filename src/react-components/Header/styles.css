@@ -1,10 +1,15 @@
 .header {
-    padding: 9px;
+	padding: 9px;
+	z-index: 100;
     /* background-color: rgb(203, 236, 255); */
     /* background-color: rgb(176, 224, 252); */
     /* background-color: #007bff; */
     background-color: #849198;
-    height: 63px;
+	height: 63px;
+	position: fixed;
+	top: 0;
+	width: 100%;
+
 }
 
 h1 {
