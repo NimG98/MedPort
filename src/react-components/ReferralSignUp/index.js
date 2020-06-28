@@ -74,9 +74,8 @@ class ReferralSignUp extends React.Component {
 				/>,
 			// patient
 			1: <PatientSignUpForm 
-					deleteCode={this.deleteCode}
+					code={this.state.code}
 					referrerID={this.state.referrerID}
-					appComponent={this.props.appComponent}
 				/>,
 			// secretary
 			2: <SecretarySignUpForm 

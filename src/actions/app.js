@@ -59,30 +59,14 @@ export const createInstitutionID = (app) => {
 	
 }
 
-// adds a new patient to the app component state
-export const addPatient = (app, patient) => {
-	// this would be an api call to the backend
-	
-	const newPatients = app.state.patients.concat(patient);
-	
-	app.setState({
-		patients: newPatients
-	});
-
+/* 
+	submits new patient information to server for account creation
+	Note: submits patient's used referral code as well
+*/
+export const addPatient = (patient, code) => {
+	// code below requires server call
+	return true;
 };
-
-// returns new id, incremented from existing patient objects
-export const createPatientID = (app) => {
-	const patients = app.state.patients
-	
-	if (patients.length) {
-		const lastID = patients[patients.length - 1].id;
-		return (lastID + 1);
-	}
-	
-	return 1;
-	
-}
 
 // adds a new secretary to the app component state
 export const addSecretary = (app, secretary) => {
