@@ -137,7 +137,8 @@ export const removeReferralCode = (app, code) => {
 	}
 }
 
-// Validates if the username is associated with a registered user,
+/* Old validateLogin way */
+/* // Validates if the username is associated with a registered user,
 // and that the user's password is correct
 export const validateLogin = (app, username, password) => {
 	// this would be an api call to the backend
@@ -152,6 +153,41 @@ export const validateLogin = (app, username, password) => {
 				break;
 			}
 		}
+	}
+
+	return isValid;
+} */
+
+// Validates if the username is associated with a registered user,
+// and that the user's password is correct
+export const validateLogin = (app, username, password) => {
+	var isValid = false;
+	
+	// this would have been an api call to the backend to look at the user database
+	const users = {
+		// Patient
+		"user": {
+			password: "user",
+			type: "patient"
+		},
+		// Doctor
+		"user2": {
+			password: "user2",
+			type: "doctor"
+		},
+		// Admin
+		"admin": {
+			password: "admin",
+			type: "admin"
+		}
+	}
+
+	isValid = users[username] && users[username].password === password;
+	
+	if(isValid) {
+		app.setState({
+			loggedInUser: users[username].type
+		});
 	}
 
 	return isValid;

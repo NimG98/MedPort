@@ -6,6 +6,7 @@ import Home from './react-components/Home';
 import SignUp from './react-components/SignUp';
 import Dashboard from './react-components/Dashboard';
 import Upload from './react-components/Upload';
+import Request from './react-components/Request';
 // import Header from './react-components/Header';
 
 class App extends React.Component {
@@ -30,6 +31,10 @@ class App extends React.Component {
 			// code: institutionID
 			'S001': 1,
 	  },
+	  loggedInUser: {
+		  // type is either patient, doctor, secretary
+		  type: null
+	  }
   }
 
   render(){
@@ -43,8 +48,10 @@ class App extends React.Component {
                             (<SignUp appComponent={this} />)}/>
 			<Route exact path='/dashboard' render={() => 
                             (<Dashboard appComponent={this} />)}/>
-          <Route exact path='/upload' render={() => 
+          	<Route exact path='/upload' render={() => 
                             (<Upload appComponent={this} />)}/>
+			<Route exact path='/request' render={() => 
+                            (<Request appComponent={this} />)}/>
           </Switch>
         </BrowserRouter>
       </div>
