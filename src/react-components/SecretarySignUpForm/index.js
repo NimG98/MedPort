@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import "./styles.css";
 
 // importing actions/required methods
-import { addSecretary, createSecretaryID} from "../../actions/app";
+import { addSecretary } from "../../actions/app";
 import { redirect } from "../../actions/router";
 
 class SecretarySignUpForm extends React.Component {
@@ -18,10 +18,13 @@ class SecretarySignUpForm extends React.Component {
 			lastName: '',
 			email: '',
 			password: '',
+			/* error: false,
+			errorCode: '', */
 		}
 		
 		// binding functions
 		this.handleInputChange = this.handleInputChange.bind(this);
+		// this.setError = this.setError.bind(this);
 		this.createSecretary = this.createSecretary.bind(this);
 		this.submit = this.submit.bind(this);
 	}
@@ -29,6 +32,8 @@ class SecretarySignUpForm extends React.Component {
 	render() {
 		return (
 			<form className="SecretarySignUpForm" onSubmit={this.submit}>
+				{/* this.state.error ? <h2>{this.state.errorCode}</h2> : null */}
+			
 				<div className="title">
 					<h2><b>Secretary Sign Up</b></h2>
 				</div>
@@ -94,7 +99,6 @@ class SecretarySignUpForm extends React.Component {
 	
 	createSecretary = () => {
 		return({
-			id: createSecretaryID(this.props.appComponent),
 			firstName: this.state.firstName,
 			lastName: this.state.lastName,
 			email: this.state.email,
@@ -106,12 +110,24 @@ class SecretarySignUpForm extends React.Component {
 	submit() {
 		const secretary = this.createSecretary();
 		
-		addSecretary(this.props.appComponent, secretary);
-		
-		this.props.deleteCode();
+		const success = addSecretary(secretary, this.props.code);
 		
 		redirect(this, "/");
+		
+		/* if (success) {
+			redirect(this, "/");
+		} else {
+			this.setError(true, 'Submission error, please try again.');
+		} */
 	}
+	
+	// general error code handler
+	/* setError(value, code) {
+		this.setState({
+			error: value,
+			errorCode: code
+		});
+	} */
 }
 
 export default withRouter(SecretarySignUpForm);

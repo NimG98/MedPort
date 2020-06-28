@@ -68,30 +68,15 @@ export const addPatient = (patient, code) => {
 	return true;
 };
 
-// adds a new secretary to the app component state
-export const addSecretary = (app, secretary) => {
-	// this would be an api call to the backend
-	
-	const newSecretaries = app.state.secretaries.concat(secretary);
-	
-	app.setState({
-		secretaries: newSecretaries
-	});
+/* 
+	submits new secretary information to server for account creation
+	Note: submits patient's used referral code as well
+*/
+export const addSecretary = (secretary, code) => {
+	// code below requires server call
+	return true;
 
 };
-
-// returns new id, incremented from existing secretary objects
-export const createSecretaryID = (app) => {
-	const secretaries = app.state.secretaries;
-	
-	if (secretaries.length) {
-		const lastID = secretaries[secretaries.length - 1].id;
-		return (lastID + 1);
-	}
-	
-	return 1;
-	
-}
 
 // submits referral code to server and gets a refferrerID on success
 export const submitReferralCode = (code) => {
@@ -102,7 +87,7 @@ export const submitReferralCode = (code) => {
 			// code: doctorID
 			'P001': 1,
 			// code: institutionID
-			'S001': 1,
+			'S001': 2,
 	}
 
 	// performed before function call
@@ -111,23 +96,4 @@ export const submitReferralCode = (code) => {
 	const refferrerID = referrals[code];
 	
 	return refferrerID;
-}
-
-/* REMOVE */
-// performed in the backend
-// removes a particular referral code from the app component state
-export const removeReferralCode = (app, code) => {
-	// this would be an api call to the backend
-	
-	const referrals = app.state.referrals;
-	
-	if (referrals[code]) {
-		const newReferrals = Object.assign({}, referrals);
-		
-		delete newReferrals[code];
-		
-		app.setState({
-			referrals: newReferrals
-		});
-	}
 }

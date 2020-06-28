@@ -9,7 +9,7 @@ import PatientSignUpForm from "../PatientSignUpForm";
 import SecretarySignUpForm from "../SecretarySignUpForm";
 
 // importing actions/required methods
-import { submitReferralCode, removeReferralCode } from "../../actions/app";
+import { submitReferralCode } from "../../actions/app";
 
 class ReferralSignUp extends React.Component {
 	
@@ -32,8 +32,6 @@ class ReferralSignUp extends React.Component {
 		this.setStatus = this.setStatus.bind(this);
 		this.setReferrerID = this.setReferrerID.bind(this);
 		this.setError = this.setError.bind(this);
-		/* REMOVE */
-		this.deleteCode = this.deleteCode.bind(this);
 		this.submit = this.submit.bind(this);
 		
 	}
@@ -79,9 +77,8 @@ class ReferralSignUp extends React.Component {
 				/>,
 			// secretary
 			2: <SecretarySignUpForm 
-					deleteCode={this.deleteCode}
+					code={this.state.code}
 					referrerID={this.state.referrerID}
-					appComponent={this.props.appComponent}
 				/>,
 		}[index]
 	}
@@ -105,17 +102,6 @@ class ReferralSignUp extends React.Component {
 		this.setState({
 			error: value,
 			errorCode: code
-		});
-	}
-	
-	/*  REMOVE  */
-	// performed in the backend
-	// deletes the referral code on signup success
-	deleteCode() {
-		removeReferralCode(this.props.appComponent, this.state.code)
-		
-		this.setState({
-			code: ''
 		});
 	}
 	
