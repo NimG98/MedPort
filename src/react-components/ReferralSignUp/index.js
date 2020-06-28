@@ -32,6 +32,7 @@ class ReferralSignUp extends React.Component {
 		this.setStatus = this.setStatus.bind(this);
 		this.setReferrerID = this.setReferrerID.bind(this);
 		this.setError = this.setError.bind(this);
+		/* REMOVE */
 		this.deleteCode = this.deleteCode.bind(this);
 		this.submit = this.submit.bind(this);
 		
@@ -108,6 +109,8 @@ class ReferralSignUp extends React.Component {
 		});
 	}
 	
+	/*  REMOVE  */
+	// performed in the backend
 	// deletes the referral code on signup success
 	deleteCode() {
 		removeReferralCode(this.props.appComponent, this.state.code)
@@ -123,7 +126,7 @@ class ReferralSignUp extends React.Component {
 	submit() {
 		const code = this.state.code;
 		
-		const referrerID = submitReferralCode(this.props.appComponent, this.state.code);
+		const referrerID = submitReferralCode(code);
 		
 		if (referrerID) {
 			
@@ -131,20 +134,20 @@ class ReferralSignUp extends React.Component {
 				// sets the referrerID
 				this.setReferrerID(referrerID);
 				
-				// secretary referral code
+				// patient referral code
 				this.setStatus(1);
 			} else if (code.startsWith('S')) {
 				// sets the referrerID
 				this.setReferrerID(referrerID);
 				
-				// patient referral code
+				// secretary referral code
 				this.setStatus(2);
 			} else {
-				// invalid referral code
+				// referral code exists but is not correctly formatted
 				this.setError(true, 'An Error Occurred');
 			}
 		} else {
-			// wrong referral code
+			// invalid referral code
 			this.setError(true, 'Invalid Referral Code')
 		}
 	}

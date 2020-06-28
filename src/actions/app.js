@@ -109,17 +109,28 @@ export const createSecretaryID = (app) => {
 	
 }
 
-// returns referrer ID from referral code in app component state
-export const submitReferralCode = (app, code) => {
-	// this would be an api call to the backend
-
-	const formattedCode = code.toUpperCase();
+// submits referral code to server and gets a refferrerID on success
+export const submitReferralCode = (code) => {
+	// code below requires server call
 	
-	const refferrerID = app.state.referrals[formattedCode];
+	// dummy data
+	const referrals = {
+			// code: doctorID
+			'P001': 1,
+			// code: institutionID
+			'S001': 1,
+	}
+
+	// performed before function call
+	// const formattedCode = code.toUpperCase();
+	
+	const refferrerID = referrals[code];
 	
 	return refferrerID;
 }
 
+/* REMOVE */
+// performed in the backend
 // removes a particular referral code from the app component state
 export const removeReferralCode = (app, code) => {
 	// this would be an api call to the backend
