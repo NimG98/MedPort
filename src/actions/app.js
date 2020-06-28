@@ -175,6 +175,11 @@ export const validateLogin = (app, username, password) => {
 			password: "user2",
 			type: "doctor"
 		},
+		// Secretary
+		"user3": {
+			password: "user3",
+			type: "secretary"
+		},
 		// Admin
 		"admin": {
 			password: "admin",
