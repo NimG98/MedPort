@@ -9,14 +9,14 @@ import InstitutionSelector from "./../InstitutionSelector";
 import InstitutionCreationForm from "./../InstitutionCreationForm";
 
 // importing actions/required methods
-import { addDoctor, createDoctorID } from "../../actions/app";
+import { addDoctor } from "../../actions/app";
 import { redirect } from "../../actions/router";
 
 // doctor signup component (controls the multi-step registration process)
 class DoctorSignUp extends React.Component {
 	
 	// possible status values
-	status = ['registration', 'select instition', 'create instituton'];
+	status = ['registration', 'select institution', 'create instituton'];
 	
 	constructor(props) {
 		super(props);
@@ -29,6 +29,8 @@ class DoctorSignUp extends React.Component {
 			MID: '',
 			institutionID: '',
 			statusIndex: 0,
+			/* error: false,
+			errorCode: '', */
 		}
 		
 		// binding functions
@@ -38,6 +40,7 @@ class DoctorSignUp extends React.Component {
 		this.previousStatus = this.previousStatus.bind(this);
 		this.createDoctor = this.createDoctor.bind(this);
 		this.setInstitutionID = this.setInstitutionID.bind(this);
+		// this.setError = this.setError.bind(this);
 		this.submit = this.submit.bind(this);
 	}
 	
@@ -45,6 +48,7 @@ class DoctorSignUp extends React.Component {
 		
 		return (
 			<div className="DoctorSignUp">
+				{/* this.state.error ? <h2>{this.state.errorCode}</h2> : null */}
 				{this.getSignUpForm(this.state.statusIndex)}
 			</div>
 		);
@@ -123,7 +127,6 @@ class DoctorSignUp extends React.Component {
 	
 	createDoctor = () => {
 		return({
-			id: createDoctorID(this.props.appComponent),
 			firstName: this.state.firstName,
 			lastName: this.state.lastName,
 			email: this.state.email,
@@ -135,11 +138,25 @@ class DoctorSignUp extends React.Component {
 	
 	// submit new doctor information
 	submit() {
-		addDoctor(this.props.appComponent, this.createDoctor());
+		const success = addDoctor(this.createDoctor());
 		// navigate back to login page
 		redirect(this, '/');
+		
+		/* if (success) {
+			redirect(this, '/');
+		} else {
+			this.setError(true, 'Submission error, please try again.');
+		}
+		*/
 	}
 	
+	// general error code handler
+	/* setError(value, code) {
+		this.setState({
+			error: value,
+			errorCode: code
+		});
+	} */
 }
 
 export default withRouter(DoctorSignUp);

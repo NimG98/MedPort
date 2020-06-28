@@ -39,8 +39,7 @@ class SignUp extends React.Component {
 		
 		return {
 			// referral
-			0: <ReferralSignUp
-					appComponent={this.props.appComponent} 
+			0: <ReferralSignUp 
 					doctorSignUp={() => this.setStatus(1)}
 				/>,
 			// doctor

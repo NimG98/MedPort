@@ -1,30 +1,13 @@
 // for debugging 
 const log = console.log
 
-// adds a new doctor to the app component state
-export const addDoctor = (app, doctor) => {
-	// this would be an api call to the backend
-	
-	const newDoctors = app.state.doctors.concat(doctor);
-	
-	app.setState({
-		doctors: newDoctors
-	});
-
+/* 
+	submits new doctor information to server for account creation
+*/
+export const addDoctor = (doctor) => {
+	// code below requires server call
+	return true;
 };
-
-// returns new id, incremented from existing doctor objects
-export const createDoctorID = (app) => {
-	const doctors = app.state.doctors
-	
-	if (doctors.length) {
-		const lastID = doctors[doctors.length - 1].id;
-		return (lastID + 1);
-	}
-	
-	return 1;
-	
-}
 
 // returns the insitutions list from the app component state
 export const getInstitutions = (app) => {
@@ -70,7 +53,7 @@ export const addPatient = (patient, code) => {
 
 /* 
 	submits new secretary information to server for account creation
-	Note: submits patient's used referral code as well
+	Note: submits secretary's used referral code as well
 */
 export const addSecretary = (secretary, code) => {
 	// code below requires server call
