@@ -9,13 +9,18 @@ export const addDoctor = (doctor) => {
 	return true;
 };
 
-// returns the insitutions list from the app component state
-export const getInstitutions = (app) => {
-	// this would be an api call to the backend
+/* 
+	Returns a list of institutions obtained from the server
+ */
+export const getInstitutions = () => {
+	// code below requires server call
 	
-	return(
-		app.state.institutions
-	)
+	const institutions = [
+		{ id: 1, name: 'Hospital A', address: '123 Main St', postalCode: 'B5C 4J6', phoneNumber: '9055558523'},
+		{ id: 1, name: 'Clinic B', address: '13 Fake Ave', postalCode: 'A1B 2C3', phoneNumber: '4165551234'},
+	]
+	
+	return institutions;
 };
 
 // adds a new institution to the app component state

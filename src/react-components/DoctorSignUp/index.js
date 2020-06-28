@@ -91,7 +91,6 @@ class DoctorSignUp extends React.Component {
 			// institution selection
 			1: <InstitutionSelector 
 					institutionID={this.institutionID}
-					appComponent={this.props.appComponent}
 					handleChange={this.handleInputChange}
 					submit={this.submit}
 					next={this.nextStatus}

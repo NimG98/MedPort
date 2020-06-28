@@ -9,18 +9,31 @@ import { getInstitutions } from "../../actions/app";
 // component for selecting a preexisiting institution
 class InstitutionSelector extends React.Component {
 	
+	constructor(props) {
+		super(props);
+		
+		this.state = {
+			institutions: []
+		}
+	}
+	
+	componentDidMount() {
+		const data = getInstitutions();
+		
+		this.setState({
+			institutions: data
+		});
+	}
+	
 	render() {
 		
 		const {
 			institutionID,
-			appComponent,
 			handleChange,
 			submit,
 			next,
 			back
 		} = this.props;
-		
-		const institutions = getInstitutions(appComponent);
 		
 		return (
 			<form className="InstitutionSelector" onSubmit={submit}>
@@ -41,7 +54,7 @@ class InstitutionSelector extends React.Component {
 							<option value="" disabled>Choose Here</option>
 							
 							{/* iterates over institutions array and displays options */}
-							{institutions.map(institution => (
+							{this.state.institutions.map(institution => (
 								<option 
 									key={uid(institution)} 
 									value={institution.id}>
