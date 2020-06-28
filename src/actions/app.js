@@ -1,3 +1,5 @@
+import { UserType } from "../constants/userType";
+
 // for debugging 
 const log = console.log
 
@@ -168,22 +170,22 @@ export const validateLogin = (app, username, password) => {
 		// Patient
 		"user": {
 			password: "user",
-			type: "patient"
+			type: UserType.patient
 		},
 		// Doctor
 		"user2": {
 			password: "user2",
-			type: "doctor"
+			type: UserType.doctor
 		},
 		// Secretary
 		"user3": {
 			password: "user3",
-			type: "secretary"
+			type: UserType.secretary
 		},
 		// Admin
 		"admin": {
 			password: "admin",
-			type: "admin"
+			type: UserType.admin
 		}
 	}
 
