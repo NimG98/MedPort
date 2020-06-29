@@ -31,10 +31,7 @@ class App extends React.Component {
 			// code: institutionID
 			'S001': 1,
 	  },
-	  loggedInUser: {
-		  // type is either patient, doctor, secretary
-		  type: null
-	  }
+	  loggedInUser: null
   }
 
   render(){
