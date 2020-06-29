@@ -3,7 +3,7 @@ import React from "react";
 import "./styles.css";
 
 // importing actions/required methods
-import { addInstitution, createInstitutionID } from "../../actions/app";
+import { addInstitution } from "../../actions/app";
 
 //
 class InstitutionCreationForm extends React.Component {
@@ -98,22 +98,19 @@ class InstitutionCreationForm extends React.Component {
 			address: this.state.address,
 			postalCode: this.state.postalCode,
 			phoneNumber: this.state.phoneNumber,
-			id: createInstitutionID(this.props.appComponent),
 		});
 	}
 	
 	// submit new institution information
 	submit() {
+		// creates the new institution object
 		const institution = this.createInstitution();
 		
-		// add institiution to app component institutions list
-		addInstitution(this.props.appComponent, institution);
-		
-		// set doctor's institutionID
-		this.props.setInstitutionID(institution.id);
+		// server call - returns institution id
+		const institutionID = addInstitution(institution);
 		
 		// invoke submission in parent component
-		this.props.submit();
+		this.props.submit(institutionID);
 	}
 }
 

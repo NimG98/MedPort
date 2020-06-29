@@ -15,36 +15,22 @@ export const addDoctor = (doctor) => {
 export const getInstitutions = () => {
 	// code below requires server call
 	
+	// mock data
 	const institutions = [
 		{ id: 1, name: 'Hospital A', address: '123 Main St', postalCode: 'B5C 4J6', phoneNumber: '9055558523'},
-		{ id: 1, name: 'Clinic B', address: '13 Fake Ave', postalCode: 'A1B 2C3', phoneNumber: '4165551234'},
+		{ id: 2, name: 'Clinic B', address: '13 Fake Ave', postalCode: 'A1B 2C3', phoneNumber: '4165551234'},
 	]
 	
 	return institutions;
 };
 
-// adds a new institution to the app component state
-export const addInstitution = (app, institution) => {
-	// this would be an api call to the backend
-	
-	const newInstitutions = app.state.institutions.concat(institution);
-	
-	app.setState({
-		institutions: newInstitutions
-	});
-}
-
-// returns new id, incremented from existing institution objects
-export const createInstitutionID = (app) => {
-	const institutions = app.state.institutions;
-	
-	if (institutions.length) {
-		const lastID = institutions[institutions.length - 1].id;
-		return (lastID + 1);
-	}
-	
-	return 1;
-	
+/* 
+	submits new institution information to server for account creation.
+	Note: returns newly created institution's ID on success
+*/
+export const addInstitution = (institution) => {
+	// code below requires server call
+	return 3;
 }
 
 /* 
@@ -70,7 +56,7 @@ export const addSecretary = (secretary, code) => {
 export const submitReferralCode = (code) => {
 	// code below requires server call
 	
-	// dummy data
+	// mock data
 	const referrals = {
 			// code: doctorID
 			'P001': 1,
