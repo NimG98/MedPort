@@ -1,4 +1,6 @@
-import { UserType } from "../constants/userType";
+import { MOCK_USERS as users} from "../mock-data/mock";
+import { MOCK_REQUESTS as allRequests} from "../mock-data/mock";
+
 
 // for debugging 
 const log = console.log
@@ -139,63 +141,52 @@ export const removeReferralCode = (app, code) => {
 	}
 }
 
-/* Old validateLogin way */
-/* // Validates if the username is associated with a registered user,
-// and that the user's password is correct
-export const validateLogin = (app, username, password) => {
-	// this would be an api call to the backend
-	var isValid = false;
-
-	const users = app.state.doctors.concat(app.state.patients, app.state.secretaries);
-
-	for(var i=0; i<users.length; i++){
-		if(users[i].email === username) {
-			if(users[i].password === password) {
-				isValid = true;
-				break;
-			}
-		}
-	}
-
-	return isValid;
-} */
-
 // Validates if the username is associated with a registered user,
 // and that the user's password is correct
 export const validateLogin = (app, username, password) => {
 	var isValid = false;
 	
-	// this would have been an api call to the backend to look at the user database
-	const users = {
-		// Patient
-		"user": {
-			password: "user",
-			type: UserType.patient
-		},
-		// Doctor
-		"user2": {
-			password: "user2",
-			type: UserType.doctor
-		},
-		// Secretary
-		"user3": {
-			password: "user3",
-			type: UserType.secretary
-		},
-		// Admin
-		"admin": {
-			password: "admin",
-			type: UserType.admin
-		}
-	}
+	// code below requires server call
+	// to look at the user database and see usernames/passwords
+
+	// users is MOCK_USERS from ../mock-data/mock.js
 
 	isValid = users[username] && users[username].password === password;
 	
 	if(isValid) {
 		app.setState({
-			loggedInUser: users[username].type
+			loggedInUser: username
 		});
 	}
 
 	return isValid;
+}
+
+// Gets a list of requests with a certain status from a certain user
+export const getUserRequestsByStatus = (username, status) => {
+
+	var userRequests = [];
+	
+	// code below requires server call
+	// to get all of the requests in the database
+
+	// allRequests is MOCK_REQUESTS from ../mock-data/mock.js
+
+	for(req of allRequests) {
+		if((req.created_by === username || req.to === username) && req.status === status) {
+			userRequests.push(req);
+		}
+	}
+
+	return userRequests;
+}
+
+// Gets the type of the user (patient/doctor/secretary/admin)
+export const getUserType = (username) => {
+
+	// code below requires server call
+	// to look at the user database and see usernames/passwords
+
+	// users is MOCK_USERS from ../mock-data/mock.js
+	return (users[username].type);
 }
