@@ -18,3 +18,7 @@
     position: sticky;
     background-color: tomato;
 }
+
+.nav .fixed-bottom {
+    width: 200px;
+}
