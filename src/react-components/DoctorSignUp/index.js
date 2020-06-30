@@ -29,8 +29,6 @@ class DoctorSignUp extends React.Component {
 			MID: '',
 			institutionID: '',
 			statusIndex: 0,
-			/* error: false,
-			errorCode: '', */
 		}
 		
 		// binding functions
@@ -40,7 +38,6 @@ class DoctorSignUp extends React.Component {
 		this.previousStatus = this.previousStatus.bind(this);
 		this.createDoctor = this.createDoctor.bind(this);
 		this.submitInstitutionID = this.submitInstitutionID.bind(this);
-		// this.setError = this.setError.bind(this);
 		this.submit = this.submit.bind(this);
 	}
 	
@@ -48,7 +45,6 @@ class DoctorSignUp extends React.Component {
 		
 		return (
 			<div className="DoctorSignUp">
-				{/* this.state.error ? <h2>{this.state.errorCode}</h2> : null */}
 				{this.getSignUpForm(this.state.statusIndex)}
 			</div>
 		);
@@ -146,21 +142,8 @@ class DoctorSignUp extends React.Component {
 		// navigate back to login page
 		redirect(this, '/');
 		
-		/* if (success) {
-			redirect(this, '/');
-		} else {
-			this.setError(true, 'Submission error, please try again.');
-		}
-		*/
 	}
 	
-	// general error code handler
-	/* setError(value, code) {
-		this.setState({
-			error: value,
-			errorCode: code
-		});
-	} */
 }
 
 export default withRouter(DoctorSignUp);

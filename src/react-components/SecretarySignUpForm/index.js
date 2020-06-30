@@ -18,13 +18,10 @@ class SecretarySignUpForm extends React.Component {
 			lastName: '',
 			email: '',
 			password: '',
-			/* error: false,
-			errorCode: '', */
 		}
 		
 		// binding functions
 		this.handleInputChange = this.handleInputChange.bind(this);
-		// this.setError = this.setError.bind(this);
 		this.createSecretary = this.createSecretary.bind(this);
 		this.submit = this.submit.bind(this);
 	}
@@ -32,7 +29,6 @@ class SecretarySignUpForm extends React.Component {
 	render() {
 		return (
 			<form className="SecretarySignUpForm" onSubmit={this.submit}>
-				{/* this.state.error ? <h2>{this.state.errorCode}</h2> : null */}
 			
 				<div className="title">
 					<h2><b>Secretary Sign Up</b></h2>
@@ -113,21 +109,8 @@ class SecretarySignUpForm extends React.Component {
 		const success = addSecretary(secretary, this.props.code);
 		
 		redirect(this, "/");
-		
-		/* if (success) {
-			redirect(this, "/");
-		} else {
-			this.setError(true, 'Submission error, please try again.');
-		} */
 	}
 	
-	// general error code handler
-	/* setError(value, code) {
-		this.setState({
-			error: value,
-			errorCode: code
-		});
-	} */
 }
 
 export default withRouter(SecretarySignUpForm);
