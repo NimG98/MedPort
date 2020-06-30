@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from "react-router";
 
 import "./styles.css";
 // import 'antd/dist/antd.css';
@@ -15,27 +16,34 @@ class Request extends React.Component {
     constructor(props) {
         super(props);
 
+        console.log(this.props.appComponent);
+        console.log(`logged in user = [${this.props.appComponent}]`);
         this.state = {
-            newRequest: false
+            newRequest: false,
+            user: this.props.appComponent.state.loggedInUser
         };
+
+        this.onClick = this.onClick.bind(this);
+        this.changeView = this.changeView.bind(this);
+        this.getPreviousRequestsPage = this.getPreviousRequestsPage.bind(this);
+
     }
 
-    user = this.props.appComponent.state.loggedInUser;
-
     onClick() {
-        this.setState( {newRequest: true} );
+        console.log(this.state);
+        this.setState( {...this.state, newRequest: true} );
     }
 
     changeView() {
         if(this.state.newRequest) {
-            return (<RequestForm loggedInUser={this.user}/>);
+            return (<RequestForm loggedInUser={this.state.user}/>);
         } else {
             return (
             <div>
                 <Button onClick={this.onClick} className="new-request-button">
                     Create a New Request
                 </Button>
-                {this.getPreviousRequestsPage}
+                {this.getPreviousRequestsPage()}
             </div>);
         }
     }
@@ -52,15 +60,15 @@ class Request extends React.Component {
             <div className="request-page">
                 <Header />
                 <NavBar />
-                {this.changeView}
+                {this.changeView()}
             </div>
         );
     }
     
     // returns the previous list of requests made by the user in a table format
     getPreviousRequestsPage() {
-        return (<PreviousRequests loggedInUser={this.user} />)
+        return (<PreviousRequests loggedInUser={this.state.user} />)
     }
 }
 
-export default Request;
+export default withRouter(Request);

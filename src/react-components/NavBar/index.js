@@ -3,14 +3,28 @@ import "./styles.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Nav} from "react-bootstrap";
 
-class SideNav extends React.Component{
+import { redirect } from "../../actions/router";
+import { withRouter } from "react-router";
+
+class NavBar extends React.Component{
+
+    constructor(props) {
+        super(props);
+
+        this.redirectRequest = this.redirectRequest.bind(this);
+    }
+
+    redirectRequest() {
+        redirect(this, '/request');
+    }
+
     render(){
         return(
             <div class="nav">
             <Nav className="col-lg-12 d-none d-inline rounded shadow-lg sidebar">
             
             <Nav.Item>
-                <Nav.Link href="/request">Request</Nav.Link>
+                <Nav.Link onClick={this.redirectRequest}>Request</Nav.Link>
             </Nav.Item>
             <Nav.Item>
                 <Nav.Link href="/results">Results</Nav.Link>
@@ -39,13 +53,4 @@ class SideNav extends React.Component{
 
 }
 
-
-export default class NavBar
-extends React.Component{
-    render(){
-        return (
-            <SideNav></SideNav>
-
-        );
-    }
-}
+export default withRouter(NavBar);

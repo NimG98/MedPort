@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from "react-router";
 
 import "./styles.css";
 // import 'antd/dist/antd.css';
@@ -11,11 +12,11 @@ class RequestForm extends React.Component {
 
     constructor(props) {
         super(props);
+        console.log("requestform", this.props.loggedInUser);
     }
 
     user = this.props.loggedInUser;
     userType = getUserType(this.user);
-    patients = getPatientsByDoctor(getDoctorID(this.user))
 
     onFinish = (formValues) => {
         console.log("Request submitted with the following values: ", formValues);
@@ -47,7 +48,7 @@ class RequestForm extends React.Component {
                                     },
                                 ]}
                             >
-                                {this.displayPatients}
+                                {this.displayPatients(getPatientsByDoctor(getDoctorID(this.user)))}
                             </Form.Item>
                         }
                         <Form.Item
@@ -113,11 +114,11 @@ class RequestForm extends React.Component {
         var patientNameElements = [];
 
         for (var patientInfo in patients) {
-            patientNameElements.push(<Select.Option>patientInfo.firstName + patientInfo.lastName</Select.Option>)
+            patientNameElements.push(<Select.Option>{patientInfo.firstName + patientInfo.lastName}</Select.Option>)
         }
 
         return (<Select>{patientNameElements}</Select>)
     }
 
 }
-export default RequestForm;
+export default withRouter(RequestForm);
