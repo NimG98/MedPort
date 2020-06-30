@@ -100,7 +100,7 @@ class PreviousRequests extends React.Component {
 
     displayTableHeaders = (status) => {
         var tableHeaders = [];
-        var headers = this.tableHeaderNames;
+        var headers = [...this.tableHeaderNames];
         console.log(this.tableHeaderNames)
 
 
@@ -176,8 +176,8 @@ class PreviousRequests extends React.Component {
                         onCancel={this.handleModalCancel}
                         visible={this.state.modalVisible}
                     >
-                        {"Request by" + req.created_by + "for a" + req.request_type
-                                + "on" + req.date + "at" + req.time}
+                        {"Request by " + req.created_by + " for a " + req.request_type
+                                + " on " + req.date + " at " + req.time}
                     </Modal>
                 </td>
             );
