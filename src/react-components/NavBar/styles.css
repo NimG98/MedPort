@@ -6,7 +6,7 @@
     left: 0;
     height: 100%;
     width: 200px;
-    margin-top: 40px;
+    margin-top: 0px;
     
 	/* background-color: rgb(203, 236, 255); */
 	/* background-color: rgb(176, 224, 252); */
@@ -17,11 +17,11 @@
     
 }
 
-li{
+.nav li{
     padding: 5px;
 }
 
-.col-background-t{
+.nav .col-background-t{
     height: 500px;
     position: sticky;
     background-color: tomato;
