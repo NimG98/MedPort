@@ -6,8 +6,6 @@
 	display: -webkit-flex;
 	display: flex;
 	align-items: center;
-	position: fixed;
-	top: 0px;
 }
 
 .header h1 {

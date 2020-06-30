@@ -17,7 +17,7 @@ class RequestForm extends React.Component {
         this.state = {
             user: this.props.loggedInUser,
             userType: getUserType(this.props.loggedInUser),
-            patients: getPatientsByDoctor(getDoctorID(this.props.loggedInUser))
+            
         }
         // this.userType = getUserType(this.state.user);
         // this.patients = getPatientsByDoctor(getDoctorID(this.state.user));
@@ -27,6 +27,13 @@ class RequestForm extends React.Component {
 
     onFinish = (formValues) => {
         console.log("Request submitted with the following values: ", formValues);
+    }
+
+    getPatients = (userType) => {
+        if(userType === UserType.doctor) {
+            const patients = getPatientsByDoctor(getDoctorID(this.state.User))
+            this.setState({ patients: patients})
+        }
     }
 
     render() {
@@ -55,7 +62,7 @@ class RequestForm extends React.Component {
                                     },
                                 ]}
                             >
-                                {this.displayPatients(this.state.patients)}
+                                {this.displayPatients(this.getPatients(this.state.userType))}
                             </Form.Item>
                         }
                         <Form.Item
