@@ -2,7 +2,7 @@ import React from "react";
 import { withRouter } from "react-router";
 
 import "./styles.css";
-// import 'antd/dist/antd.css';
+import 'antd/dist/antd.css';
 
 import Header from './../Header';
 import NavBar from './../NavBar';
@@ -39,8 +39,8 @@ class Request extends React.Component {
             return (<RequestForm loggedInUser={this.state.user}/>);
         } else {
             return (
-            <div>
-                <Button onClick={this.onClick} className="new-request-button">
+            <div className="previousRequestsPage">
+                <Button onClick={this.onClick} type="primary" className="new-request-button">
                     Create a New Request
                 </Button>
                 {this.getPreviousRequestsPage()}

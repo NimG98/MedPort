@@ -1,7 +1,7 @@
 import React from "react";
 
 import "./styles.css";
-// import 'antd/dist/antd.css';
+import 'antd/dist/antd.css';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Tabs, Button, Modal }  from "antd";
 
