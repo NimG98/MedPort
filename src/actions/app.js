@@ -1,6 +1,7 @@
 import { MOCK_USERS as users} from "../mock-data/mock";
 import { MOCK_REQUESTS as allRequests} from "../mock-data/mock";
-
+import { MOCK_PATIENTS as allPatients} from "../mock-data/mock";
+import { MOCK_DOCTORS as allDoctors} from "../mock-data/mock";
 
 // for debugging 
 const log = console.log
@@ -188,5 +189,28 @@ export const getUserType = (username) => {
 	// to look at the user database and see usernames/passwords
 
 	// users is MOCK_USERS from ../mock-data/mock.js
-	return (users[username].type);
+	return users[username].type;
+}
+
+// Gets the patients assigned to a specific doctor
+export const getPatientsByDoctor = (doctorID) => {
+
+	var patients = []
+
+	// code below requires server call
+	// to look at the patient database
+
+	// allPatients is MOCK_PATIENTS from ../mock-data/mock.js
+
+	for (patientInfo in allPatients) {
+		if(patientInfo.doctorID === doctorID) {
+			patients.push(patientInfo)
+		}
+	}
+
+	return patients;
+}
+
+export const getDoctorID = (username) => {
+	return allDoctors[username].doctorID;
 }
