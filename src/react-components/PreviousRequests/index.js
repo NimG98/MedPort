@@ -11,9 +11,9 @@ const { TabPane } = Tabs;
 
 class PreviousRequests extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
+    // constructor(props) {
+    //     super(props);
+    // }
 
     user = this.props.loggedInUser;
     pendingRequests = getUserRequestsByStatus(this.user, "pending");
@@ -79,12 +79,13 @@ class PreviousRequests extends React.Component {
     }
 
     displayTableElements = (status) => {
-        var tableRows = []
+        var tableRows = [];
+        var requestData = [];
 
         if(status === "pending") {
-            var requestData = this.pendingRequests;
+            requestData = this.pendingRequests;
         } else if(status === "confirmed") {
-            var requestData = this.confirmedRequests;
+            requestData = this.confirmedRequests;
         }
 
         for(var req in requestData) {

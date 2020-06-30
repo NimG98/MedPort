@@ -15,9 +15,9 @@ import { redirect } from "../../actions/router";
 /* Component for the Home page */
 class Home extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
 
   login = loginValues => {
     const username = loginValues.username;

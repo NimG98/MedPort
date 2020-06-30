@@ -20,7 +20,7 @@ class NavBar extends React.Component{
 
     render(){
         return(
-            <div class="nav">
+            <div className="nav">
             <Nav className="col-lg-12 d-none d-inline rounded shadow-lg sidebar">
             
             <Nav.Item>
@@ -33,7 +33,7 @@ class NavBar extends React.Component{
                 <Nav.Link href="/handw">Health and Wellness</Nav.Link>
             </Nav.Item>
             
-            <div class="fixed-bottom">
+            <div className="fixed-bottom">
             <Nav.Item>
                 <Nav.Link href="/upload">
                 Upload

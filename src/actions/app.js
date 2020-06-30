@@ -3,8 +3,8 @@ import { MOCK_REQUESTS as allRequests} from "../mock-data/mock";
 import { MOCK_PATIENTS as allPatients} from "../mock-data/mock";
 import { MOCK_DOCTORS as allDoctors} from "../mock-data/mock";
 
-// for debugging 
-const log = console.log
+// // for debugging 
+// const log = console.log
 
 // adds a new doctor to the app component state
 export const addDoctor = (app, doctor) => {
@@ -194,6 +194,7 @@ export const getUserType = (username) => {
 
 // Gets the patients assigned to a specific doctor
 export const getPatientsByDoctor = (doctorID) => {
+	console.log(doctorID);
 
 	var patients = []
 
@@ -202,11 +203,14 @@ export const getPatientsByDoctor = (doctorID) => {
 
 	// allPatients is MOCK_PATIENTS from ../mock-data/mock.js
 
-	for (var patientInfo in allPatients) {
-		if(patientInfo.doctorID === doctorID) {
-			patients.push(patientInfo)
+	for (var patientUsername in allPatients) {
+		console.log(patientUsername);
+		if(allPatients[patientUsername].doctorID === doctorID) {
+			patients.push(allPatients[patientUsername])
 		}
 	}
+
+	console.log("getPatientsByDoctor");
 
 	return patients;
 }

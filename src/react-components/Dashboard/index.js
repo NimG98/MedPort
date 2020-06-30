@@ -20,9 +20,9 @@ import NavBar from './../NavBar';
 /* Component for the Dashboard */
 class Dashboard extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
+//   constructor(props) {
+//     super(props);
+//   }
 
   render() {
     // To make sure no one just visits http://localhost:3000/dashboard
