@@ -174,8 +174,8 @@ export const getUserRequestsByStatus = (username, status) => {
 	// allRequests is MOCK_REQUESTS from ../mock-data/mock.js
 
 	for(var req in allRequests) {
-		if((req.created_by === username || req.to === username) && req.status === status) {
-			userRequests.push(req);
+		if((allRequests[req].created_by === username || allRequests[req].to === username) && allRequests[req].status === status) {
+			userRequests.push(allRequests[req]);
 		}
 	}
 
