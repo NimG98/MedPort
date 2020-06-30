@@ -2,11 +2,13 @@ import React from "react";
 import { withRouter } from "react-router";
 
 import "./styles.css";
-// import 'antd/dist/antd.css';
+import 'antd/dist/antd.css';
 import { Row, Card, Form, Input, Button, Select, DatePicker, TimePicker} from "antd";
 
 import { getPatientsByDoctor, getUserType, getDoctorID } from "../../actions/app";
 import { UserType } from "../../constants/userType";
+
+const { TextArea } = Input;
 
 class RequestForm extends React.Component {
 
@@ -114,7 +116,7 @@ class RequestForm extends React.Component {
                                 name="reason"
                                 label="Reason:"
                             >
-                                <Input placeholder="Input your reason for submitting this request" autoSize />
+                                <TextArea placeholder="Input your reason for submitting this request" autoSize />
                             </Form.Item>
                             <Form.Item>
                                 <Button type="primary" htmlType="submit" className="request-form-button">
@@ -132,7 +134,7 @@ class RequestForm extends React.Component {
         var patientNameElements = [];
 
         for (var patientInfo in patients) {
-            patientNameElements.push(<Select.Option>{patients[patientInfo].firstName + " " + patients[patientInfo].lastName}</Select.Option>)
+            patientNameElements.push(<Select.Option key={patientInfo}>{patients[patientInfo].firstName + " " + patients[patientInfo].lastName}</Select.Option>)
         }
 
         return (<Select>{patientNameElements}</Select>)
