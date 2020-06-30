@@ -1,20 +1,43 @@
 import React from "react";
 
 import "./styles.css";
+// import 'antd/dist/antd.css';
 
 import Header from './../Header';
 import NavBar from './../NavBar';
-import PatientRequest from './../PatientRequest';
-import DoctorRequest from './../DoctorRequest';
+import RequestForm from '../RequestForm';
 
+import { Button }  from "antd";
 
 class Request extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            newRequest: false
+        };
     }
 
-    userType = this.props.appComponent.state.loggedInUser;
+    user = this.props.appComponent.state.loggedInUser;
+
+    onClick() {
+        this.setState( {newRequest: true} );
+    }
+
+    changeView() {
+        if(this.state.newRequest) {
+            return (<RequestForm loggedInUser={this.user}/>);
+        } else {
+            return (
+            <div>
+                <Button onClick={this.onClick} className="new-request-button">
+                    Create a New Request
+                </Button>
+                {this.getPreviousRequestsPage}
+            </div>);
+        }
+    }
 
     render() {
 
@@ -28,21 +51,15 @@ class Request extends React.Component {
             <div className="request-page">
                 <Header />
                 <NavBar />
-                {this.getRequestsPage(this.userType)}
+                {this.changeView}
             </div>
         );
     }
-
-    // returns the appropriate requests page based on the user type
-	getRequestsPage = (userType) => {
-		
-		return {
-			// Patient's page for requests
-			"patient": <PatientRequest appComponent={this.props.appComponent} />,
-			// Doctor's page for requests
-			"doctor": <DoctorRequest appComponent={this.props.appComponent} />
-		}[userType]
-	}
+    
+    // returns the previous list of requests made by the user in a table format
+    getPreviousRequestsPage() {
+        return (<PreviousRequests loggedInUser={this.user} />)
+    }
 }
 
 export default Request;
