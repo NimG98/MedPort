@@ -7,6 +7,10 @@ export const MOCK_USERS = {
         password: "user",
         type: UserType.patient
     },
+    jdoe: {
+        password: "12345",
+        type: UserType.patient
+    },
     // Doctor
     user2: {
         password: "user2",
@@ -74,3 +78,24 @@ export const MOCK_REQUESTS = [
         reason: "Need to come in person to observe growth in movement after last x-ray of broken leg"
     }
 ]
+
+// mock data for patients
+export const MOCK_PATIENTS = {
+    "user": {
+        firstName: 'UserFn', lastName: 'UserLn', address: '4 User St', postalCode: 'H3B 2JC', HCN: '5555555123XX', email: 'user@user.com', doctorID: 1
+    },
+    "jdoe": {
+        firstName: 'Jane', lastName: 'Doe', address: '123 Main St', postalCode: 'H3B 2JC', HCN: '5555555123XX', email: 'jdoe@example.com', doctorID: 1
+    },
+    "billybob": {
+        firstName: 'Billy', lastName: 'Bob', address: '987 Royal St', postalCode: 'LA1 3C7', HCN: '5555555123XX', email: 'jdoe@example.com', doctorID: 2
+    }
+}
+
+// mock data for doctors
+export const MOCK_DOCTORS = {
+    "user2": {
+        doctorID: 1, firstName: 'Bob', lastName: 'Builder', MID: 123456,  email: 'b.build@fake.com', password: 'abcdef'
+    }
+}
+
