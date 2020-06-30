@@ -43,7 +43,7 @@ class App extends React.Component {
                             (<SignUp appComponent={this} />)}/>
 			<Route exact path='/dashboard' render={() => 
                             (<Dashboard appComponent={this} />)}/>
-          <Route exact path='/upload' render={() => 
+          	<Route exact path='/upload' render={() => 
                             (<Upload appComponent={this} />)}/>
           </Switch>
         </BrowserRouter>
