@@ -23,16 +23,20 @@ class RequestForm extends React.Component {
         // this.patients = getPatientsByDoctor(getDoctorID(this.state.user));
         this.onFinish = this.onFinish.bind(this);
         this.displayPatients = this.displayPatients.bind(this);
+        // this.getPatients = this.getPatients.bind(this);
     }
 
     onFinish = (formValues) => {
         console.log("Request submitted with the following values: ", formValues);
     }
 
-    getPatients = (userType) => {
-        if(userType === UserType.doctor) {
-            const patients = getPatientsByDoctor(getDoctorID(this.state.User))
-            this.setState({ patients: patients})
+    getPatients () {
+        if(this.state.userType === UserType.doctor) {
+            console.log("being called")
+            const patients = getPatientsByDoctor(getDoctorID(this.state.user))
+            // this.setState({ ...this.state, patients: patients})
+            console.log(patients);
+            return patients;
         }
     }
 
@@ -62,7 +66,7 @@ class RequestForm extends React.Component {
                                     },
                                 ]}
                             >
-                                {this.displayPatients(this.getPatients(this.state.userType))}
+                                {this.displayPatients(this.getPatients())}
                             </Form.Item>
                         }
                         <Form.Item
@@ -128,7 +132,7 @@ class RequestForm extends React.Component {
         var patientNameElements = [];
 
         for (var patientInfo in patients) {
-            patientNameElements.push(<Select.Option>{patientInfo.firstName + patientInfo.lastName}</Select.Option>)
+            patientNameElements.push(<Select.Option>{patients[patientInfo].firstName + " " + patients[patientInfo].lastName}</Select.Option>)
         }
 
         return (<Select>{patientNameElements}</Select>)
