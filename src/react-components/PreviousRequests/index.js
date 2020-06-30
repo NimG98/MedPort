@@ -7,6 +7,7 @@ import { Tabs, Button, Modal }  from "antd";
 
 import { getUserRequestsByStatus } from "../../actions/app";
 
+const { TabPane } = Tabs;
 
 class PreviousRequests extends React.Component {
 
@@ -15,8 +16,8 @@ class PreviousRequests extends React.Component {
     }
 
     user = this.props.loggedInUser;
-    pendingRequests = getUserRequestsByStatus(user, "pending");
-    confirmedRequests = getUserRequestsByStatus(user, "confirmed");
+    pendingRequests = getUserRequestsByStatus(this.user, "pending");
+    confirmedRequests = getUserRequestsByStatus(this.user, "confirmed");
 
     tableHeaderNames = ["Created By", "Request To", "Request Type", "Date", "Time", "Reason"];
     actionHeaderName = "Action Needed";
@@ -63,14 +64,14 @@ class PreviousRequests extends React.Component {
     }
 
     displayTableHeaders = (status) => {
-        tableHeaders = []
-        headers = this.tableHeaderNames;
+        var tableHeaders = []
+        var headers = this.tableHeaderNames;
 
         if(status === "pending") {
             headers.push(this.actionHeaderName);
         }
 
-        for (header in headers) {
+        for (var header in headers) {
             tableHeaders.push(<th>{header}</th>);
         }
 
@@ -78,15 +79,15 @@ class PreviousRequests extends React.Component {
     }
 
     displayTableElements = (status) => {
-        tableRows = []
+        var tableRows = []
 
         if(status === "pending") {
-            requestData = this.pendingRequests;
+            var requestData = this.pendingRequests;
         } else if(status === "confirmed") {
-            requestData = this.confirmedRequests;
+            var requestData = this.confirmedRequests;
         }
 
-        for(req in requestData) {
+        for(var req in requestData) {
             tableRows.push(
                 <tr>
                     {/* Later display user's First and Last Name, instead of username */}

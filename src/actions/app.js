@@ -173,7 +173,7 @@ export const getUserRequestsByStatus = (username, status) => {
 
 	// allRequests is MOCK_REQUESTS from ../mock-data/mock.js
 
-	for(req of allRequests) {
+	for(var req in allRequests) {
 		if((req.created_by === username || req.to === username) && req.status === status) {
 			userRequests.push(req);
 		}
@@ -202,7 +202,7 @@ export const getPatientsByDoctor = (doctorID) => {
 
 	// allPatients is MOCK_PATIENTS from ../mock-data/mock.js
 
-	for (patientInfo in allPatients) {
+	for (var patientInfo in allPatients) {
 		if(patientInfo.doctorID === doctorID) {
 			patients.push(patientInfo)
 		}

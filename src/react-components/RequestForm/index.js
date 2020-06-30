@@ -5,7 +5,7 @@ import "./styles.css";
 import { Row, Card, Form, Input, Button, Select, DatePicker, TimePicker} from "antd";
 
 import { getPatientsByDoctor, getUserType, getDoctorID } from "../../actions/app";
-import { UserType } from "../constants/userType"
+import { UserType } from "../../constants/userType";
 
 class RequestForm extends React.Component {
 
@@ -14,7 +14,7 @@ class RequestForm extends React.Component {
     }
 
     user = this.props.loggedInUser;
-    userType = getUserType(user);
+    userType = getUserType(this.user);
     patients = getPatientsByDoctor(getDoctorID(this.user))
 
     onFinish = (formValues) => {
@@ -36,7 +36,7 @@ class RequestForm extends React.Component {
                         layout="vertical"
                     >
                         {/* Only display this element if user is a doctor */}
-                        {userType === UserType.doctor &&
+                        {this.userType === UserType.doctor &&
                             <Form.Item
                                 name="patient"
                                 label="Patient:"
@@ -110,9 +110,9 @@ class RequestForm extends React.Component {
     }
 
     displayPatients = (patients) => {
-        patientNameElements = [];
+        var patientNameElements = [];
 
-        for (patientInfo in patients) {
+        for (var patientInfo in patients) {
             patientNameElements.push(<Select.Option>patientInfo.firstName + patientInfo.lastName</Select.Option>)
         }
 
@@ -120,4 +120,4 @@ class RequestForm extends React.Component {
     }
 
 }
-export default PatientRequestForm;
+export default RequestForm;

@@ -6,6 +6,7 @@ import "./styles.css";
 import Header from './../Header';
 import NavBar from './../NavBar';
 import RequestForm from '../RequestForm';
+import PreviousRequests from '../PreviousRequests'
 
 import { Button }  from "antd";
 
