@@ -7,6 +7,7 @@ import { Row, Card, Form, Input, Button, Select, DatePicker, TimePicker} from "a
 
 import { getPatientsByDoctor, getUserType, getDoctorID } from "../../actions/app";
 import { UserType } from "../../constants/userType";
+import { LeftOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
 
@@ -55,7 +56,7 @@ class RequestForm extends React.Component {
                     Submit a request
                 </h1>
                 <Button onClick={this.onClick} className="back-to-previous-req-button">
-                    hello
+                    <LeftOutlined />
                 </Button>
                 <Card className="requestFormCard">
                     <Form
