@@ -139,7 +139,10 @@ class PatientSignUpForm extends React.Component {
 	/* 
 		submits a new patient account and redirects to the login page
 	*/
-	submit() {
+	submit(event) {
+		// prevents page reload
+		event.preventDefault(); 
+		
 		const patient = this.createPatient();
 		
 		const success = addPatient(patient, this.props.code);

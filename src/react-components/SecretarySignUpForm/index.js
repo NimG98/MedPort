@@ -73,7 +73,7 @@ class SecretarySignUpForm extends React.Component {
 				</div>
 					
 				<Link to="/">
-					<button className="login">Login</button>
+					<button type="button" className="login">Login</button>
 				</Link>	
 				
 				<button type="submit" className="submit">Submit</button>
@@ -103,7 +103,10 @@ class SecretarySignUpForm extends React.Component {
 		});
 	}
 	
-	submit() {
+	submit(event) {
+		// prevents page reload
+		event.preventDefault();
+		
 		const secretary = this.createSecretary();
 		
 		const success = addSecretary(secretary, this.props.code);

@@ -74,7 +74,7 @@ class InstitutionCreationForm extends React.Component {
 						required />
 				</div>
 				
-				<button className="back" onClick={back}>Back</button>
+				<button type="button" className="back" onClick={back}>Back</button>
 				<button type="submit" className="submit">Submit</button>
 			</form>
 		);
@@ -102,7 +102,10 @@ class InstitutionCreationForm extends React.Component {
 	}
 	
 	// submit new institution information
-	submit() {
+	submit(event) {
+		// prevents page reload
+		event.preventDefault();
+		
 		// creates the new institution object
 		const institution = this.createInstitution();
 		

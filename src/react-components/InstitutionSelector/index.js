@@ -15,6 +15,9 @@ class InstitutionSelector extends React.Component {
 		this.state = {
 			institutions: []
 		}
+		
+		// binding functions
+		this.submit = this.submit.bind(this);
 	}
 	
 	componentDidMount() {
@@ -36,7 +39,7 @@ class InstitutionSelector extends React.Component {
 		} = this.props;
 		
 		return (
-			<form className="InstitutionSelector" onSubmit={submit}>
+			<form className="InstitutionSelector" onSubmit={this.submit}>
 				<div className="main_form">
 					<div className="title">
 						<h2><b>Select Your Institution</b></h2>
@@ -64,16 +67,24 @@ class InstitutionSelector extends React.Component {
 						</select>
 					</div>
 					
-					<button className="back" onClick={back}>Back</button>
+					<button type="button" className="back" onClick={back}>Back</button>
 					<button type="submit" className="submit">Submit</button>
 				</div>
 				
 				<div className="secondary_form">
 					<h3>Can't find your institution? </h3>
-					<button className="create" onClick={next}>Create</button>
+					<button type="button" className="create" onClick={next}>Create</button>
 				</div>
 			</form>
 		);
+	}
+	
+	// onSubmit event handler
+	submit(event) {
+		// prevents page reload
+		event.preventDefault();
+		
+		this.props.submit();
 	}
 	
 }

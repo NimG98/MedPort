@@ -5,6 +5,13 @@ import "./styles.css";
 
 class DoctorSignUpForm extends React.Component {
 	
+	constructor(props) {
+		super(props);
+		
+		// bind functions
+		this.submit = this.submit.bind(this);
+	}
+	
 	render() {
 		
 		const {
@@ -18,7 +25,7 @@ class DoctorSignUpForm extends React.Component {
 		} = this.props;
 		
 		return (
-			<form className="DoctorSignUpForm" onSubmit={next}>
+			<form className="DoctorSignUpForm" onSubmit={this.submit}>
 				<div className="title">
 					<h2><b>Doctor Sign Up</b></h2>
 				</div>
@@ -72,7 +79,7 @@ class DoctorSignUpForm extends React.Component {
 				</div>
 					
 				<Link to="/">	
-					<button className="login">Login</button>
+					<button type="button" className="login">Login</button>
 				</Link>
 				
 				<button type="submit" className="next">Next</button>
@@ -85,6 +92,14 @@ class DoctorSignUpForm extends React.Component {
 		if (event.target.validity.valid) {
 			handler(event);
 		}
+	}
+	
+	// onSubmit event handler
+	submit(event) {
+		// prevents page reload
+		event.preventDefault();
+		
+		this.props.next();
 	}
 	
 }
