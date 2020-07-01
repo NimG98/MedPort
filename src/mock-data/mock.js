@@ -95,7 +95,7 @@ export const MOCK_PATIENTS = {
 // mock data for doctors
 export const MOCK_DOCTORS = {
     "user2": {
-        doctorID: 1, firstName: 'Bob', lastName: 'Builder', MID: 123456,  email: 'b.build@fake.com', password: 'abcdef'
+        doctorID: 1, firstName: 'Bob', lastName: 'Builder', MID: 123456,  email: 'b.build@fake.com', password: 'abcdef', institutionID: 1
     }
 }
 
