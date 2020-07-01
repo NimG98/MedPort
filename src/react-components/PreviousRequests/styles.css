@@ -3,8 +3,6 @@
 .previousRequests {
     margin-top: 10px;
     margin-left: 280px;
-    /* float: left; */
-
 }
 
 .previousRequestsTitle {
@@ -20,13 +18,7 @@
     width: fit-content;
 }
 
-.previousRequests .ant-tabs-nav-list {
-    text-align: center;
-}
-
 .previousRequests table {
-    /* border-collapse: separate;
-    border-spacing: 50px 0px; */
     background-color: white;
     margin-right: 20px;
 }
@@ -49,8 +41,6 @@
 }
 
 .confirm-request-button {
-    /* background-color: rgb(151, 238, 151);
-    border-color: rgb(151, 238, 151); */
     width: 100%;
     height: 100%;
     color: rgb(37, 201, 37);
@@ -60,16 +50,9 @@
 .confirm-request-button:hover {
     color: rgb(37, 201, 37);
     border-color: rgb(37, 201, 37);
-    /* background-color: rgb(151, 238, 151);
-    border-color: rgb(151, 238, 151);
-    color: black; */
-    
 }
 
 .confirm-request-button:focus {
-    /* color: black; */
-    /* background-color: rgb(151, 238, 151);
-    border-color: rgb(151, 238, 151); */
     color: rgb(37, 201, 37);
     border-color: rgb(37, 201, 37);
 }
