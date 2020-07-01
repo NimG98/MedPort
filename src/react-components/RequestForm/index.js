@@ -45,13 +45,13 @@ class RequestForm extends React.Component {
     render() {
 
         return(
-            <div className="patientRequest">
+            <div className="newRequestFormPage">
                 <h1 className="requestTitle">
                     Submit a request
                 </h1>
                 <Card className="requestFormCard">
                     <Form
-                        name="patientRequestForm"
+                        name="request-form"
                         className="requestForm"
                         onFinish={this.onFinish}
                         layout="vertical"
@@ -82,9 +82,9 @@ class RequestForm extends React.Component {
                             ]}
                         >
                             <Select>
-                                <Select.Option>Phone Call</Select.Option>
-                                <Select.Option>Appointment</Select.Option>
-                                <Select.Option>Test</Select.Option>
+                                <Select.Option key={0}>Phone Call</Select.Option>
+                                <Select.Option key={1}>Appointment</Select.Option>
+                                <Select.Option key={2}>Test</Select.Option>
                             </Select>
                         </Form.Item>
                         <Row className="request-date-time">
