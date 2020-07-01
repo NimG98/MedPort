@@ -1,0 +1,22 @@
+.nav {
+    z-index: 10; 
+    padding: 1px;
+    position: fixed;
+    border: 10px;
+    left: 0;
+    height: 100%;
+    width: 200px;
+    margin-top: 0px;
+    
+	/* background-color: rgb(203, 236, 255); */
+	/* background-color: rgb(176, 224, 252); */
+	/* background-color: #007bff; */
+	/* background-color: #1e80e2;
+	background-color: #249CCC; */
+    background-color: #1F90CC;
+    
+}
+
+.nav li{
+    padding: 5px;
+}
