@@ -91,6 +91,7 @@ class RequestForm extends React.Component {
                             <Form.Item
                                 name="date"
                                 label="Date:"
+                                className="requestDateFormItem"
                                 rules={[
                                     {
                                         required: true,
@@ -103,6 +104,7 @@ class RequestForm extends React.Component {
                             <Form.Item
                                 name="time"
                                 label="Time:"
+                                className="requestTimeFormItem"
                                 rules={[
                                     {
                                         required: true,
@@ -110,20 +112,20 @@ class RequestForm extends React.Component {
                                     },
                                 ]}
                             >
-                                <TimePicker use12Hours format="h:mm"/>
-                            </Form.Item>
-                            <Form.Item
-                                name="reason"
-                                label="Reason:"
-                            >
-                                <TextArea placeholder="Input your reason for submitting this request" autoSize />
-                            </Form.Item>
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit" className="request-form-button">
-                                    Submit
-                                </Button>
+                                <TimePicker use12Hours format="h:mm A"/>
                             </Form.Item>
                         </Row>
+                        <Form.Item
+                            name="reason"
+                            label="Reason:"
+                        >
+                            <TextArea placeholder="Input your reason for submitting this request" autoSize className="requestReasonInput"/>
+                        </Form.Item>
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit" className="request-form-button">
+                                Submit
+                            </Button>
+                        </Form.Item>
                     </Form>
                 </Card>
             </div>

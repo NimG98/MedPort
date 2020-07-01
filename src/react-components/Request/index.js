@@ -41,7 +41,7 @@ class Request extends React.Component {
             return (
             <div className="previousRequestsPage">
                 <Button onClick={this.onClick} type="primary" className="new-request-button">
-                    Create a New Request
+                    Submit a New Request
                 </Button>
                 {this.getPreviousRequestsPage()}
             </div>);
