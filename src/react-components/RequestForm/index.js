@@ -23,6 +23,7 @@ class RequestForm extends React.Component {
         }
         // this.userType = getUserType(this.state.user);
         // this.patients = getPatientsByDoctor(getDoctorID(this.state.user));
+        this.onClick = this.onClick.bind(this);
         this.onFinish = this.onFinish.bind(this);
         this.displayPatients = this.displayPatients.bind(this);
         // this.getPatients = this.getPatients.bind(this);
@@ -42,6 +43,10 @@ class RequestForm extends React.Component {
         }
     }
 
+    onClick() {
+        this.props.backToPreviousRequestsPage();
+    }
+
     render() {
 
         return(
@@ -49,6 +54,9 @@ class RequestForm extends React.Component {
                 <h1 className="requestTitle">
                     Submit a request
                 </h1>
+                <Button onClick={this.onClick} className="back-to-previous-req-button">
+                    hello
+                </Button>
                 <Card className="requestFormCard">
                     <Form
                         name="request-form"
