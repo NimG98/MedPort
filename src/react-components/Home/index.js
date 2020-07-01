@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from "react-router";
 
 import "./styles.css";
 import 'antd/dist/antd.css';
@@ -9,13 +10,14 @@ import bgImage from "./static/doctor-patient-online2.png";
 import { Card, Row, Col } from "antd";
 
 import { validateLogin } from "../../actions/app";
+import { redirect } from "../../actions/router";
 
 /* Component for the Home page */
 class Home extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
 
   login = loginValues => {
     const username = loginValues.username;
@@ -25,7 +27,8 @@ class Home extends React.Component {
 
     if(isValid){
       document.cookie = "LoggedInSession=Valid; " + "path=/";
-      window.location.href = "/dashboard";
+      redirect(this, '/dashboard');
+      // window.location.href = "/dashboard";
       console.log("Login was successful!");
     } else {
       console.log("Invalid credentials");
@@ -74,4 +77,4 @@ class Home extends React.Component {
   }
 }
 
-export default Home;
+export default withRouter(Home);

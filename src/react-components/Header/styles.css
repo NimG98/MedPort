@@ -6,13 +6,12 @@
 	display: -webkit-flex;
 	display: flex;
 	align-items: center;
-
 }
 
 .header h1 {
 	color: rgb(255, 255, 255);
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-	font-size: 33px !important;
+	font-size: 33px;
 }
 
 .header .logo {

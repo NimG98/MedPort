@@ -1,5 +1,10 @@
-// for debugging 
-const log = console.log
+import { MOCK_USERS as users} from "../mock-data/mock";
+import { MOCK_REQUESTS as allRequests} from "../mock-data/mock";
+import { MOCK_PATIENTS as allPatients} from "../mock-data/mock";
+import { MOCK_DOCTORS as allDoctors} from "../mock-data/mock";
+
+// // for debugging 
+// const log = console.log
 
 // adds a new doctor to the app component state
 export const addDoctor = (app, doctor) => {
@@ -140,19 +145,76 @@ export const removeReferralCode = (app, code) => {
 // Validates if the username is associated with a registered user,
 // and that the user's password is correct
 export const validateLogin = (app, username, password) => {
-	// this would be an api call to the backend
 	var isValid = false;
+	
+	// code below requires server call
+	// to look at the user database and see usernames/passwords
 
-	const users = app.state.doctors.concat(app.state.patients, app.state.secretaries);
+	// users is MOCK_USERS from ../mock-data/mock.js
 
-	for(var i=0; i<users.length; i++){
-		if(users[i].email === username) {
-			if(users[i].password === password) {
-				isValid = true;
-				break;
-			}
-		}
+	isValid = users[username] && users[username].password === password;
+	
+	if(isValid) {
+		app.setState({
+			loggedInUser: username
+		});
 	}
 
 	return isValid;
+}
+
+// Gets a list of requests with a certain status from a certain user
+export const getUserRequestsByStatus = (username, status) => {
+
+	var userRequests = [];
+	
+	// code below requires server call
+	// to get all of the requests in the database
+
+	// allRequests is MOCK_REQUESTS from ../mock-data/mock.js
+
+	for(var req in allRequests) {
+		if((allRequests[req].created_by === username || allRequests[req].to === username) && allRequests[req].status === status) {
+			userRequests.push(allRequests[req]);
+		}
+	}
+
+	return userRequests;
+}
+
+// Gets the type of the user (patient/doctor/secretary/admin)
+export const getUserType = (username) => {
+
+	// code below requires server call
+	// to look at the user database and see usernames/passwords
+
+	// users is MOCK_USERS from ../mock-data/mock.js
+	return users[username].type;
+}
+
+// Gets the patients assigned to a specific doctor
+export const getPatientsByDoctor = (doctorID) => {
+	console.log(doctorID);
+
+	var patients = []
+
+	// code below requires server call
+	// to look at the patient database
+
+	// allPatients is MOCK_PATIENTS from ../mock-data/mock.js
+
+	for (var patientUsername in allPatients) {
+		console.log(patientUsername);
+		if(allPatients[patientUsername].doctorID === doctorID) {
+			patients.push(allPatients[patientUsername])
+		}
+	}
+
+	console.log("getPatientsByDoctor");
+
+	return patients;
+}
+
+export const getDoctorID = (username) => {
+	return allDoctors[username].doctorID;
 }

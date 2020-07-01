@@ -1,0 +1,46 @@
+@import '~antd/dist/antd.css';
+
+.newRequestFormPage {
+    margin-top: 10px;
+    margin-left: 280px;
+}
+
+.requestTitle {
+    margin-bottom: 40px;
+}
+
+.requestFormCard {
+    margin-right: 20px;
+    max-width: 1100px;
+    box-shadow: 1px 3px 0px 0 rgba(0,0,0,0.24);
+}
+
+.requestFormCard .ant-card-body {
+    padding-bottom: 0px;
+}
+
+#request-form_reason {
+    min-height: 80px;
+}
+
+.request-date-time .ant-picker-suffix {
+    margin-top: -6px;
+}
+
+.request-date-time .ant-picker {
+    width: 100%;
+}
+
+.requestTimeFormItem {
+    padding-right: 0px;
+    width: 50%;
+}
+
+.requestDateFormItem {
+    padding-right: 20px;
+    width: 50%;
+}
+
+.request-form-button{
+    float: right;
+}
