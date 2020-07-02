@@ -6,7 +6,7 @@ import "./styles.css";
 import { addInstitution } from "../../actions/app";
 
 // import form validators
-import { validateName, validateAddress, validatePostalCode, validatePhoneNumber } from "./form-validators";
+import { validateName, validateAddress, validatePostalCode, validatePhoneNumber } from "../../validators/form-validators";
 
 //
 class InstitutionCreationForm extends React.Component {
@@ -152,10 +152,10 @@ class InstitutionCreationForm extends React.Component {
 	validate() {
 		
 		const valid = (
-			validateName(this.state.name, this.setError) &&
-			validateAddress(this.state.address, this.setError) &&
-			validatePostalCode(this.state.postalCode, this.setError) &&
-			validatePhoneNumber(this.state.phoneNumber, this.setError)
+			validateName('name', this.state.name, this.setError) &&
+			validateAddress('address', this.state.address, this.setError) &&
+			validatePostalCode('postalCode', this.state.postalCode, this.setError) &&
+			validatePhoneNumber('phoneNumber', this.state.phoneNumber, this.setError)
 		);
 		
 		return valid;

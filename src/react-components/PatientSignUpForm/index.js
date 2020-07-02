@@ -9,7 +9,7 @@ import { addPatient } from "../../actions/app";
 import { redirect } from "../../actions/router";
 
 // import form validators
-import { validateFirstName, validateLastName, validateAddress, validatePostalCode, validateHCN, validateEmail, validatePassword } from "./form-validators"; 
+import { validateName, validateAddress, validatePostalCode, validateHCN, validateEmail, validatePassword } from "../../validators/form-validators"; 
 
 class PatientSignUpForm extends React.Component {
 	
@@ -197,13 +197,13 @@ class PatientSignUpForm extends React.Component {
 	validate() {
 		
 		const valid = (
-			validateFirstName(this.state.firstName, this.setError) &&
-			validateLastName(this.state.lastName, this.setError) &&
-			validateAddress(this.state.address, this.setError) &&
-			validatePostalCode(this.state.postalCode, this.setError) &&
-			validateHCN(this.state.HCN, this.setError) &&
-			validateEmail(this.state.email, this.setError) &&
-			validatePassword(this.state.password, this.setError));
+			validateName('firstName', this.state.firstName, this.setError) &&
+			validateName('lastName', this.state.lastName, this.setError) &&
+			validateAddress('address', this.state.address, this.setError) &&
+			validatePostalCode('postalCode', this.state.postalCode, this.setError) &&
+			validateHCN('HCN', this.state.HCN, this.setError) &&
+			validateEmail('email', this.state.email, this.setError) &&
+			validatePassword('password', this.state.password, this.setError));
 		
 		return valid;
 	}

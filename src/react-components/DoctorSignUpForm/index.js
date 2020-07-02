@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import "./styles.css";
 
 // import form validators
-import { validateFirstName, validateLastName, validateMID, validateEmail, validatePassword } from "./form-validators";
+import { validateName, validateMID, validateEmail, validatePassword } from "../../validators/form-validators";
 
 class DoctorSignUpForm extends React.Component {
 	
@@ -135,11 +135,11 @@ class DoctorSignUpForm extends React.Component {
 	validate() {
 		
 		const valid = (
-			validateFirstName(this.props.firstName, this.setError) &&
-			validateLastName(this.props.lastName, this.setError) &&
-			validateMID(this.props.MID, this.setError) &&
-			validateEmail(this.props.email, this.setError) &&
-			validatePassword(this.props.password, this.setError));
+			validateName('firstName', this.props.firstName, this.setError) &&
+			validateName('lastName',this.props.lastName, this.setError) &&
+			validateMID('MID', this.props.MID, this.setError) &&
+			validateEmail('email', this.props.email, this.setError) &&
+			validatePassword('password', this.props.password, this.setError));
 		
 		return valid;
 	}
