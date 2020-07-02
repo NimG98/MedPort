@@ -225,7 +225,7 @@ export const getUserProfileImageUrl = (username) => {
 
 	// users is MOCK_USERS from ../mock-data/mock.js
 
-	const defaultProfileImageUrl = "../mock-data/user_profile_images/default-profile-icon.png";
+	const defaultProfileImageUrl = "./default-profile-icon.png";
 	
 	var userProfileImageUrl = null;
 
