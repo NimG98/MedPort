@@ -1,6 +1,3 @@
-// for debugging 
-const log = console.log
-
 /* 
 	submits new doctor information to server for account creation
 */

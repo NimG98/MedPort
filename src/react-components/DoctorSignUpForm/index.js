@@ -47,7 +47,6 @@ class DoctorSignUpForm extends React.Component {
 			password,
 			MID,
 			handleChange,
-			next
 		} = this.props;
 		
 		return (

@@ -24,7 +24,6 @@ class ReferralSignUpForm extends React.Component {
 			code,
 			handleChange,
 			doctorSignUp,
-			submit,
 		} = this.props;
 		
 		return (

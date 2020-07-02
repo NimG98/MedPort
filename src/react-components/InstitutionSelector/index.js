@@ -46,7 +46,6 @@ class InstitutionSelector extends React.Component {
 		const {
 			institutionID,
 			handleChange,
-			submit,
 			next,
 			back
 		} = this.props;
