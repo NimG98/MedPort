@@ -39,8 +39,8 @@ class InstitutionSelector extends React.Component {
 		} = this.props;
 		
 		return (
-			<form className="InstitutionSelector" onSubmit={this.submit}>
-				<div className="main_form">
+			<div className="InstitutionSelector">
+				<form className="main_form" onSubmit={this.submit}>
 					<div className="title">
 						<h2><b>Select Your Institution</b></h2>
 					</div>
@@ -69,13 +69,13 @@ class InstitutionSelector extends React.Component {
 					
 					<button type="button" className="back" onClick={back}>Back</button>
 					<button type="submit" className="submit">Submit</button>
-				</div>
+				</form>
 				
 				<div className="secondary_form">
 					<h3>Can't find your institution? </h3>
 					<button type="button" className="create" onClick={next}>Create</button>
 				</div>
-			</form>
+			</div>
 		);
 	}
 	

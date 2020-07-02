@@ -40,6 +40,17 @@
 	/* border: 1px solid #DA1C4B; */
 }
 
+.DoctorSignUpForm .container input.danger {
+	border: 1px solid;
+	border-color: #dc3545;
+}
+
+.DoctorSignUpForm .container p.error {
+	margin-left: 20px;
+	margin-bottom: 0px;
+	color: #dc3545;
+}
+
 .DoctorSignUpForm .container label {
 	margin-left: 20px;
 	margin-top: 5px;
