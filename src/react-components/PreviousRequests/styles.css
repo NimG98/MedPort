@@ -3,14 +3,10 @@
 .previousRequests {
     margin-top: 10px;
     margin-left: 280px;
-    /* top: 70px;
-    position: absolute; */
-    /* pointer-events:none; */
 }
 
 .previousRequestsTitle {
     margin-bottom: 40px;
-    /* width: 50%; */
 }
 
 .previousRequests .ant-tabs-nav {
