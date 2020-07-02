@@ -1,0 +1,24 @@
+.nav {
+    z-index: 10; 
+    padding: 1px;
+    position: fixed;
+    border: 10px;
+    left: 0;
+    height: 100%;
+    width: 200px;
+    background-color: #1F90CC;    
+}
+
+.nav li{
+    padding: 5px;
+}
+
+.nav .col-background-t{
+    height: 500px;
+    position: sticky;
+    background-color: tomato;
+}
+
+.nav .fixed-bottom {
+    width: 200px;
+}
