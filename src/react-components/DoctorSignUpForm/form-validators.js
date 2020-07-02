@@ -1,10 +1,13 @@
 // import input validators
-import { isMatch, isRequired, isEmail, isLongEnough } from "../../validators/input-validators.js";
+import { isMatch, isRequired, isEmail, isMinLength } from "../../validators/input-validators.js";
 
 // validates the firstName form field
 export const validateFirstName = (firstName, setError) => {
 	if (!isRequired(firstName)) {
 		setError('firstName', true, 'Please fill out this field');
+		return false;
+	} else if (!isMinLength(firstName, 2)) {
+		setError('firstName', true, 'First name must be at least 2 characters long');
 		return false;
 	} else {
 		setError('firstName', false, '');
@@ -17,6 +20,9 @@ export const validateFirstName = (firstName, setError) => {
 export const validateLastName = (lastName, setError) => {
 	if (!isRequired(lastName)) {
 		setError('lastName', true, 'Please fill out this field');
+		return false;
+	} else if (!isMinLength(lastName, 2)) {
+		setError('lastName', true, 'Last name must be at least 2 characters long');
 		return false;
 	} else {
 		setError('lastName', false, '');
@@ -57,7 +63,7 @@ export const validatePassword = (password, setError) => {
 	if (!isRequired(password)) {
 		setError('password', true, 'Please fill out this field');
 		return false;
-	} else if (!isLongEnough(password, 6)) {
+	} else if (!isMinLength(password, 6)) {
 		setError('password', true, 'Password must be at least 6 characters long');
 		return false;
 	} else {

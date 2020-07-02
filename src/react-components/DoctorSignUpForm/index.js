@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import "./styles.css";
 
 // import form validators
-import { validateFirstName, validateLastName, validateMID, validateEmail, validatePassword } from "./form-validators.js";
+import { validateFirstName, validateLastName, validateMID, validateEmail, validatePassword } from "./form-validators";
 
 class DoctorSignUpForm extends React.Component {
 	
@@ -31,6 +31,7 @@ class DoctorSignUpForm extends React.Component {
 		
 		// bind functions
 		this.submit = this.submit.bind(this);
+		this.validate = this.validate.bind(this);
 		this.setError = this.setError.bind(this);
 	}
 	
