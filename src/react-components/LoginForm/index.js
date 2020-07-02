@@ -9,9 +9,9 @@ import 'antd/dist/antd.css';
 
 class LoginForm extends React.Component {
     
-    constructor(props) {
-        super(props);
-    }
+    // constructor(props) {
+    //     super(props);
+    // }
     
     render() {
 
@@ -59,11 +59,6 @@ class LoginForm extends React.Component {
                             <Button type="primary" htmlType="submit" className="login-form-button">
                             Log in
                             </Button>
-                        </Form.Item>
-                        <Form.Item className="forgot-password">
-                            <a className="forgot-password-redirect" href="">
-                            Forgot password?
-                            </a>
                         </Form.Item>
                     </Form>
                 </Card>

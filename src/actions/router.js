@@ -1,6 +1,3 @@
-// for debugging
-const log = console.log
-
 /*  
 	programatically redirects to path, by replacing the current path in
 	the history prop instead of pushing a new path, in order to maintain

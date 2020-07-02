@@ -1,0 +1,16 @@
+@import '~antd/dist/antd.css';
+
+.new-request-button {
+    float: right;
+    margin-top: 10px;
+    margin-right: 20px;
+}
+
+.new-request-button:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.previousRequestsPage {
+    display: block;
+    width: 100%;
+}
