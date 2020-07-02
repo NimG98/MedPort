@@ -41,6 +41,17 @@
 	/* border: 1px solid #DA1C4B; */
 }
 
+.InstitutionSelector select.select-error {
+	border: 1px solid;
+	border-color: #dc3545;
+}
+
+.InstitutionSelector .container p.error-message {
+	margin-left: 20px;
+	margin-bottom: 0px;
+	color: #dc3545;
+}
+
 .InstitutionSelector button {
 	/* styling */
 	padding-right: 6px;

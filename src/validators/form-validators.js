@@ -113,3 +113,14 @@ export const validateHCN = (fieldName, HCN, setError) => {
 		return true;
 	}
 }
+
+// validates the institutionID field
+export const validateInstitutionID = (fieldName, institutionID, setError) => {
+	if (!isRequired(institutionID)) {
+		setError(fieldName, true, 'Please fill out this field');
+		return false;
+	} else {
+		setError(fieldName, false, '');
+		return true;
+	}
+}

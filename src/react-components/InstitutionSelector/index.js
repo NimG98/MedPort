@@ -6,6 +6,9 @@ import './styles.css';
 // importing actions/required methods
 import { getInstitutions } from "../../actions/app";
 
+// importing form validators
+import { validateInstitutionID } from "../../validators/form-validators";
+
 // component for selecting a preexisiting institution
 class InstitutionSelector extends React.Component {
 	
@@ -13,11 +16,21 @@ class InstitutionSelector extends React.Component {
 		super(props);
 		
 		this.state = {
-			institutions: []
+			institutions: [],
+			
+			errors: {
+				institutionID: false,
+			},
+			
+			errorCodes: {
+				institutionID: '',
+			},
 		}
 		
 		// binding functions
 		this.submit = this.submit.bind(this);
+		this.validate = this.validate.bind(this);
+		this.setError = this.setError.bind(this);
 	}
 	
 	componentDidMount() {
@@ -49,9 +62,8 @@ class InstitutionSelector extends React.Component {
 						<select
 							name="institutionID"
 							value={institutionID}
-							defaultValue={""}
+							className={this.state.errors.institutionID ? 'select-error' : null}
 							onChange={handleChange}
-							required
 						>
 							{/* default selector value*/}
 							<option value="" disabled>Choose Here</option>
@@ -65,6 +77,7 @@ class InstitutionSelector extends React.Component {
 								</option>
 							))}
 						</select>
+						{this.state.errors.institutionID ? <p className="error-message" >{this.state.errorCodes.institutionID}</p> : null}
 					</div>
 					
 					<button type="button" className="back" onClick={back}>Back</button>
@@ -84,7 +97,38 @@ class InstitutionSelector extends React.Component {
 		// prevents page reload
 		event.preventDefault();
 		
-		this.props.submit();
+		const valid = this.validate();
+		
+		if (valid) {
+			this.props.submit();
+		}
+	}
+	
+	// validates inputs on submission
+	validate() {
+		
+		const valid = (
+			validateInstitutionID(
+				'institutionID', 
+				this.props.institutionID, 
+				this.setError
+			)
+		);
+		
+		return valid;
+	}
+		
+	setError(name, value, message) {
+		this.setState(prevState => ({
+			errors: {
+				...prevState.errors,
+				[name]: value,
+			},
+			errorCodes: {
+				...prevState.errorCodes,
+				[name]: message,
+			}
+		}));
 	}
 	
 }
