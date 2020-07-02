@@ -28,7 +28,7 @@ class SignUp extends React.Component {
 	render() {
 		return (
 			<div className="SignUp">
-				<Header />
+				<Header appComponent={this.props.appComponent}/>
 				{this.getSignUpForm(this.state.statusIndex)}
 			</div>
 		);

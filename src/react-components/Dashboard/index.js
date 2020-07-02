@@ -32,7 +32,7 @@ class Dashboard extends React.Component {
     }
     return (
         <div>
-            <Header />
+            <Header appComponent={this.props.appComponent}/>
             
             
             <Container>

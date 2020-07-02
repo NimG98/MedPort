@@ -15,9 +15,10 @@ import { redirect } from "../../actions/router";
 /* Component for the Home page */
 class Home extends React.Component {
 
-  // constructor(props) {
-  //   super(props);
-  // }
+  constructor(props) {
+    super(props);
+    console.log(this.props);
+  }
 
   login = loginValues => {
     const username = loginValues.username;
@@ -38,7 +39,7 @@ class Home extends React.Component {
   render() {
     return (
       <div className="home__bg">
-        <Header />
+        <Header appComponent={this.props.appComponent}/>
         <Row className="login-background">
           <img alt={"lobgImagego"} src={bgImage} className="home__bg-image"/>
           <LoginForm
