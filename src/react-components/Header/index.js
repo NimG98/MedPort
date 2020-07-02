@@ -5,6 +5,7 @@ import "./styles.css";
 import logo from "./static/heart (2).png"
 
 import { redirect } from "../../actions/router";
+import ProfileDropdown from "../ProfileDropdown";
 
 /* The Header Component */
 class Header extends React.Component {
@@ -18,10 +19,10 @@ class Header extends React.Component {
           user: this.props.appComponent.state.loggedInUser
         };
 
-        this.onClick = this.onClick.bind(this);
+        this.redirectHome = this.redirectHome.bind(this);
     }
 
-    onClick() {
+    redirectHome() {
         if(this.state.user){
             redirect(this, '/dashboard');
 
@@ -33,8 +34,11 @@ class Header extends React.Component {
     render() {
         return (
             <div className="header">
-                <img alt={"logo"} src={logo} className="logo" onClick={this.onClick}/>
+                <img alt={"logo"} src={logo} className="logo" onClick={this.redirectHome}/>
                 <h1>Medical Site Name</h1>
+                {this.state.user &&
+                <ProfileDropdown appComponent={this.props.appComponent}/>
+                }
             </div>
         );
     }

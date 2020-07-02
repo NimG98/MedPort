@@ -5,26 +5,31 @@ export const MOCK_USERS = {
     // Patient
     user: {
         password: "user",
-        type: UserType.patient
+        type: UserType.patient,
+        image: "./userPatientProfilePicture.png"
     },
     jdoe: {
         password: "12345",
-        type: UserType.patient
+        type: UserType.patient,
+        image: null
     },
     // Doctor
     user2: {
         password: "user2",
-        type: UserType.doctor
+        type: UserType.doctor,
+        image: "./user2DoctorProfilePicture.png"
     },
     // Secretary
     user3: {
         password: "user3",
-        type: UserType.secretary
+        type: UserType.secretary,
+        image: null
     },
     // Admin
     admin: {
         password: "admin",
-        type: UserType.admin
+        type: UserType.admin,
+        image: null
     }
 }
 
