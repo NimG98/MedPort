@@ -20,6 +20,22 @@ export const isMatch = (input, pattern) => {
 }
 
 /* 
+	Returns true iff input has a length greater than or equal to minLength,
+	otherwise returns false.
+*/
+export const isMinLength = (input, minLength) => {
+	return input.length >= minLength;
+}
+
+/* 
+	Returns true iff input has a length less than or equal to maxLength,
+	otherwise returns false.
+*/
+export const isMaxLength = (input, maxLength) => {
+	return input.length <= maxLength;
+}
+
+/* 
 	Returns true iff input is a match to the email pattern,
 	Otherwise returns false.
 	Note: email pattern obtained from https://emailregex.com/
@@ -45,17 +61,17 @@ export const isPostalCode = (input) => {
 }
 
 /* 
-	Returns true iff input has a length greater than or equal to minLength,
-	otherwise returns false.
+	Returns true iff input is a match to the Medical ID Number pattern,
+	Otherwise returns false. 
 */
-export const isMinLength = (input, minLength) => {
-	return input.length >= minLength;
+export const isMID = (input) => {
+	return isMatch(input, '^([a-zA-Z]{4})([0-9]{8})$');
 }
 
 /* 
-	Returns true iff input has a length less than or equal to maxLength,
-	otherwise returns false.
+	Returns true iff input is a match to the Health Card Number pattern,
+	Otherwise returns false. 
 */
-export const isMaxLength = (input, maxLength) => {
-	return input.length <= maxLength;
+export const isHCN = (input) => {
+	return isMatch(input, '^[0-9]{4}[ -]?[0-9]{3}[ -]?[0-9]{3}[ -]?[a-zA-Z]{2}$');
 }

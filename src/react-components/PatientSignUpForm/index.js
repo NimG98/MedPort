@@ -8,6 +8,9 @@ import "./styles.css";
 import { addPatient } from "../../actions/app";
 import { redirect } from "../../actions/router";
 
+// import form validators
+import { validateFirstName, validateLastName, validateAddress, validatePostalCode, validateHCN, validateEmail, validatePassword } from "./form-validators"; 
+
 class PatientSignUpForm extends React.Component {
 	
 	constructor(props) {
@@ -21,12 +24,34 @@ class PatientSignUpForm extends React.Component {
 			HCN: '',
 			email: '',
 			password: '',
+			
+			errors: {
+				firstName: false,
+				lastName: false,
+				address: false,
+				postalCode: false,
+				HCN: false,
+				email: false,
+				password: false,
+			},
+			
+			errorCodes: {
+				firstName: '',
+				lastName: '',
+				address: '',
+				postalCode: '',
+				HCN: '',
+				email: '',
+				password: '',
+			},
 		}
 		
 		// binding functions
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.createPatient = this.createPatient.bind(this);
 		this.submit = this.submit.bind(this);
+		this.validate = this.validate.bind(this);
+		this.setError = this.setError.bind(this);
 	}
 	
 	render() {
@@ -42,64 +67,78 @@ class PatientSignUpForm extends React.Component {
 					<input 
 						type='text' 
 						name='firstName' 
+						className={this.state.errors.firstName ? 'input-error' : null}
 						placeholder='First Name'
 						value={this.state.firstName}
 						onChange={this.handleInputChange} 
-						required />
+					/>
+					{this.state.errors.firstName ? <p className="error-message" >{this.state.errorCodes.firstName}</p> : null}
 							
 					<label>Last Name</label>
 					<input 
 						type='text' 
 						name='lastName' 
+						className={this.state.errors.lastName ? 'input-error' : null}
 						placeholder='Last Name'
 						value={this.state.lastName}
 						onChange={this.handleInputChange} 
-						required />
+					/>
+					{this.state.errors.lastName ? <p className="error-message" >{this.state.errorCodes.lastName}</p> : null}
 							
 					<label>Address</label>
 					<input 
 						type='text' 
 						name='address' 
+						className={this.state.errors.address ? 'input-error' : null}
 						placeholder='Address'
 						value={this.state.address}
 						onChange={this.handleInputChange} 
-						required />
+					/>
+					{this.state.errors.address ? <p className="error-message" >{this.state.errorCodes.address}</p> : null}
 							
 					<label>Postal Code</label>
 					<input 
 						type='text' 
 						name='postalCode' 
+						className={this.state.errors.postalCode ? 'input-error' : null}
 						placeholder='Postal Code'
 						value={this.state.postalCode}
 						onChange={this.handleInputChange} 
-						required />
+					/>
+					{this.state.errors.postalCode ? <p className="error-message" >{this.state.errorCodes.postalCode}</p> : null}
 							
 					<label>Health Card Number</label>
 					<input 
 						type='text' 
 						name='HCN' 
+						className={this.state.errors.HCN ? 'input-error' : null}
 						placeholder='Health Card Number'
 						value={this.state.HCN}
 						onChange={this.handleInputChange} 
-						required />
+					/>
+					{this.state.errors.HCN ? <p className="error-message" >{this.state.errorCodes.HCN}</p> : null}
 							
 					<label>Email</label>
 					<input 
 						type='email' 
 						name='email' 
+						className={this.state.errors.email ? 'input-error' : null}
 						placeholder='Email'
 						value={this.state.email}
 						onChange={this.handleInputChange} 
-						required />
+					/>
+					{this.state.errors.email ? <p className="error-message" >{this.state.errorCodes.email}</p> : null}
 							
 					<label>Password</label>
 					<input 
 						type='password' 
 						name='password' 
+						className={this.state.errors.password ? 'input-error' : null}
 						placeholder='Password'
 						value={this.state.password}
 						onChange={this.handleInputChange} 
-						required />
+					/>
+					{this.state.errors.password ? <p className="error-message" >{this.state.errorCodes.password}</p> : null}
 				</div>
 					
 				<Link to="/">
@@ -143,11 +182,43 @@ class PatientSignUpForm extends React.Component {
 		// prevents page reload
 		event.preventDefault(); 
 		
-		const patient = this.createPatient();
+		const valid = this.validate();
 		
-		const success = addPatient(patient, this.props.code);
+		if (valid) {
+			const patient = this.createPatient();
+			
+			const success = addPatient(patient, this.props.code);
+			
+			redirect(this, "/");
+		}
+	}
+	
+	// validates inputs on submission
+	validate() {
 		
-		redirect(this, "/");
+		const valid = (
+			validateFirstName(this.state.firstName, this.setError) &&
+			validateLastName(this.state.lastName, this.setError) &&
+			validateAddress(this.state.address, this.setError) &&
+			validatePostalCode(this.state.postalCode, this.setError) &&
+			validateHCN(this.state.HCN, this.setError) &&
+			validateEmail(this.state.email, this.setError) &&
+			validatePassword(this.state.password, this.setError));
+		
+		return valid;
+	}
+		
+	setError(name, value, message) {
+		this.setState(prevState => ({
+			errors: {
+				...prevState.errors,
+				[name]: value,
+			},
+			errorCodes: {
+				...prevState.errorCodes,
+				[name]: message,
+			}
+		}));
 	}
 	
 }

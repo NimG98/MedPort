@@ -40,6 +40,17 @@
 	/* border: 1px solid #DA1C4B; */
 }
 
+.PatientSignUpForm .container input.input-error {
+	border: 1px solid;
+	border-color: #dc3545;
+}
+
+.PatientSignUpForm .container p.error-message {
+	margin-left: 20px;
+	margin-bottom: 0px;
+	color: #dc3545;
+}
+
 .PatientSignUpForm .container label {
 	margin-left: 20px;
 	margin-top: 5px;

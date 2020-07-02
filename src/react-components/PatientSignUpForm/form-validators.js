@@ -1,5 +1,5 @@
 // import input validators
-import { isMID, isRequired, isEmail, isMinLength } from "../../validators/input-validators.js";
+import { isHCN, isRequired, isEmail, isPostalCode, isMinLength } from "../../validators/input-validators.js";
 
 // validates the firstName form field
 export const validateFirstName = (firstName, setError) => {
@@ -30,16 +30,44 @@ export const validateLastName = (lastName, setError) => {
 	}
 }
 
-// validates the MID form field
-export const validateMID = (MID, setError) => {
-	if (!isRequired(MID)) {
-		setError('MID', true, 'Please fill out this field');
+// validates the address form field
+export const validateAddress = (address, setError) => {
+	if (!isRequired(address)) {
+		setError('address', true, 'Please fill out this field');
 		return false;
-	} else if (!isMID(MID)) {
-		setError('MID', true, 'Enter a valid Medical ID Number');
+	} else if (!isMinLength(address, 4)) {
+		setError('address', true, 'Address must be at least 4 characters long');
+		return false;
+	}else {
+		setError('address', false, '');
+		return true;
+	}
+}
+
+// validates the postalCode form field
+export const validatePostalCode = (postalCode, setError) => {
+	if (!isRequired(postalCode)) {
+		setError('postalCode', true, 'Please fill out this field');
+		return false;
+	} else if (!isPostalCode(postalCode)) {
+		setError('postalCode', true, 'Enter a valid postal code');
 		return false;
 	} else {
-		setError('MID', false, '');
+		setError('postalCode', false, '');
+		return true;
+	}
+}
+
+// validates the health card number field
+export const validateHCN = (HCN, setError) => {
+	if (!isRequired(HCN)) {
+		setError('HCN', true, 'Please fill out this field');
+		return false;
+	} else if (!isHCN(HCN)) {
+		setError('HCN', true, 'Enter a valid Health Card Number');
+		return false;
+	} else {
+		setError('HCN', false, '');
 		return true;
 	}
 }
