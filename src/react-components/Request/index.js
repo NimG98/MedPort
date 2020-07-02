@@ -24,6 +24,7 @@ class Request extends React.Component {
         };
 
         this.onClick = this.onClick.bind(this);
+        this.backToPreviousRequestsPage = this.backToPreviousRequestsPage.bind(this);
         this.changeView = this.changeView.bind(this);
         this.getPreviousRequestsPage = this.getPreviousRequestsPage.bind(this);
 
@@ -36,7 +37,7 @@ class Request extends React.Component {
 
     changeView() {
         if(this.state.newRequest) {
-            return (<RequestForm loggedInUser={this.state.user}/>);
+            return (<RequestForm loggedInUser={this.state.user} backToPreviousRequestsPage={this.backToPreviousRequestsPage}/>);
         } else {
             return (
             <div className="previousRequestsPage">
@@ -46,6 +47,10 @@ class Request extends React.Component {
                 {this.getPreviousRequestsPage()}
             </div>);
         }
+    }
+
+    backToPreviousRequestsPage() {
+        this.setState( {...this.state, newRequest: false} );
     }
 
     render() {
