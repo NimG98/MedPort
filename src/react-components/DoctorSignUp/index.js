@@ -9,14 +9,14 @@ import InstitutionSelector from "./../InstitutionSelector";
 import InstitutionCreationForm from "./../InstitutionCreationForm";
 
 // importing actions/required methods
-import { addDoctor, createDoctorID } from "../../actions/app";
+import { addDoctor } from "../../actions/app";
 import { redirect } from "../../actions/router";
 
 // doctor signup component (controls the multi-step registration process)
 class DoctorSignUp extends React.Component {
 	
 	// possible status values
-	status = ['registration', 'select instition', 'create instituton'];
+	status = ['registration', 'select institution', 'create instituton'];
 	
 	constructor(props) {
 		super(props);
@@ -25,6 +25,7 @@ class DoctorSignUp extends React.Component {
 			firstName: '',
 			lastName: '',
 			email: '',
+			username: '',
 			password: '',
 			MID: '',
 			institutionID: '',
@@ -37,7 +38,7 @@ class DoctorSignUp extends React.Component {
 		this.nextStatus = this.nextStatus.bind(this);
 		this.previousStatus = this.previousStatus.bind(this);
 		this.createDoctor = this.createDoctor.bind(this);
-		this.setInstitutionID = this.setInstitutionID.bind(this);
+		this.submitInstitutionID = this.submitInstitutionID.bind(this);
 		this.submit = this.submit.bind(this);
 	}
 	
@@ -61,14 +62,6 @@ class DoctorSignUp extends React.Component {
 		});
 	}
 	
-	// allows InstitutionCreationForm to set the institutionID directly
-	setInstitutionID(id) {
-		
-		this.setState({
-			institutionID: id
-		});
-	}
-	
 	// returns the appropriate signup form based on the statusIndex
 	getSignUpForm = (index) => {
 		
@@ -78,6 +71,7 @@ class DoctorSignUp extends React.Component {
 					firstName={this.state.firstName}
 					lastName={this.state.lastName}
 					email={this.state.email}
+					username={this.state.username}
 					password={this.state.password}
 					MID={this.state.MID}
 					institutionID={this.state.institutionID}
@@ -86,8 +80,7 @@ class DoctorSignUp extends React.Component {
 			   />,
 			// institution selection
 			1: <InstitutionSelector 
-					institutionID={this.institutionID}
-					appComponent={this.props.appComponent}
+					institutionID={this.state.institutionID}
 					handleChange={this.handleInputChange}
 					submit={this.submit}
 					next={this.nextStatus}
@@ -95,10 +88,8 @@ class DoctorSignUp extends React.Component {
 			   />,
 			// institution registration
 			2: <InstitutionCreationForm
-					setInstitutionID={this.setInstitutionID}
-					appComponent={this.props.appComponent}
 					back={this.previousStatus}
-					submit={this.submit}
+					submit={this.submitInstitutionID}
 				/>,
 		}[index];
 	}
@@ -121,12 +112,24 @@ class DoctorSignUp extends React.Component {
 		}
 	}
 	
+	// submits newly created institution's ID
+	submitInstitutionID(id) {
+		
+		this.setState({
+			institutionID: id
+		},
+			// callback function
+			this.submit
+		);
+		
+	}
+	
 	createDoctor = () => {
 		return({
-			id: createDoctorID(this.props.appComponent),
 			firstName: this.state.firstName,
 			lastName: this.state.lastName,
 			email: this.state.email,
+			username: this.state.username,
 			password: this.state.password,
 			MID: this.state.MID,
 			institutionID: this.state.institutionID,
@@ -135,9 +138,13 @@ class DoctorSignUp extends React.Component {
 	
 	// submit new doctor information
 	submit() {
-		addDoctor(this.props.appComponent, this.createDoctor());
+		const doctor = this.createDoctor();
+		
+		const success = addDoctor(doctor);
+		
 		// navigate back to login page
 		redirect(this, '/');
+		
 	}
 	
 }

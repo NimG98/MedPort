@@ -5,14 +5,13 @@ import "./styles.css";
 // importing components
 import ReferralSignUpForm from "../ReferralSignUpForm";
 import PatientSignUpForm from "../PatientSignUpForm";
-import SecretarySignUpForm from "../SecretarySignUpForm";
 
 // importing actions/required methods
-import { submitReferralCode, removeReferralCode } from "../../actions/app";
+import { submitReferralCode } from "../../actions/app";
 
 class ReferralSignUp extends React.Component {
 	
-	status = ['referral', 'secretary', 'patient']
+	status = ['referral', 'patient']
 	
 	constructor(props) {
 		super(props);
@@ -31,7 +30,6 @@ class ReferralSignUp extends React.Component {
 		this.setStatus = this.setStatus.bind(this);
 		this.setReferrerID = this.setReferrerID.bind(this);
 		this.setError = this.setError.bind(this);
-		this.deleteCode = this.deleteCode.bind(this);
 		this.submit = this.submit.bind(this);
 		
 	}
@@ -65,6 +63,7 @@ class ReferralSignUp extends React.Component {
 			0: <ReferralSignUpForm
 					error={this.state.error}
 					errorCode={this.state.errorCode}
+					setError={this.setError}
 					code={this.state.code} 
 					handleChange={this.handleInputChange}
 					doctorSignUp={this.props.doctorSignUp}
@@ -72,15 +71,8 @@ class ReferralSignUp extends React.Component {
 				/>,
 			// patient
 			1: <PatientSignUpForm 
-					deleteCode={this.deleteCode}
+					code={this.state.code}
 					referrerID={this.state.referrerID}
-					appComponent={this.props.appComponent}
-				/>,
-			// secretary
-			2: <SecretarySignUpForm 
-					deleteCode={this.deleteCode}
-					referrerID={this.state.referrerID}
-					appComponent={this.props.appComponent}
 				/>,
 		}[index]
 	}
@@ -107,43 +99,24 @@ class ReferralSignUp extends React.Component {
 		});
 	}
 	
-	// deletes the referral code on signup success
-	deleteCode() {
-		removeReferralCode(this.props.appComponent, this.state.code)
-		
-		this.setState({
-			code: ''
-		});
-	}
-	
 	/* 
 		retrieves referrerID based on referral code and redirects to appropriate signup page
 	*/
 	submit() {
 		const code = this.state.code;
 		
-		const referrerID = submitReferralCode(this.props.appComponent, this.state.code);
+		const referrerID = submitReferralCode(code);
 		
 		if (referrerID) {
 			
-			if (code.startsWith('P')) {
-				// sets the referrerID
-				this.setReferrerID(referrerID);
-				
-				// secretary referral code
-				this.setStatus(1);
-			} else if (code.startsWith('S')) {
-				// sets the referrerID
-				this.setReferrerID(referrerID);
-				
-				// patient referral code
-				this.setStatus(2);
-			} else {
-				// invalid referral code
-				this.setError(true, 'An Error Occurred');
-			}
+			// sets the referrerID
+			this.setReferrerID(referrerID);
+			
+			// patient referral code
+			this.setStatus(1);
+			
 		} else {
-			// wrong referral code
+			// invalid referral code
 			this.setError(true, 'Invalid Referral Code')
 		}
 	}

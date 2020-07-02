@@ -2,144 +2,61 @@ import { MOCK_USERS as users} from "../mock-data/mock";
 import { MOCK_REQUESTS as allRequests} from "../mock-data/mock";
 import { MOCK_PATIENTS as allPatients} from "../mock-data/mock";
 import { MOCK_DOCTORS as allDoctors} from "../mock-data/mock";
+import { MOCK_INSTITUTIONS } from "../mock-data/mock";
+import { MOCK_REFERRALS } from "../mock-data/mock";
+import { MOCK_USERNAMES } from "../mock-data/mock";
 
-// // for debugging 
-// const log = console.log
-
-// adds a new doctor to the app component state
-export const addDoctor = (app, doctor) => {
-	// this would be an api call to the backend
-	
-	const newDoctors = app.state.doctors.concat(doctor);
-	
-	app.setState({
-		doctors: newDoctors
-	});
-
+/* 
+	submits new doctor information to server for account creation
+*/
+export const addDoctor = (doctor) => {
+	// code below requires server call
+	return true;
 };
 
-// returns new id, incremented from existing doctor objects
-export const createDoctorID = (app) => {
-	const doctors = app.state.doctors
-	
-	if (doctors.length) {
-		const lastID = doctors[doctors.length - 1].id;
-		return (lastID + 1);
-	}
-	
-	return 1;
-	
-}
-
-// returns the insitutions list from the app component state
-export const getInstitutions = (app) => {
-	// this would be an api call to the backend
-	
-	return(
-		app.state.institutions
-	)
+/* 
+	Returns a list of institutions obtained from the server
+ */
+export const getInstitutions = () => {
+	// code below requires server call
+	return MOCK_INSTITUTIONS;
 };
 
-// adds a new institution to the app component state
-export const addInstitution = (app, institution) => {
-	// this would be an api call to the backend
-	
-	const newInstitutions = app.state.institutions.concat(institution);
-	
-	app.setState({
-		institutions: newInstitutions
-	});
+/* 
+	submits new institution information to server for account creation.
+	Note: returns newly created institution's ID on success
+*/
+export const addInstitution = (institution) => {
+	// code below requires server call
+	return 3;
 }
 
-// returns new id, incremented from existing institution objects
-export const createInstitutionID = (app) => {
-	const institutions = app.state.institutions;
-	
-	if (institutions.length) {
-		const lastID = institutions[institutions.length - 1].id;
-		return (lastID + 1);
-	}
-	
-	return 1;
-	
-}
-
-// adds a new patient to the app component state
-export const addPatient = (app, patient) => {
-	// this would be an api call to the backend
-	
-	const newPatients = app.state.patients.concat(patient);
-	
-	app.setState({
-		patients: newPatients
-	});
-
+/* 
+	submits new patient information to server for account creation
+	Note: submits patient's used referral code as well
+*/
+export const addPatient = (patient, code) => {
+	// code below requires server call
+	return true;
 };
 
-// returns new id, incremented from existing patient objects
-export const createPatientID = (app) => {
-	const patients = app.state.patients
-	
-	if (patients.length) {
-		const lastID = patients[patients.length - 1].id;
-		return (lastID + 1);
-	}
-	
-	return 1;
-	
-}
-
-// adds a new secretary to the app component state
-export const addSecretary = (app, secretary) => {
-	// this would be an api call to the backend
-	
-	const newSecretaries = app.state.secretaries.concat(secretary);
-	
-	app.setState({
-		secretaries: newSecretaries
-	});
-
-};
-
-// returns new id, incremented from existing secretary objects
-export const createSecretaryID = (app) => {
-	const secretaries = app.state.secretaries;
-	
-	if (secretaries.length) {
-		const lastID = secretaries[secretaries.length - 1].id;
-		return (lastID + 1);
-	}
-	
-	return 1;
-	
-}
-
-// returns referrer ID from referral code in app component state
-export const submitReferralCode = (app, code) => {
-	// this would be an api call to the backend
-
-	const formattedCode = code.toUpperCase();
-	
-	const refferrerID = app.state.referrals[formattedCode];
+// submits referral code to server and gets a refferrerID on success
+export const submitReferralCode = (code) => {
+	// code below requires server call
+	const refferrerID = MOCK_REFERRALS[code];
 	
 	return refferrerID;
 }
 
-// removes a particular referral code from the app component state
-export const removeReferralCode = (app, code) => {
-	// this would be an api call to the backend
+/*
+	checks if username already exists on server
+	returns true iff username exists, otherwise returns false
+*/
+export const checkUserName = (username) => {
+	// code below requires server call
+	const formattedUsername = username.toLowerCase();
 	
-	const referrals = app.state.referrals;
-	
-	if (referrals[code]) {
-		const newReferrals = Object.assign({}, referrals);
-		
-		delete newReferrals[code];
-		
-		app.setState({
-			referrals: newReferrals
-		});
-	}
+	return MOCK_USERNAMES.includes(formattedUsername);
 }
 
 // Validates if the username is associated with a registered user,

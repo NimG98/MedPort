@@ -40,6 +40,17 @@
 	/* border: 1px solid #DA1C4B; */
 }
 
+.ReferralSignUpForm .main_form .container input.input-error {
+	border: 1px solid;
+	border-color: #dc3545;
+}
+
+.ReferralSignUpForm .main_form .container p.error-message {
+	margin-left: 20px;
+	margin-bottom: 0px;
+	color: #dc3545;
+}
+
 .ReferralSignUpForm .main_form .container label {
 	margin-left: 20px;
 	font-weight: bold;

@@ -3,7 +3,39 @@ import { Link } from "react-router-dom";
 
 import "./styles.css";
 
+// import form validators
+import { validateName, validateMID, validateEmail, validatePassword, validateUserName } from "../../validators/form-validators";
+
 class DoctorSignUpForm extends React.Component {
+	
+	constructor(props) {
+		super(props);
+		
+		this.state = {
+			errors: {
+				firstName: false,
+				lastName: false,
+				MID: false,
+				email: false,
+				username: false,
+				password: false,
+			},
+			
+			errorCodes: {
+				firstName: '',
+				lastName: '',
+				MID: '',
+				email: '',
+				username: '',
+				password: '',
+			},
+		}
+		
+		// bind functions
+		this.submit = this.submit.bind(this);
+		this.validate = this.validate.bind(this);
+		this.setError = this.setError.bind(this);
+	}
 	
 	render() {
 		
@@ -11,14 +43,14 @@ class DoctorSignUpForm extends React.Component {
 			firstName,
 			lastName,
 			email,
+			username,
 			password,
 			MID,
 			handleChange,
-			next
 		} = this.props;
 		
 		return (
-			<form className="DoctorSignUpForm" onSubmit={next}>
+			<form className="DoctorSignUpForm" onSubmit={this.submit}>
 				<div className="title">
 					<h2><b>Doctor Sign Up</b></h2>
 				</div>
@@ -28,51 +60,71 @@ class DoctorSignUpForm extends React.Component {
 					<input 
 						type='text' 
 						name='firstName' 
+						className={this.state.errors.firstName ? 'input-error' : null}
 						placeholder='First Name'
 						value={firstName}
-						onChange={handleChange} 
-						required />
+						onChange={handleChange}
+					/>
+					{this.state.errors.firstName ? <p className="error-message" >{this.state.errorCodes.firstName}</p> : null}
 				
 					<label>Last Name</label>					
 					<input 
 						type='text' 
 						name='lastName' 
+						className={this.state.errors.lastName ? 'input-error' : null}
 						placeholder='Last Name'
 						value={lastName}
 						onChange={handleChange} 
-						required /> 
+					/> 
+					{this.state.errors.lastName ? <p className="error-message" >{this.state.errorCodes.lastName}</p> : null}
 								
 					<label>Medical ID Number</label>
 					<input 
 						type='text' 
 						name='MID'
+						className={this.state.errors.MID ? 'input-error' : null}
 						placeholder='Medical ID Number'
 						value={MID}
-						pattern='[0-9]*'
-						onChange={(e) => this.numberChangeHandler(e, handleChange)} 
-						required />
+						onChange={handleChange}
+					/>
+					{this.state.errors.MID ? <p className="error-message" >{this.state.errorCodes.MID}</p> : null}
 			
 					<label>Email</label>
 					<input 
-						type='email' 
+						type='text' 
 						name='email' 
+						className={this.state.errors.email ? 'input-error' : null}
 						placeholder='Email'
 						value={email}
 						onChange={handleChange} 
-						required />
+					/>
+					{this.state.errors.email ? <p className="error-message" >{this.state.errorCodes.email}</p> : null}
+					
+					<label>User Name</label>
+					<input 
+						type='text' 
+						name='username' 
+						className={this.state.errors.username ? 'input-error' : null}
+						placeholder='User Name'
+						value={username}
+						onChange={handleChange}
+					/>
+					{this.state.errors.username ? <p className="error-message" >{this.state.errorCodes.username}</p> : null}
 				
 					<label>Password</label>
 					<input 
 						type='password' 
 						name='password' 
+						className={this.state.errors.password ? 'input-error' : null}
 						placeholder='Password'
 						value={password}
 						onChange={handleChange}  
-						required />
+					/>
+					{this.state.errors.password ? <p className="error-message" >{this.state.errorCodes.password}</p> : null}
 				</div>
 					
 				<Link to="/">	
-					<button className="login">Login</button>
+					<button type="button" className="login">Login</button>
 				</Link>
 				
 				<button type="submit" className="next">Next</button>
@@ -80,11 +132,43 @@ class DoctorSignUpForm extends React.Component {
 		);
 	}
 	
-	// onChange handler for number inputs 
-	numberChangeHandler(event, handler) {
-		if (event.target.validity.valid) {
-			handler(event);
+	// onSubmit event handler
+	submit(event) {
+		// prevents page reload
+		event.preventDefault();
+		
+		const valid = this.validate();
+		
+		if (valid) {
+			this.props.next();
 		}
+	}
+	
+	// validates inputs on submission
+	validate() {
+		
+		const valid = (
+			validateName('firstName', this.props.firstName, this.setError) &&
+			validateName('lastName',this.props.lastName, this.setError) &&
+			validateMID('MID', this.props.MID, this.setError) &&
+			validateEmail('email', this.props.email, this.setError) &&
+			validateUserName('username', this.props.username, this.setError) &&
+			validatePassword('password', this.props.password, this.setError));
+		
+		return valid;
+	}
+		
+	setError(name, value, message) {
+		this.setState(prevState => ({
+			errors: {
+				...prevState.errors,
+				[name]: value,
+			},
+			errorCodes: {
+				...prevState.errorCodes,
+				[name]: message,
+			}
+		}));
 	}
 	
 }
