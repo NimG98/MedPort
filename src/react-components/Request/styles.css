@@ -4,6 +4,8 @@
     float: right;
     margin-top: 10px;
     margin-right: 20px;
+    /* top: 80px;
+    z-index: 1; */
 }
 
 .new-request-button:hover {
