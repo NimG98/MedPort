@@ -25,4 +25,6 @@
 	height: 35px;
 	float: left;
 	margin-right: 10px;
+
+	cursor: pointer;
 }
