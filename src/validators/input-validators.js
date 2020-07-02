@@ -20,7 +20,8 @@ export const isMatch = (input, pattern) => {
 }
 
 /* 
-	Returns true iff input is a match to the email pattern
+	Returns true iff input is a match to the email pattern,
+	Otherwise returns false.
 	Note: email pattern obtained from https://emailregex.com/
 */
 export const isEmail = (input) => {
@@ -28,9 +29,33 @@ export const isEmail = (input) => {
 }
 
 /* 
-	Returns true iff input has a length greater than or equal to maxLength,
+	Returns true iff input is a match to the phone number pattern,
+	Otherwise returns false. 
+*/
+export const isPhoneNumber = (input) => {
+	return isMatch(input, '^[0-9]{10,11}$');
+}
+
+/* 
+	Returns true iff input is a match to the postal code pattern,
+	Otherwise returns false. 
+*/
+export const isPostalCode = (input) => {
+	return isMatch(input, '^[a-zA-Z][0-9][a-zA-Z][ -]?[0-9][a-zA-Z][0-9]$');
+}
+
+/* 
+	Returns true iff input has a length greater than or equal to minLength,
 	otherwise returns false.
 */
-export const isLongEnough = (input, minLength) => {
+export const isMinLength = (input, minLength) => {
 	return input.length >= minLength;
+}
+
+/* 
+	Returns true iff input has a length less than or equal to maxLength,
+	otherwise returns false.
+*/
+export const isMaxLength = (input, maxLength) => {
+	return input.length <= maxLength;
 }
