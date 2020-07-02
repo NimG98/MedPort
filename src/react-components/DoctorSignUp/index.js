@@ -25,6 +25,7 @@ class DoctorSignUp extends React.Component {
 			firstName: '',
 			lastName: '',
 			email: '',
+			username: '',
 			password: '',
 			MID: '',
 			institutionID: '',
@@ -70,6 +71,7 @@ class DoctorSignUp extends React.Component {
 					firstName={this.state.firstName}
 					lastName={this.state.lastName}
 					email={this.state.email}
+					username={this.state.username}
 					password={this.state.password}
 					MID={this.state.MID}
 					institutionID={this.state.institutionID}
@@ -127,6 +129,7 @@ class DoctorSignUp extends React.Component {
 			firstName: this.state.firstName,
 			lastName: this.state.lastName,
 			email: this.state.email,
+			username: this.state.username,
 			password: this.state.password,
 			MID: this.state.MID,
 			institutionID: this.state.institutionID,

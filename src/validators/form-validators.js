@@ -1,5 +1,5 @@
 // import input validators
-import { isRequired, isMinLength, isMaxLength, isEmail, isPhoneNumber, isPostalCode, isMID, isHCN } from "./input-validators";
+import { isRequired, isMinLength, isMaxLength, isEmail, isPhoneNumber, isPostalCode, isMID, isHCN, isNewUserName } from "./input-validators";
 
 
 // validates the name form field
@@ -133,6 +133,22 @@ export const validateReferralCode = (referralCode, setError) => {
 		return false;
 	} else {
 		setError(false, '');
+		return true;
+	}
+}
+
+export const validateUserName = (fieldName, username, setError) => {
+	if (!isRequired(username)) {
+		setError(fieldName, true, 'Please fill out this field');
+		return false;
+	} else if (!isMinLength(username, 3)) {
+		setError(fieldName, true, 'Minimum 3 characters');
+		return false;
+	} else if (!isNewUserName(username)) {
+		setError(fieldName, true, 'Username already exists');
+		return false;
+	} else {
+		setError(fieldName, false, '');
 		return true;
 	}
 }

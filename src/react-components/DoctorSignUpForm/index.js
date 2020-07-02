@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import "./styles.css";
 
 // import form validators
-import { validateName, validateMID, validateEmail, validatePassword } from "../../validators/form-validators";
+import { validateName, validateMID, validateEmail, validatePassword, validateUserName } from "../../validators/form-validators";
 
 class DoctorSignUpForm extends React.Component {
 	
@@ -17,6 +17,7 @@ class DoctorSignUpForm extends React.Component {
 				lastName: false,
 				MID: false,
 				email: false,
+				username: false,
 				password: false,
 			},
 			
@@ -25,6 +26,7 @@ class DoctorSignUpForm extends React.Component {
 				lastName: '',
 				MID: '',
 				email: '',
+				username: '',
 				password: '',
 			},
 		}
@@ -41,6 +43,7 @@ class DoctorSignUpForm extends React.Component {
 			firstName,
 			lastName,
 			email,
+			username,
 			password,
 			MID,
 			handleChange,
@@ -97,6 +100,17 @@ class DoctorSignUpForm extends React.Component {
 						onChange={handleChange} 
 					/>
 					{this.state.errors.email ? <p className="error-message" >{this.state.errorCodes.email}</p> : null}
+					
+					<label>User Name</label>
+					<input 
+						type='text' 
+						name='username' 
+						className={this.state.errors.username ? 'input-error' : null}
+						placeholder='User Name'
+						value={username}
+						onChange={handleChange}
+					/>
+					{this.state.errors.username ? <p className="error-message" >{this.state.errorCodes.username}</p> : null}
 				
 					<label>Password</label>
 					<input 
@@ -139,6 +153,7 @@ class DoctorSignUpForm extends React.Component {
 			validateName('lastName',this.props.lastName, this.setError) &&
 			validateMID('MID', this.props.MID, this.setError) &&
 			validateEmail('email', this.props.email, this.setError) &&
+			validateUserName('username', this.props.username, this.setError) &&
 			validatePassword('password', this.props.password, this.setError));
 		
 		return valid;

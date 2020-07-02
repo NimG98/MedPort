@@ -56,3 +56,22 @@ export const submitReferralCode = (code) => {
 	
 	return refferrerID;
 }
+
+/*
+	checks if username already exists on server
+	returns true iff username exists, otherwise returns false
+*/
+export const checkUserName = (username) => {
+	// code below requires server call
+	
+	const formattedUsername = username.toLowerCase();
+	
+	// mock data
+	const users = [
+		'user',
+		'user2',
+		'user3',
+	]
+	
+	return users.includes(formattedUsername);
+}
