@@ -2,6 +2,9 @@ import { MOCK_USERS as users} from "../mock-data/mock";
 import { MOCK_REQUESTS as allRequests} from "../mock-data/mock";
 import { MOCK_PATIENTS as allPatients} from "../mock-data/mock";
 import { MOCK_DOCTORS as allDoctors} from "../mock-data/mock";
+import { MOCK_INSTITUTIONS } from "../mock-data/mock";
+import { MOCK_REFERRALS } from "../mock-data/mock";
+import { MOCK_USERNAMES } from "../mock-data/mock";
 
 /* 
 	submits new doctor information to server for account creation
@@ -16,14 +19,7 @@ export const addDoctor = (doctor) => {
  */
 export const getInstitutions = () => {
 	// code below requires server call
-	
-	// mock data
-	const institutions = [
-		{ id: 1, name: 'Hospital A', address: '123 Main St', postalCode: 'B5C 4J6', phoneNumber: '9055558523'},
-		{ id: 2, name: 'Clinic B', address: '13 Fake Ave', postalCode: 'A1B 2C3', phoneNumber: '4165551234'},
-	]
-	
-	return institutions;
+	return MOCK_INSTITUTIONS;
 };
 
 /* 
@@ -47,14 +43,7 @@ export const addPatient = (patient, code) => {
 // submits referral code to server and gets a refferrerID on success
 export const submitReferralCode = (code) => {
 	// code below requires server call
-	
-	// mock data
-	const referrals = {
-			// code: doctorID
-			'P001': 1,
-	}
-	
-	const refferrerID = referrals[code];
+	const refferrerID = MOCK_REFERRALS[code];
 	
 	return refferrerID;
 }
@@ -65,17 +54,9 @@ export const submitReferralCode = (code) => {
 */
 export const checkUserName = (username) => {
 	// code below requires server call
-	
 	const formattedUsername = username.toLowerCase();
 	
-	// mock data
-	const users = [
-		'user',
-		'user2',
-		'user3',
-	]
-	
-	return users.includes(formattedUsername);
+	return MOCK_USERNAMES.includes(formattedUsername);
 }
 
 // Validates if the username is associated with a registered user,
