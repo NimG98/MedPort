@@ -3,7 +3,18 @@ import { Link } from "react-router-dom";
 
 import "./styles.css";
 
+// importing form validators
+import { validateReferralCode } from "../../validators/form-validators";
+
 class ReferralSignUpForm extends React.Component {
+	
+	constructor(props) {
+		super(props);
+		
+		// binding functions
+		this.submit = this.submit.bind(this);
+		this.validate = this.validate.bind(this);
+	}
 	
 	render() {
 		
@@ -18,9 +29,7 @@ class ReferralSignUpForm extends React.Component {
 		
 		return (
 			<div className="ReferralSignUpForm">
-				{error ? <h2>{errorCode}</h2> : null}
-				
-				<div className="main_form">
+				<form className="main_form" onSubmit={this.submit}>
 					<div className="title">
 						<h2><b>Enter Referral Code</b></h2>
 					</div>
@@ -29,17 +38,19 @@ class ReferralSignUpForm extends React.Component {
 						<input 
 							type='text' 
 							name='code' 
+							className={error ? 'input-error' : null}
 							placeholder='Referral Code'
 							value={code}
 							onChange={handleChange} />
+						{error ? <p className="error-message" >{errorCode}</p> : null}
 					</div>
 						
 					<Link to="/">	
-						<button className="login" >Login</button>
+						<button type="button" className="login" >Login</button>
 					</Link>
 						
-					<button className="next" onClick={submit} >Next</button>
-				</div>
+					<button type="submit" className="next">Next</button>
+				</form>
 				
 				<div className="secondary_form">
 					<h3>Are you a Doctor? </h3>
@@ -47,6 +58,27 @@ class ReferralSignUpForm extends React.Component {
 				</div>
 			</div>
 		)
+	}
+	
+	submit(event) {
+		// prevents page reload
+		event.preventDefault();
+		
+		const valid = this.validate();
+		
+		if (valid) {
+			this.props.submit();
+		}
+	}
+	
+	// validates inputs on submission
+	validate() {
+		
+		const valid = (
+			validateReferralCode(this.props.code, this.props.setError)
+		);
+		
+		return valid;
 	}
 	
 }

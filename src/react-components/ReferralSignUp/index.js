@@ -6,14 +6,13 @@ import "./styles.css";
 // importing components
 import ReferralSignUpForm from "../ReferralSignUpForm";
 import PatientSignUpForm from "../PatientSignUpForm";
-import SecretarySignUpForm from "../SecretarySignUpForm";
 
 // importing actions/required methods
 import { submitReferralCode } from "../../actions/app";
 
 class ReferralSignUp extends React.Component {
 	
-	status = ['referral', 'secretary', 'patient']
+	status = ['referral', 'patient']
 	
 	constructor(props) {
 		super(props);
@@ -65,6 +64,7 @@ class ReferralSignUp extends React.Component {
 			0: <ReferralSignUpForm
 					error={this.state.error}
 					errorCode={this.state.errorCode}
+					setError={this.setError}
 					code={this.state.code} 
 					handleChange={this.handleInputChange}
 					doctorSignUp={this.props.doctorSignUp}
@@ -72,11 +72,6 @@ class ReferralSignUp extends React.Component {
 				/>,
 			// patient
 			1: <PatientSignUpForm 
-					code={this.state.code}
-					referrerID={this.state.referrerID}
-				/>,
-			// secretary
-			2: <SecretarySignUpForm 
 					code={this.state.code}
 					referrerID={this.state.referrerID}
 				/>,
@@ -115,22 +110,12 @@ class ReferralSignUp extends React.Component {
 		
 		if (referrerID) {
 			
-			if (code.startsWith('P')) {
-				// sets the referrerID
-				this.setReferrerID(referrerID);
-				
-				// patient referral code
-				this.setStatus(1);
-			} else if (code.startsWith('S')) {
-				// sets the referrerID
-				this.setReferrerID(referrerID);
-				
-				// secretary referral code
-				this.setStatus(2);
-			} else {
-				// referral code exists but is not correctly formatted
-				this.setError(true, 'An Error Occurred');
-			}
+			// sets the referrerID
+			this.setReferrerID(referrerID);
+			
+			// patient referral code
+			this.setStatus(1);
+			
 		} else {
 			// invalid referral code
 			this.setError(true, 'Invalid Referral Code')

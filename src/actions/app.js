@@ -42,16 +42,6 @@ export const addPatient = (patient, code) => {
 	return true;
 };
 
-/* 
-	submits new secretary information to server for account creation
-	Note: submits secretary's used referral code as well
-*/
-export const addSecretary = (secretary, code) => {
-	// code below requires server call
-	return true;
-
-};
-
 // submits referral code to server and gets a refferrerID on success
 export const submitReferralCode = (code) => {
 	// code below requires server call
@@ -60,12 +50,7 @@ export const submitReferralCode = (code) => {
 	const referrals = {
 			// code: doctorID
 			'P001': 1,
-			// code: institutionID
-			'S001': 2,
 	}
-
-	// performed before function call
-	// const formattedCode = code.toUpperCase();
 	
 	const refferrerID = referrals[code];
 	

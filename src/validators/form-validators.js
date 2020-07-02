@@ -64,7 +64,7 @@ export const validateEmail = (fieldName, email, setError) => {
 		setError(fieldName, true, 'Please fill out this field');
 		return false;
 	} else if (!isEmail(email)) {
-		setError(fieldName, true, 'Please enter a valid email address');
+		setError(fieldName, true, 'Enter a valid email address');
 		return false;
 	} else {
 		setError(fieldName, false, '');
@@ -121,6 +121,18 @@ export const validateInstitutionID = (fieldName, institutionID, setError) => {
 		return false;
 	} else {
 		setError(fieldName, false, '');
+		return true;
+	}
+}
+
+// validates the referral code field
+// Note specific to referral sign up form
+export const validateReferralCode = (referralCode, setError) => {
+	if (!isRequired(referralCode)) {
+		setError(true, 'Please fill out this field');
+		return false;
+	} else {
+		setError(false, '');
 		return true;
 	}
 }
