@@ -9,7 +9,14 @@ import { addPatient } from "../../actions/app";
 import { redirect } from "../../actions/router";
 
 // import form validators
-import { validateName, validateAddress, validatePostalCode, validateHCN, validateEmail, validatePassword } from "../../validators/form-validators"; 
+import { 
+	validateName, 
+	validateAddress, 
+	validatePostalCode, 
+	validateHCN, 
+	validateEmail, 
+	validatePassword, 
+	validateUserName } from "../../validators/form-validators"; 
 
 class PatientSignUpForm extends React.Component {
 	
@@ -23,6 +30,7 @@ class PatientSignUpForm extends React.Component {
 			postalCode: '',
 			HCN: '',
 			email: '',
+			username: '',
 			password: '',
 			
 			errors: {
@@ -32,6 +40,7 @@ class PatientSignUpForm extends React.Component {
 				postalCode: false,
 				HCN: false,
 				email: false,
+				username: false,
 				password: false,
 			},
 			
@@ -42,6 +51,7 @@ class PatientSignUpForm extends React.Component {
 				postalCode: '',
 				HCN: '',
 				email: '',
+				username: '',
 				password: '',
 			},
 		}
@@ -128,6 +138,17 @@ class PatientSignUpForm extends React.Component {
 						onChange={this.handleInputChange} 
 					/>
 					{this.state.errors.email ? <p className="error-message" >{this.state.errorCodes.email}</p> : null}
+					
+					<label>User Name</label>
+					<input 
+						type='text' 
+						name='username' 
+						className={this.state.errors.username ? 'input-error' : null}
+						placeholder='User Name'
+						value={this.state.username}
+						onChange={this.handleInputChange} 
+					/>
+					{this.state.errors.username ? <p className="error-message" >{this.state.errorCodes.username}</p> : null}
 							
 					<label>Password</label>
 					<input 
@@ -170,6 +191,7 @@ class PatientSignUpForm extends React.Component {
 			postalCode: this.state.postalCode,
 			HCN: this.state.HCN,
 			email: this.state.email,
+			username: this.state.username,
 			password: this.state.password,
 			doctorID: this.props.referrerID,
 		});
@@ -203,6 +225,7 @@ class PatientSignUpForm extends React.Component {
 			validatePostalCode('postalCode', this.state.postalCode, this.setError) &&
 			validateHCN('HCN', this.state.HCN, this.setError) &&
 			validateEmail('email', this.state.email, this.setError) &&
+			validateUserName('username', this.state.username, this.setError) &&
 			validatePassword('password', this.state.password, this.setError));
 		
 		return valid;
