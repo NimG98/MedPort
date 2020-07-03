@@ -1,0 +1,61 @@
+@import '~antd/dist/antd.css';
+
+.AdminInstitutionView .container {
+	margin-top: 10px;
+	margin-left: 280px;
+}
+
+.AdminInstitutionView .container .institution-info {
+	margin-bottom: 30px;
+}
+
+.AdminInstitutionView .container .title {
+	display: inline-block;
+	margin-bottom: 20px;
+}
+
+
+
+.AdminInstitutionView .container .alert {
+	max-width: 300px;
+	margin: auto;
+	padding: auto;
+}
+
+.AdminInstitutionView .container table {
+    background-color: white;
+    margin-right: 20px;
+}
+  
+.AdminInstitutionView .container th, td {
+    padding: 10px 10px 10px 30px;
+    height: 55px;
+}
+
+.AdminInstitutionView .container th, tr {
+    border-bottom: 1px solid rgb(231, 231, 231);
+}
+
+.AdminInstitutionView .container th:first-child, td:first-child {
+    padding-left:20px;
+}
+
+.AdminInstitutionView .container th:last-child, td:last-child {
+    padding-right:20px;
+}
+
+.AdminInstitutionView .container .alert {
+	max-width: 300px;
+	margin: auto;
+	padding: auto;
+}
+
+.AdminInstitutionView .container .delete-institution-button {
+	float: right;
+	margin-top: 10px;
+	margin-right: 245px;
+}
+
+.AdminInstitutionView .container tr input {
+	max-width: 100px;
+}

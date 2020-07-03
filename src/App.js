@@ -8,7 +8,7 @@ import Dashboard from './react-components/Dashboard';
 import Upload from './react-components/Upload';
 import Request from './react-components/Request';
 import AdminInstitutions from './react-components/AdminInstitutions';
-// import AdminInstitutionView from './react-components/AdminInstitutionView';
+import AdminInstitutionView from './react-components/AdminInstitutionView';
 
 class App extends React.Component {
 
@@ -33,8 +33,8 @@ class App extends React.Component {
                             (<Request appComponent={this} />)}/>
 			<Route exact path='/admin/institutions' render={() =>
 							(<AdminInstitutions appComponent={this} />)}/>
-			{/* <Route exact path='/admin/institutions/:id' render={() =>
-							(<AdminInstitutionView appComponent={this} />)}/> */}
+			<Route exact path='/admin/institutions/:id' render={() =>
+							(<AdminInstitutionView appComponent={this} />)}/>
           </Switch>
         </BrowserRouter>
       </div>

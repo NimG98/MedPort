@@ -124,3 +124,9 @@ export const MOCK_USERNAMES = [
 	'user3',
 ]
 
+export const MOCK_ADMIN_INSTITUTION_INFO = [
+	{ id: 1, name: 'Hospital A', address: '123 Main St', postalCode: 'B5C 4J6', phoneNumber: '9055558523', doctors: [
+		{ doctorID: 1, username: "user2", firstName: 'Bob', lastName: 'Builder', MID: 123456,  email: 'b.build@fake.com'},
+		{ doctorID: 2, username: "userX", firstName: 'Jen', lastName: 'Iffer', MID: 'ABCD22223333',  email: 'jeniffer@example.com'}
+	]},
+]

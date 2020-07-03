@@ -5,6 +5,7 @@ import { MOCK_DOCTORS as allDoctors} from "../mock-data/mock";
 import { MOCK_INSTITUTIONS } from "../mock-data/mock";
 import { MOCK_REFERRALS } from "../mock-data/mock";
 import { MOCK_USERNAMES } from "../mock-data/mock";
+import { MOCK_ADMIN_INSTITUTION_INFO } from "../mock-data/mock";
 
 /* 
 	submits new doctor information to server for account creation
@@ -160,6 +161,24 @@ export const getUserProfileImageUrl = (username) => {
 	Note: admin functionality
 */
 export const deleteInstitution = (institutionID) => {
+	// code below requires server call
+	return true;
+}
+
+/*
+	sends server request to get institution with id, insitutionID
+*/
+export const getInstitution = (institutionID) => {
+	// code below requires server call
+	const institution = MOCK_ADMIN_INSTITUTION_INFO.find(element => element.id === institutionID);
+	
+	return institution;
+}
+
+/*
+	sends updated institution object to server
+*/
+export const updateInstitution = (institution) => {
 	// code below requires server call
 	return true;
 }
