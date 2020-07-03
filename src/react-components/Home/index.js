@@ -41,7 +41,7 @@ class Home extends React.Component {
       <div className="home__bg">
         <Header appComponent={this.props.appComponent}/>
         <Row className="login-background">
-          <img alt={"lobgImagego"} src={bgImage} className="home__bg-image"/>
+          <img alt={"bgImagelogo"} src={bgImage} className="home__bg-image"/>
           <LoginForm
             onFinish={this.login}
           />

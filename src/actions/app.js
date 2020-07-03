@@ -135,3 +135,22 @@ export const getPatientsByDoctor = (doctorID) => {
 export const getDoctorID = (username) => {
 	return allDoctors[username].doctorID;
 }
+
+export const getUserProfileImageUrl = (username) => {
+	// code below requires server call
+	// to look at the user database and see user's profile pics
+
+	// users is MOCK_USERS from ../mock-data/mock.js
+
+	const defaultProfileImageUrl = "./default-profile-icon.png";
+	
+	var userProfileImageUrl = null;
+
+	if(users[username].image) {
+		userProfileImageUrl = users[username].image;
+	} else {
+		userProfileImageUrl = defaultProfileImageUrl;
+	}
+
+	return userProfileImageUrl;
+}
