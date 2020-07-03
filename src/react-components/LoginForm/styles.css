@@ -37,6 +37,12 @@
 .signup-card p {
     margin-bottom: 0px;
 }
+
 .signup-redirect {
     font-weight: 600;
+}
+
+.invalidCredMessage {
+    color: red;
+    margin-bottom: 0px;
 }

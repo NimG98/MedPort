@@ -1,17 +1,45 @@
 import React from "react";
+import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
-import { Row, Card, Form, Input, Button} from "antd";
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import "./styles.css";
 import 'antd/dist/antd.css';
+import { Row, Card, Form, Input, Button} from "antd";
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
+import { validateLogin } from "../../actions/app";
+import { redirect } from "../../actions/router";
 
 class LoginForm extends React.Component {
     
-    // constructor(props) {
-    //     super(props);
-    // }
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            displayInvalid: false
+        };
+
+        this.login = this.login.bind(this);
+        this.displayInvalidCredentials = this.displayInvalidCredentials.bind(this);
+    }
+
+    login = loginValues => {
+        const username = loginValues.username;
+        const password = loginValues.password;
+        console.log('Received values of form: ', username, password);
+        const isValid = validateLogin(this.props.appComponent, username, password);
+    
+        if(isValid){
+            document.cookie = "LoggedInSession=Valid; " + "path=/";
+            redirect(this, '/dashboard');
+        } else {
+            this.displayInvalidCredentials();
+        }
+      }
+
+    displayInvalidCredentials() {
+        this.setState({ displayInvalid: true });
+    }
     
     render() {
 
@@ -21,7 +49,7 @@ class LoginForm extends React.Component {
                     <Form
                         name="login"
                         className="login-form"
-                        onFinish={this.props.onFinish}
+                        onFinish={this.login}
                         layout="vertical"
                     >
                         <Form.Item
@@ -61,6 +89,9 @@ class LoginForm extends React.Component {
                             </Button>
                         </Form.Item>
                     </Form>
+                    {this.state.displayInvalid &&
+                        <p className="invalidCredMessage">Invalid Credentials</p>
+                    }
                 </Card>
                 <Card className="signup-card">
                     <p>Don't have an account?
@@ -71,4 +102,4 @@ class LoginForm extends React.Component {
         );
     }
 }
-export default LoginForm;
+export default withRouter(LoginForm);
