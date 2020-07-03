@@ -1,4 +1,4 @@
-.nav {
+.nav2 {
     z-index: 10; 
     padding: 1px;
     position: fixed;
@@ -6,6 +6,16 @@
     left: 0;
     height: 100%;
     width: 200px;
+    background-color: #1F90CC;    
+}
+.nav3 {
+    z-index: 10; 
+    padding: 1px;
+    position: fixed;
+    border: 10px;
+    left: 0;
+    height: 100%;
+    width: 100px;
     background-color: #1F90CC;    
 }
 
@@ -20,5 +30,16 @@
 }
 
 .nav .fixed-bottom {
-    width: 200px;
+    width: 0px;
+}
+
+.butt{
+    margin-top: 0px;
+    margin-left: 172px;
+    
+}
+
+.butt2{
+    margin-left: 70px;
+    
 }

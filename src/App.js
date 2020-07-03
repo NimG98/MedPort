@@ -7,6 +7,7 @@ import SignUp from './react-components/SignUp';
 import Dashboard from './react-components/Dashboard';
 import Upload from './react-components/Upload';
 import Request from './react-components/Request';
+import Result from './react-components/Results';
 // import Header from './react-components/Header';
 
 class App extends React.Component {
@@ -30,6 +31,8 @@ class App extends React.Component {
                             (<Upload appComponent={this} />)}/>
 			<Route exact path='/request' render={() => 
                             (<Request appComponent={this} />)}/>
+      <Route exact path='/results' render={() => 
+                            (<Result appComponent={this} />)}/>
           </Switch>
         </BrowserRouter>
       </div>

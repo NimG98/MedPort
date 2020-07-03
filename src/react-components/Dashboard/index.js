@@ -33,30 +33,30 @@ class Dashboard extends React.Component {
     return (
         <div>
             <Header />
+            <NavBar appComponent={this.props.appComponent}/>
             
-            
-            <Container>
+            <div className="container2">
                 <Row>
-                    <NavBar appComponent={this.props.appComponent}/>
+                    
                     <Col className="col-md size-1">
-                        <h2>News:</h2>
+                        <h2 className="RH2">News:</h2>
                         <h5>- news story</h5>
-                        <h5>-another news story</h5>
+                        <h5>- another news story</h5>
                     </Col>
                     <br/>
                     <Col className="col-md size-1">
-                        <h2>Journals:</h2>
+                        <h2 className="RH2">Journals:</h2>
                         <h5>- news story</h5>
-                        <h5>-another news story</h5>
+                        <h5>- another news story</h5>
                     </Col>
                 </Row>
                 <Row className="size-2">
-                <h2>Health News/Latest advancemnets</h2>
+                <h2 className="RH2">Health News/Latest advancemnets</h2>
                     
                         <h5>- news story</h5>
-                        <h5>-another news story</h5>
+                        <h5>- another news story</h5>
                 </Row>
-            </Container>
+            </div>
             
            
 
