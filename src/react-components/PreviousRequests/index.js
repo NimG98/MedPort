@@ -154,13 +154,12 @@ class PreviousRequests extends React.Component {
                     <Modal
                         title="Do you want to confirm the following request?"
                         icon={<InfoCircleOutlined />}
-                        // content={"Request by" + req.created_by + "for a" + req.request_type
-                        //         + "on" + req.date + "at" + req.time}
                         onOk={this.handleModalOk}
                         onCancel={this.handleModalCancel}
                         visible={this.state.modalVisible}
                     >
-                        {"Request by " + req.created_by + " for a " + req.request_type
+                        {"Request by " + getUserProfileInfo(req.created_by).firstName 
+                                + " " + getUserProfileInfo(req.created_by).lastName + " for a " + req.request_type
                                 + " on " + req.date + " at " + req.time}
                     </Modal>
                 </td>
