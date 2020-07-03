@@ -9,7 +9,12 @@ export const MOCK_USERS = {
         image: "./userPatientProfilePicture.png"
     },
     jdoe: {
-        password: "12345",
+        password: "123456",
+        type: UserType.patient,
+        image: null
+    },
+    billybob: {
+        password: "yoyoyo",
         type: UserType.patient,
         image: null
     },
