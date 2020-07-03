@@ -115,7 +115,7 @@ export const getUserRequestsByStatus = (username, status) => {
 	return userRequests;
 }
 
-/* Gets the type of the user (patient/doctor/secretary/admin) */
+/* Gets the type of the user (patient/doctor/admin) */
 export const getUserType = (username) => {
 
 	// code below requires server call
@@ -127,7 +127,6 @@ export const getUserType = (username) => {
 
 /* Gets the patients assigned to a specific doctor */
 export const getPatientsByDoctor = (doctorID) => {
-	console.log(doctorID);
 
 	var patients = []
 
@@ -137,7 +136,6 @@ export const getPatientsByDoctor = (doctorID) => {
 	// allPatients is MOCK_PATIENTS from ../mock-data/mock.js
 
 	for (var patientUsername in allPatients) {
-		console.log(patientUsername);
 		var patientInfo = getUserProfileInfo(patientUsername);
 		if(patientInfo.doctorID === doctorID) {
 			patients.push(patientInfo)

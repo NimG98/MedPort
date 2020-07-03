@@ -37,7 +37,6 @@ class Profile extends React.Component {
         } else if(this.state.userType === UserType.doctor) {
             this.MID = getUserProfileInfo(this.state.user).MID;
             this.institutionID = getUserProfileInfo(this.state.user).institutionID;
-            console.log("insID" + this.institutionID);
             this.institutionInfo = getInstitutionInfo(this.institutionID);
         }
 

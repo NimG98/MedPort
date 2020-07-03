@@ -83,8 +83,6 @@ class PreviousRequests extends React.Component {
     displayTableHeaders = (status) => {
         var tableHeaders = [];
         var headers = [...this.tableHeaderNames];
-        console.log(this.tableHeaderNames)
-
 
         if(status === "pending") {
             headers.push(this.actionHeaderName);
@@ -107,11 +105,6 @@ class PreviousRequests extends React.Component {
         } else if(status === "confirmed") {
             requestData = this.state.confirmedRequests;
         }
-
-        console.log(requestData)
-        console.log(this.state.user)
-
-        
 
         for(var req in requestData) {
             var actionNeeded = this.displayActionNeeded(requestData[req]);

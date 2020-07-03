@@ -16,7 +16,6 @@
 .profileDetail .ant-input {
     display: inline-block;
     width: fit-content;
-    /* float: left; */
 }
 
 .profilePageContent ul {
@@ -24,15 +23,12 @@
 }
 
 .profilePageContent li {
-    /* padding-top: 20px; */
     min-height: 40px;
 }
 
 .profilePageContent h5 {
     font-weight: bold;
-    /* display: inline-flex; */
     padding-right: 10px;
-    /* float: left; */
 }
 
 .profilePageContent .profileDetailValue {

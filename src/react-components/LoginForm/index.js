@@ -26,7 +26,6 @@ class LoginForm extends React.Component {
     login = loginValues => {
         const username = loginValues.username;
         const password = loginValues.password;
-        console.log('Received values of form: ', username, password);
         const isValid = validateLogin(this.props.appComponent, username, password);
     
         if(isValid){

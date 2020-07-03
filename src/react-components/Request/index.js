@@ -16,8 +16,6 @@ class Request extends React.Component {
     constructor(props) {
         super(props);
 
-        console.log(this.props.appComponent);
-        console.log(`logged in user = [${this.props.appComponent}]`);
         this.state = {
             newRequest: false,
             user: this.props.appComponent.state.loggedInUser
@@ -31,7 +29,6 @@ class Request extends React.Component {
     }
 
     onClick() {
-        console.log(this.state);
         this.setState( {...this.state, newRequest: true} );
     }
 
