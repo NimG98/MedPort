@@ -8,6 +8,7 @@ import ImgCrop from 'antd-img-crop';
 
 import Header from '../Header';
 import NavBar from '../NavBar';
+import ProfileDetail from '../ProfileDetail';
 import uploadPlusImage from './static/opaque-upload-profile.png';
 import editProfileImagePencil from './static/pencil-edit-icon.png';
 
@@ -71,18 +72,20 @@ class Profile extends React.Component {
                     </h1>
                     <Card className="profileInfoCard">
                         <ul>
-                            <li><h5>Email:</h5><span>{this.email}</span></li>
+                            <ProfileDetail detailName="Email" detailValue={this.email} isEditable={true}/>
                             {this.state.userType === UserType.patient && 
                                 <div className="specificUserTypeDetails">
-                                    <li><h5>Address:</h5><span>{this.address}</span></li>
-                                    <li><h5>Postal Code:</h5><span>{this.postalCode}</span></li>
-                                    <li><h5>Health Card Number:</h5><span>{this.HCN}</span></li>
-                                    <li><h5>Doctor:</h5><span>{this.doctor.firstName + " " + this.doctor.lastName}</span></li>
+                                    <ProfileDetail detailName="Address" detailValue={this.address} isEditable={true}/>
+                                    <ProfileDetail detailName="Postal Code" detailValue={this.postalCode} isEditable={true}/>
+                                    <ProfileDetail detailName="Health Card Number" detailValue={this.HCN} isEditable={false}/>
+                                    <ProfileDetail detailName="Doctor" 
+                                                   detailValue={this.doctor.firstName + " " + this.doctor.lastName}
+                                                   isEditable={false}/>
                                 </div>
                             }
                             {this.state.userType === UserType.doctor && 
                                 <div className="specificUserTypeDetails">
-                                    <li><h5>Medical Identification Number:</h5><span>{this.MID}</span></li>
+                                    <ProfileDetail detailName="Medical Identification Number" detailValue={this.MID} isEditable={false}/>
                                 </div>
                             }
                         </ul>
@@ -91,9 +94,9 @@ class Profile extends React.Component {
                         <Card className="institutionInfoCard">
                             <h3>{this.institutionInfo.name}</h3>
                             <ul>
-                                <li><h5>Address:</h5><span>{this.institutionInfo.address}</span></li>
-                                <li><h5>Postal Code:</h5><span>{this.institutionInfo.postalCode}</span></li>
-                                <li><h5>Phone Number:</h5><span>{this.institutionInfo.phoneNumber}</span></li>
+                                <ProfileDetail detailName="Address" detailValue={this.institutionInfo.address} isEditable={false}/>
+                                <ProfileDetail detailName="Postal Code" detailValue={this.institutionInfo.postalCode} isEditable={false}/>
+                                <ProfileDetail detailName="Phone Number" detailValue={this.institutionInfo.phoneNumber} isEditable={false}/>
                             </ul>
                         </Card>
                     }
