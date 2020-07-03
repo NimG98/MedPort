@@ -6,6 +6,7 @@ import { MOCK_INSTITUTIONS } from "../mock-data/mock";
 import { MOCK_REFERRALS } from "../mock-data/mock";
 import { MOCK_USERNAMES } from "../mock-data/mock";
 import { MOCK_ADMIN_INSTITUTION_INFO } from "../mock-data/mock";
+import { MOCK_ADMIN_DOCTORS } from "../mock-data/mock"; 
 
 /* 
 	submits new doctor information to server for account creation
@@ -17,7 +18,7 @@ export const addDoctor = (doctor) => {
 
 /* 
 	Returns a list of institutions obtained from the server
- */
+*/
 export const getInstitutions = () => {
 	// code below requires server call
 	return MOCK_INSTITUTIONS;
@@ -179,6 +180,23 @@ export const getInstitution = (institutionID) => {
 	sends updated institution object to server
 */
 export const updateInstitution = (institution) => {
+	// code below requires server call
+	return true;
+}
+
+/* 
+	Returns a list of doctors obtained from the server
+*/
+export const getDoctors = () => {
+	// code below requires server call
+	return MOCK_ADMIN_DOCTORS;
+}
+
+/*
+	sends server request to delete doctor
+	Note: admin functionality
+*/
+export const deleteDoctor = (doctorID) => {
 	// code below requires server call
 	return true;
 }

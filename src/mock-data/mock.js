@@ -130,3 +130,8 @@ export const MOCK_ADMIN_INSTITUTION_INFO = [
 		{ doctorID: 2, username: "userX", firstName: 'Jen', lastName: 'Iffer', MID: 'ABCD22223333',  email: 'jeniffer@example.com'}
 	]},
 ]
+
+export const MOCK_ADMIN_DOCTORS = [
+	{ id: 1, userName: 'user2', firstName: 'Bob', lastName: 'Builder', MID: 123456,  email: 'b.build@fake.com', password: 'abcdef', institutionID: 1 },
+	{ id: 2, userName: 'userY', firstName: 'Jane', lastName: 'Jackson', MID: 'DCBA33335555',  email: 'jacksonj@aol.com', password: '123456', institutionID: 1 },	
+]

@@ -9,6 +9,7 @@ import Upload from './react-components/Upload';
 import Request from './react-components/Request';
 import AdminInstitutions from './react-components/AdminInstitutions';
 import AdminInstitutionView from './react-components/AdminInstitutionView';
+import AdminDoctors from "./react-components/AdminDoctors";
 
 class App extends React.Component {
 
@@ -35,6 +36,8 @@ class App extends React.Component {
 							(<AdminInstitutions appComponent={this} />)}/>
 			<Route exact path='/admin/institutions/:id' render={() =>
 							(<AdminInstitutionView appComponent={this} />)}/>
+			<Route exact path='/admin/doctors' render={() =>
+							(<AdminDoctors appComponent={this} />)}/>
           </Switch>
         </BrowserRouter>
       </div>

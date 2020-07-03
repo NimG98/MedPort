@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from "react-router";
 
 import "./styles.css";
 
@@ -6,6 +7,9 @@ import "./styles.css";
 import Header from "../Header";
 import DoctorSignUp from "../DoctorSignUp";
 import ReferralSignUp from "../ReferralSignUp";
+
+// importing actions/required methods
+import { redirect } from "../../actions/router";
 
 /* Component for user registration */
 class SignUp extends React.Component {
@@ -43,7 +47,10 @@ class SignUp extends React.Component {
 					doctorSignUp={() => this.setStatus(1)}
 				/>,
 			// doctor
-			1: <DoctorSignUp />,
+			1: <DoctorSignUp 
+					submit={() => redirect(this, "/")}
+					back={() => this.setStatus(0)}
+			   />,
 		}[index]
 	}
 	
@@ -54,4 +61,4 @@ class SignUp extends React.Component {
 
 }
 
-export default SignUp;
+export default withRouter(SignUp);

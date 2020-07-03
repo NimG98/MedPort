@@ -47,6 +47,7 @@ class DoctorSignUpForm extends React.Component {
 			password,
 			MID,
 			handleChange,
+			back,
 		} = this.props;
 		
 		return (
@@ -123,9 +124,7 @@ class DoctorSignUpForm extends React.Component {
 					{this.state.errors.password ? <p className="error-message" >{this.state.errorCodes.password}</p> : null}
 				</div>
 					
-				<Link to="/">	
-					<button type="button" className="login">Login</button>
-				</Link>
+				<button type="button" className="back" onClick={back}>back</button>
 				
 				<button type="submit" className="next">Next</button>
 			</form>
