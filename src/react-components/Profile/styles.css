@@ -1,0 +1,74 @@
+.profilePage {
+    /* margin-top: 10px; */
+    /* margin-left: 280px; */
+    /* width: 100%; */
+}
+
+.loggedInUserProfileName {
+    display: inline-block;
+    font-size: 54.4px;
+    padding-left: 40px;
+    color: #1F90CC;
+}
+
+.profilePageContent {
+    margin-top: 40px;
+    margin-left: 280px;
+    /* width: 100%; */
+}
+
+.profilePageContent ul {
+    list-style-type:none;
+}
+
+.profilePageContent h5 {
+    font-weight: bold;
+    display: inline-block;
+    padding-right: 10px;
+}
+
+.profilePageContent span {
+    font-size: larger;
+}
+
+.profilePageContent .ant-card {
+    margin-top: 30px;
+    min-height: 150px;
+    display: -webkit-flex;
+	display: flex;
+	align-items: center;
+}
+
+.bigUserProfileImage {
+    border-radius: 50%;
+    border: 4px solid black;
+    width: 200px;
+    /* margin-top: 80px;
+    margin-left: 280px; */
+}
+
+.profileInfoCard {
+    margin-right: 20px;
+    max-width: 1100px;
+    box-shadow: 1px 3px 0px 0 rgba(0,0,0,0.24);
+}
+
+.profileInfoCard .ant-card-body {
+    padding-bottom: 0px;
+}
+
+.institutionInfoCard {
+    margin-right: 20px;
+    max-width: 1100px;
+    box-shadow: 1px 3px 0px 0 rgba(0,0,0,0.24);
+}
+
+.institutionInfoCard .ant-card-body {
+    padding-bottom: 0px;
+}
+
+.institutionInfoCard h3 {
+    margin-bottom: 20px;
+    color: rgb(190, 19, 19);
+    padding-left: 40px;
+}

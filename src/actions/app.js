@@ -24,6 +24,19 @@ export const getInstitutions = () => {
 };
 
 /* 
+	Returns the info of an institution based on institutionID
+ */
+export const getInstitutionInfo = (institutionID) => {
+	// code below requires server call
+	const allInstitutions = getInstitutions();
+	for(var institution in allInstitutions) {
+		if(allInstitutions[institution].id === institutionID) {
+			return allInstitutions[institution];
+		}
+	}
+}
+
+/* 
 	submits new institution information to server for account creation.
 	Note: returns newly created institution's ID on success
 */
