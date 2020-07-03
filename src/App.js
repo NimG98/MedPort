@@ -8,7 +8,6 @@ import Dashboard from './react-components/Dashboard';
 import Upload from './react-components/Upload';
 import Request from './react-components/Request';
 import Profile from './react-components/Profile';
-// import Header from './react-components/Header';
 
 class App extends React.Component {
 

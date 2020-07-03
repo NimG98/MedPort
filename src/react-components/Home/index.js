@@ -6,7 +6,7 @@ import 'antd/dist/antd.css';
 
 import Header from './../Header';
 import LoginForm from './../LoginForm';
-import bgImage from "./static/doctor-patient-online2.png";
+import bgImage from "./static/home-bg-doctor-patient-online.png";
 import { Card, Row, Col } from "antd";
 
 import { validateLogin } from "../../actions/app";
