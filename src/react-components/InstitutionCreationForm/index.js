@@ -3,7 +3,10 @@ import React from "react";
 import "./styles.css";
 
 // importing actions/required methods
-import { addInstitution, createInstitutionID } from "../../actions/app";
+import { addInstitution } from "../../actions/app";
+
+// import form validators
+import { validateName, validateAddress, validatePostalCode, validatePhoneNumber } from "../../validators/form-validators";
 
 //
 class InstitutionCreationForm extends React.Component {
@@ -15,13 +18,29 @@ class InstitutionCreationForm extends React.Component {
 			name: '',
 			address: '',
 			postalCode: '',
-			phoneNumber: ''
+			phoneNumber: '',
+			
+			errors: {
+				name: false,
+				address: false,
+				postalCode: false,
+				phoneNumber: false,
+			},
+			
+			errorCodes: {
+				name: '',
+				address: '',
+				postalCode: '',
+				phoneNumber: '',
+			},
 		}
 		
 		// binding functions
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.createInstitution = this.createInstitution.bind(this);
 		this.submit = this.submit.bind(this);
+		this.validate = this.validate.bind(this);
+		this.setError = this.setError.bind(this);
 	}
 	
 	render() {
@@ -41,40 +60,48 @@ class InstitutionCreationForm extends React.Component {
 					<input 
 						type='text' 
 						name='name' 
+						className={this.state.errors.name ? 'input-error' : null}
 						placeholder='Name'
 						value={this.state.name}
 						onChange={this.handleInputChange} 
-						required />
+					/>
+					{this.state.errors.name ? <p className="error-message" >{this.state.errorCodes.name}</p> : null}
 					
 					<label>Address</label>					
 					<input 
 						type='text' 
 						name='address' 
+						className={this.state.errors.address ? 'input-error' : null}
 						placeholder='Address'
 						value={this.state.address}
 						onChange={this.handleInputChange} 
-						required /> 
+					/> 
+					{this.state.errors.address ? <p className="error-message" >{this.state.errorCodes.address}</p> : null}
 						
 					<label>Postal Code</label>
 					<input 
 						type='text' 
 						name='postalCode'
+						className={this.state.errors.postalCode ? 'input-error' : null}
 						placeholder='Postal Code'
 						value={this.state.postalCode}
 						onChange={this.handleInputChange} 
-						required />
+					/>
+					{this.state.errors.postalCode ? <p className="error-message" >{this.state.errorCodes.postalCode}</p> : null}
 					
 					<label>Phone Number</label>
 					<input 
-						type='tel' 
+						type='text' 
 						name='phoneNumber' 
+						className={this.state.errors.phoneNumber ? 'input-error' : null}
 						placeholder='Phone Number'
 						value={this.state.phoneNumber}
 						onChange={this.handleInputChange} 
-						required />
+					/>
+					{this.state.errors.phoneNumber ? <p className="error-message" >{this.state.errorCodes.phoneNumber}</p> : null}
 				</div>
 				
-				<button className="back" onClick={back}>Back</button>
+				<button type="button" className="back" onClick={back}>Back</button>
 				<button type="submit" className="submit">Submit</button>
 			</form>
 		);
@@ -98,22 +125,53 @@ class InstitutionCreationForm extends React.Component {
 			address: this.state.address,
 			postalCode: this.state.postalCode,
 			phoneNumber: this.state.phoneNumber,
-			id: createInstitutionID(this.props.appComponent),
 		});
 	}
 	
 	// submit new institution information
-	submit() {
-		const institution = this.createInstitution();
+	submit(event) {
+		// prevents page reload
+		event.preventDefault();
 		
-		// add institiution to app component institutions list
-		addInstitution(this.props.appComponent, institution);
+		// validate form inputs
+		const valid = this.validate();
 		
-		// set doctor's institutionID
-		this.props.setInstitutionID(institution.id);
+		if (valid) {
+			// creates the new institution object
+			const institution = this.createInstitution();
+			
+			// server call - returns institution id
+			const institutionID = addInstitution(institution);
+			
+			// invoke submission in parent component
+			this.props.submit(institutionID);
+		}
+	}
+	
+	// validates inputs on submission
+	validate() {
 		
-		// invoke submission in parent component
-		this.props.submit();
+		const valid = (
+			validateName('name', this.state.name, this.setError) &&
+			validateAddress('address', this.state.address, this.setError) &&
+			validatePostalCode('postalCode', this.state.postalCode, this.setError) &&
+			validatePhoneNumber('phoneNumber', this.state.phoneNumber, this.setError)
+		);
+		
+		return valid;
+	}
+		
+	setError(name, value, message) {
+		this.setState(prevState => ({
+			errors: {
+				...prevState.errors,
+				[name]: value,
+			},
+			errorCodes: {
+				...prevState.errorCodes,
+				[name]: message,
+			}
+		}));
 	}
 }
 

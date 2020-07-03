@@ -109,3 +109,22 @@ export const MOCK_DOCTORS = {
     }
 }
 
+// mock data for institutions
+export const MOCK_INSTITUTIONS = [
+		{ id: 1, name: 'Hospital A', address: '123 Main St', postalCode: 'B5C 4J6', phoneNumber: '9055558523'},
+		{ id: 2, name: 'Clinic B', address: '13 Fake Ave', postalCode: 'A1B 2C3', phoneNumber: '4165551234'},
+]
+
+// mock data for referralls
+export const MOCK_REFERRALS = {
+			// code: doctorID
+			'P001': 1,
+}
+
+// mock data for usernames
+export const MOCK_USERNAMES = [
+	'user',
+	'user2',
+	'user3',
+]
+
