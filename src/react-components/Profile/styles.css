@@ -21,6 +21,13 @@
     opacity: 0.3;
 }
 
+.profilePage .ant-upload:hover .editProfileImagePencil {
+    width: 90px;
+    position: absolute;
+    top: 245px;
+    left: 395px;
+}
+
 .editProfileImagePencil {
     position: absolute;
     width: 80px;
