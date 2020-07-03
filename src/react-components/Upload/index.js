@@ -14,7 +14,7 @@ class Upload extends React.Component {
     render() {
         return(
         <div>
-            <Header />
+            <Header appComponent={this.props.appComponent}/>
             
             <Container >
                 
