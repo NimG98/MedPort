@@ -11,20 +11,17 @@ import { getInstitutions, deleteInstitution } from "../../actions/app";
 import { redirect } from "../../actions/router"
 
 // importing components
-import Header from "../Header";
-import NavBar from "../NavBar";
 import { Alert, Button } from "antd";
 
-class InstitutionsOverview extends React.Component {
+class AdminInstitutionsOverview extends React.Component {
 	
 	headers = ["Name", "Address", "Postal Code", "Phone Number"];
 	
 	componentDidMount() {
 		const data = getInstitutions();
 		
+		
 		this.setState({
-			error: false,
-			errorCode: '',
 			institutions: data
 		});
 	}
@@ -33,6 +30,8 @@ class InstitutionsOverview extends React.Component {
 		super(props);
 		
 		this.state = {
+			error: false,
+			errorCode: '',
 			institutions: [],
 		}
 		
@@ -45,16 +44,24 @@ class InstitutionsOverview extends React.Component {
 	}
 	
 	render() {
+		
+		const {
+			createInstitution
+		} = this.props;
+		
 		return(
-			<div className="InstitutionsOverview">
-				<Header appComponent={this.props.appComponent}/>
-				<NavBar />
-				
+			<div className="AdminInstitutionsOverview">
 				<div className="container">
 					{this.state.error ? <Alert type="error" message={this.state.errorCode} className="alert" closable onClose={this.handleClose}></Alert> : null}
 					<h1 className="title">
 						Institutions Overview
 					</h1>
+					
+					<Button
+						type="primary"
+						className="create-institution-button"
+						onClick={createInstitution}
+					>Create Institution</Button>
 					
 					<table>
 						<thead>
@@ -94,7 +101,7 @@ class InstitutionsOverview extends React.Component {
 					<td><Button
 							type="primary"
 							onClick={() => {redirect(this, "/admin/institutions/" + institution.id)}}
-						>Edit</Button>
+						>View</Button>
 					</td>
 					<td>
 						<Button 
@@ -145,4 +152,4 @@ class InstitutionsOverview extends React.Component {
 	
 }
 
-export default withRouter(InstitutionsOverview);
+export default withRouter(AdminInstitutionsOverview);

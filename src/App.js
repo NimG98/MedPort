@@ -7,7 +7,8 @@ import SignUp from './react-components/SignUp';
 import Dashboard from './react-components/Dashboard';
 import Upload from './react-components/Upload';
 import Request from './react-components/Request';
-import InstitutionsOverview from './react-components/InstitutionsOverview';
+import AdminInstitutions from './react-components/AdminInstitutions';
+// import AdminInstitutionView from './react-components/AdminInstitutionView';
 
 class App extends React.Component {
 
@@ -31,7 +32,9 @@ class App extends React.Component {
 			      <Route exact path='/request' render={() => 
                             (<Request appComponent={this} />)}/>
 			<Route exact path='/admin/institutions' render={() =>
-							(<InstitutionsOverview appComponent={this} />)}/>
+							(<AdminInstitutions appComponent={this} />)}/>
+			{/* <Route exact path='/admin/institutions/:id' render={() =>
+							(<AdminInstitutionView appComponent={this} />)}/> */}
           </Switch>
         </BrowserRouter>
       </div>
