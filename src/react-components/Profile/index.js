@@ -3,10 +3,13 @@ import { withRouter } from "react-router";
 
 import "./styles.css";
 import 'antd/dist/antd.css';
-import { Card } from "antd";
+import { Card, Upload } from "antd";
+import ImgCrop from 'antd-img-crop';
 
 import Header from '../Header';
 import NavBar from '../NavBar';
+import uploadPlusImage from './static/opaque-upload-profile.png';
+import editProfileImagePencil from './static/pencil-edit-icon.png';
 
 import { getUserProfileImageUrl, getUserType, getUserProfileInfo, getDoctorbyID, getInstitutionInfo } from '../../actions/app';
 import { UserType } from '../../constants/userType';
@@ -55,7 +58,13 @@ class Profile extends React.Component {
                 <Header appComponent={this.props.appComponent}/>
                 <NavBar />
                 <div className="profilePageContent">
-                    <img alt="bigProfileImageforLoggedInUser" className="bigUserProfileImage" src={this.getUserProfileImage()}/>
+                    <ImgCrop rotate grid shape='round'>
+                        <Upload showUploadList={false}>
+                            <img alt="bigProfileImageforLoggedInUser" className="bigUserProfileImage" src={this.getUserProfileImage()}/>
+                            <img alt="uploadImageOverlay" className="uploadProfileImageOverlay" src={uploadPlusImage} />
+                            <img alt="editProfileImagePencil" className="editProfileImagePencil" src={editProfileImagePencil} />
+                        </Upload>
+                    </ImgCrop>
                     <h1 className="loggedInUserProfileName">
                         {this.state.userType === UserType.doctor && "Dr. "}
                         {this.firstName + " " + this.lastName}
@@ -83,8 +92,8 @@ class Profile extends React.Component {
                             <h3>{this.institutionInfo.name}</h3>
                             <ul>
                                 <li><h5>Address:</h5><span>{this.institutionInfo.address}</span></li>
-                                <li><h5>Postal Code:</h5><span>{this.institutionInfo.address}</span></li>
-                                <li><h5>Phone Number:</h5><span>{this.institutionInfo.address}</span></li>
+                                <li><h5>Postal Code:</h5><span>{this.institutionInfo.postalCode}</span></li>
+                                <li><h5>Phone Number:</h5><span>{this.institutionInfo.phoneNumber}</span></li>
                             </ul>
                         </Card>
                     }

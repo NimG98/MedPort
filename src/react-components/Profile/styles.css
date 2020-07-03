@@ -1,7 +1,31 @@
-.profilePage {
-    /* margin-top: 10px; */
-    /* margin-left: 280px; */
-    /* width: 100%; */
+.bigUserProfileImage {
+    border-radius: 50%;
+    border: 4px solid black;
+    width: 200px;
+}
+
+.uploadProfileImageOverlay {
+    opacity: 0;
+    width: 200px;
+    position: absolute;
+    top: 60px;
+    left: 280px;
+}
+
+.profilePage .ant-upload:hover .uploadProfileImageOverlay {
+    border-radius: 50%;
+    opacity: 1;
+}
+
+.profilePage .ant-upload:hover .bigUserProfileImage {
+    opacity: 0.3;
+}
+
+.editProfileImagePencil {
+    position: absolute;
+    width: 80px;
+    top: 250px;
+    left: 400px;
 }
 
 .loggedInUserProfileName {
@@ -14,7 +38,6 @@
 .profilePageContent {
     margin-top: 40px;
     margin-left: 280px;
-    /* width: 100%; */
 }
 
 .profilePageContent ul {
@@ -37,14 +60,6 @@
     display: -webkit-flex;
 	display: flex;
 	align-items: center;
-}
-
-.bigUserProfileImage {
-    border-radius: 50%;
-    border: 4px solid black;
-    width: 200px;
-    /* margin-top: 80px;
-    margin-left: 280px; */
 }
 
 .profileInfoCard {
