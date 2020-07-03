@@ -161,5 +161,5 @@ export const getUserProfileImageUrl = (username) => {
 */
 export const deleteInstitution = (institutionID) => {
 	// code below requires server call
-	return false;
+	return true;
 }
