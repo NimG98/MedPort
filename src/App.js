@@ -7,7 +7,7 @@ import SignUp from './react-components/SignUp';
 import Dashboard from './react-components/Dashboard';
 import Upload from './react-components/Upload';
 import Request from './react-components/Request';
-// import Header from './react-components/Header';
+import InstitutionsOverview from './react-components/InstitutionsOverview';
 
 class App extends React.Component {
 
@@ -30,6 +30,8 @@ class App extends React.Component {
                             (<Upload appComponent={this} />)}/>
 			      <Route exact path='/request' render={() => 
                             (<Request appComponent={this} />)}/>
+			<Route exact path='/admin/institutions' render={() =>
+							(<InstitutionsOverview appComponent={this} />)}/>
           </Switch>
         </BrowserRouter>
       </div>

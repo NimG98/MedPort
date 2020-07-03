@@ -154,3 +154,12 @@ export const getUserProfileImageUrl = (username) => {
 
 	return userProfileImageUrl;
 }
+
+/*
+	sends server request to delete institution
+	Note: admin functionality
+*/
+export const deleteInstitution = (institutionID) => {
+	// code below requires server call
+	return false;
+}
