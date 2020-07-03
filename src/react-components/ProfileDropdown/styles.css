@@ -26,3 +26,9 @@
 .profileDropdown:hover .dropdownContent {
     display: block;
 }
+
+
+.profileDropdown .dropdownContent a {
+    display: block;
+    padding-bottom: 10px;
+}

@@ -5,6 +5,7 @@ import { MOCK_DOCTORS as allDoctors} from "../mock-data/mock";
 import { MOCK_INSTITUTIONS } from "../mock-data/mock";
 import { MOCK_REFERRALS } from "../mock-data/mock";
 import { MOCK_USERNAMES } from "../mock-data/mock";
+import { UserType } from "../constants/userType";
 
 /* 
 	submits new doctor information to server for account creation
@@ -21,6 +22,19 @@ export const getInstitutions = () => {
 	// code below requires server call
 	return MOCK_INSTITUTIONS;
 };
+
+/* 
+	Returns the info of an institution based on institutionID
+ */
+export const getInstitutionInfo = (institutionID) => {
+	// code below requires server call
+	const allInstitutions = getInstitutions();
+	for(var institution in allInstitutions) {
+		if(allInstitutions[institution].id === institutionID) {
+			return allInstitutions[institution];
+		}
+	}
+}
 
 /* 
 	submits new institution information to server for account creation.
@@ -122,8 +136,9 @@ export const getPatientsByDoctor = (doctorID) => {
 
 	for (var patientUsername in allPatients) {
 		console.log(patientUsername);
-		if(allPatients[patientUsername].doctorID === doctorID) {
-			patients.push(allPatients[patientUsername])
+		var patientInfo = getUserProfileInfo(patientUsername);
+		if(patientInfo.doctorID === doctorID) {
+			patients.push(patientInfo)
 		}
 	}
 
@@ -133,7 +148,23 @@ export const getPatientsByDoctor = (doctorID) => {
 }
 
 export const getDoctorID = (username) => {
+	// code below requires server call
+	// to look at the doctor database
+
+	// allDoctors is MOCK_DOCTORS from ../mock-data/mock.js
 	return allDoctors[username].doctorID;
+}
+
+export const getDoctorbyID = (doctorID) => {
+	// code below requires server call
+	// to look at the doctor database
+
+	// allDoctors is MOCK_DOCTORS from ../mock-data/mock.js
+	for(var doctor in allDoctors) {
+		if(allDoctors[doctor].doctorID === doctorID) {
+			return doctor;
+		}
+	}
 }
 
 export const getUserProfileImageUrl = (username) => {
@@ -153,4 +184,18 @@ export const getUserProfileImageUrl = (username) => {
 	}
 
 	return userProfileImageUrl;
+}
+
+export const getUserProfileInfo = (username) => {
+	// code below requires server call
+	// to look at the patients and doctor database and see their profile info
+
+	// allPatients is MOCK_PATIENTS, allDoctors is MOCK_DOCTORS from ../mock-data/mock.js
+	const userType = getUserType(username);
+
+	if(userType === UserType.patient) {
+		return allPatients[username];
+	} else if(userType === UserType.doctor) {
+		return allDoctors[username];
+	}
 }
