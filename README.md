@@ -1,3 +1,5 @@
+*** Submitting late 10:10pm
+
 # team34 Introduction
 
 Our application is called MedPort and is a site for displaying medical test reports and results in one convenient place for patients and doctors to review.
@@ -156,7 +158,6 @@ Password: **admin**
 
 1. Log in using the [admin credentials](#admin-credentials) and you will be taken to the admin dashboard.
     - If you want to navigate back to this dashboard from other pages, press the heart website logo.
-1. Login (username: admin, password: admin)
 2. Press Red Delete button on St. Josephs Hospital
 3. Press the Blue Create Insitution Button on the top-right corner of the view
 4. Fill out into an click submit
