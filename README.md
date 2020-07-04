@@ -64,7 +64,7 @@ Password: **admin**
     - input valid "Password"
         - minimum 6 characters
         - ex. `password`
-5. Log in using the [patient credentials](patient-credentials) and you will be taken to the dashboard.
+5. Log in using the [patient credentials](#patient-credentials) and you will be taken to the dashboard.
     - If you want to navigate back to this dashboard, press the heart website logo.
     
 6. Click `Requests` on the navbar on the left-hand side.
@@ -122,7 +122,7 @@ Password: **admin**
    ii. Press `Create` to link your medical institution since it wasn't there before.
        - fill out the info for the institution and press `Submit`
    
-6. Log in using the [doctor credentials](doctor-credentials) and you will be taken to the dashboard.
+6. Log in using the [doctor credentials](#doctor-credentials) and you will be taken to the dashboard.
     - If you want to navigate back to this dashboard from other pages, press the heart website logo.
     
 6. Click `Requests` on the navbar on the left-hand side.
