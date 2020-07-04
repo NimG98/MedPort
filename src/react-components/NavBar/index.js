@@ -54,7 +54,7 @@ class NavBar extends React.Component{
                     <Nav.Link onClick={() => this.redirectRequest("/results")}>Results</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link href="/profile">Profiles</Nav.Link>
+                    <Nav.Link href="/profiles">Profiles</Nav.Link>
                 </Nav.Item>
                 
                 <div className="fixed-bottom">

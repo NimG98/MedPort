@@ -6,14 +6,11 @@ import 'antd/dist/antd.css';
 
 import Header from './../Header';
 import NavBar from './../NavBar';
-import RequestForm from '../RequestForm';
-import PreviousRequests from '../PreviousRequests'
-//import { MOCK_USERS as users} from "../../mock-data/mock";
-import { getPatientsByDoctor, getUserType, getDoctorID } from "../../actions/app";
+
+import { getUserType} from "../../actions/app";
 import { UserType } from "../../constants/userType";
 
 import { Card, Button }  from "antd";
-import { render } from "@testing-library/react";
 
 class Result extends React.Component {
 
@@ -22,15 +19,19 @@ class Result extends React.Component {
 
         console.log(this.props.appComponent);
         console.log(`logged in user = [${this.props.appComponent.state.loggedInUser}]`);
-        const x = getUserType(this.props.appComponent.state.loggedInUser);
-        //console.log(x);
+        
+       
 
         this.state = {
-            userType: x,
+            userType: "",
             value:'',
             list: ["Please come to the Doctors office tomorrow to discuss your results"],
             pList:["Okay, I will schedule an appointment"]
         };
+        const x = this.props.appComponent.state.loggedInUser;
+        if(x !== null){
+            this.setState( {...this.state, userType: getUserType(this.props.appComponent.state.loggedInUser)} );
+        }
         this.updateValue = this.updateValue.bind(this);
         this.AddItemOnClick = this.AddItemOnClick.bind(this);
     }
@@ -71,6 +72,11 @@ class Result extends React.Component {
     
 
     render(){
+        // To make sure no one just visits http://localhost:3000/request
+        // without logging in first
+        if (this.state.userType === "") {
+            window.location.href = "/";
+        }
         return(
         
         <div>
