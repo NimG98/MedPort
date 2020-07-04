@@ -5,20 +5,15 @@ import {Nav} from "react-bootstrap";
 import { Card, Button }  from "antd";
 import { redirect } from "../../actions/router";
 import { withRouter } from "react-router";
-import { getUserType} from "../../actions/app";
-import { UserType } from "../../constants/userType";
 
 class NavBar extends React.Component{
 
     constructor(props) {
         super(props);
 
-        
-
         this.redirectRequest = this.redirectRequest.bind(this);
         this.changeVal = this.changeVal.bind(this);
         this.state={
-            userType: getUserType(this.props.appComponent.state.loggedInUser),
             collapse: false
         };
     }
@@ -40,42 +35,7 @@ class NavBar extends React.Component{
             
                 <div className={this.state.collapse ? "nav3" : "nav2"}>
                 
-                {this.state.userType === UserType.admin &&
-
-                    <Nav className="col-lg-12 d-none d-inline rounded shadow-lg sidebar">
-                    {this.state.collapse &&
-                        <div>
-                            <div type="button" className="butt2" onClick={this.changeVal}>&#9776;</div>
-                        </div>
-                    }
-                    {this.state.collapse === false &&
-                        <div>
-                            <div type="button" className="butt" onClick={this.changeVal}>&#9776;</div>
-                        </div>
-                    }
-                    <Nav.Item>
-                        <Nav.Link onClick={() => this.redirectRequest("/admin/institutions")}>Institutions</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link onClick={() => this.redirectRequest("/admin/doctors")}>Doctors</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link onClick={() => this.redirectRequest("/admin/patients")}>Patients</Nav.Link>
-                    </Nav.Item>
-
-                    <div className="fixed-bottom">
-
-                    <Nav.Item>
-                        <Nav.Link onClick={() => this.redirectRequest("/setting")} disabled="true">
-                        Settings
-                        </Nav.Link>
-                    </Nav.Item>
-                    </div>
-
-                    </Nav>
                 
-                }
-                {this.state.userType === UserType.doctor || this.state.userType === UserType.doctor &&
                 <Nav className="col-lg-12 d-none d-inline rounded shadow-lg sidebar">
                 {this.state.collapse &&
                     <div>
@@ -112,7 +72,7 @@ class NavBar extends React.Component{
                 </div>
                 
                 </Nav>
-                }
+
                 </div>
                 
                 

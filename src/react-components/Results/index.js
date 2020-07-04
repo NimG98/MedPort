@@ -80,7 +80,7 @@ class Result extends React.Component {
         <div>
 
             <Header appComponent={this.props.appComponent}/>
-            <NavBar appComponent={this.props.appComponent}/>
+            <NavBar />
             <div className="container2">
                 <Card className="ant-card1">
                     <h3>File</h3>
