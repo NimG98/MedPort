@@ -1,0 +1,45 @@
+@import '~antd/dist/antd.css';
+
+.AdminDoctorsOverview .container {
+	margin-top: 10px;
+	margin-left: 280px;
+}
+
+.AdminDoctorsOverview .container .title {
+	display: inline-block;
+	margin-bottom: 20px;
+}
+
+.AdminDoctorsOverview .container table {
+    background-color: white;
+    margin-right: 20px;
+}
+  
+.AdminDoctorsOverview .container th, td {
+    padding: 10px 10px 10px 30px;
+    height: 55px;
+}
+
+.AdminDoctorsOverview .container th, tr {
+    border-bottom: 1px solid rgb(231, 231, 231);
+}
+
+.AdminDoctorsOverview .container th:first-child, td:first-child {
+    padding-left:20px;
+}
+
+.AdminDoctorsOverview .container th:last-child, td:last-child {
+    padding-right:20px;
+}
+
+.AdminDoctorsOverview .container .alert {
+	max-width: 300px;
+	margin: auto;
+	padding: auto;
+}
+
+.AdminDoctorsOverview .container .create-doctor-button {
+	float: right;
+	margin-top: 10px;
+	margin-right: 245px;
+}

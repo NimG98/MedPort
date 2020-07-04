@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from "react-router";
 
 import "./styles.css";
 
@@ -8,6 +9,7 @@ import PatientSignUpForm from "../PatientSignUpForm";
 
 // importing actions/required methods
 import { submitReferralCode } from "../../actions/app";
+import { redirect } from "../../actions/router";
 
 class ReferralSignUp extends React.Component {
 	
@@ -73,6 +75,8 @@ class ReferralSignUp extends React.Component {
 			1: <PatientSignUpForm 
 					code={this.state.code}
 					referrerID={this.state.referrerID}
+					back={() => this.setStatus(0)}
+					submit={() => redirect(this, "/")}
 				/>,
 		}[index]
 	}
@@ -123,4 +127,4 @@ class ReferralSignUp extends React.Component {
 	
 }
 
-export default ReferralSignUp;
+export default withRouter(ReferralSignUp);

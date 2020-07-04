@@ -5,6 +5,10 @@ import { MOCK_DOCTORS as allDoctors} from "../mock-data/mock";
 import { MOCK_INSTITUTIONS } from "../mock-data/mock";
 import { MOCK_REFERRALS } from "../mock-data/mock";
 import { MOCK_USERNAMES } from "../mock-data/mock";
+import { MOCK_ADMIN_INSTITUTION_INFO } from "../mock-data/mock";
+import { MOCK_ADMIN_DOCTORS } from "../mock-data/mock"; 
+import { MOCK_ADMIN_DOCTOR_INFO } from "../mock-data/mock";
+import { MOCK_ADMIN_PATIENTS } from "../mock-data/mock"; 
 import { UserType } from "../constants/userType";
 
 /* 
@@ -17,7 +21,7 @@ export const addDoctor = (doctor) => {
 
 /* 
 	Returns a list of institutions obtained from the server
- */
+*/
 export const getInstitutions = () => {
 	// code below requires server call
 	return MOCK_INSTITUTIONS;
@@ -186,6 +190,104 @@ export const getUserProfileImageUrl = (username) => {
 	}
 
 	return userProfileImageUrl;
+}
+
+
+/*
+	sends server request to delete institution
+	Note: admin functionality
+*/
+export const deleteInstitution = (institutionID) => {
+	// code below requires server call
+	return true;
+}
+
+/*
+	sends server request to get institution with id, insitutionID
+*/
+export const getInstitution = (institutionID) => {
+	// code below requires server call
+	const institution = MOCK_ADMIN_INSTITUTION_INFO.find(element => element.id === institutionID);
+	
+	return institution;
+}
+
+/*
+	sends updated institution object to server
+*/
+export const updateInstitution = (institution) => {
+	// code below requires server call
+	return true;
+}
+
+/* 
+	Returns a list of doctors obtained from the server
+*/
+export const getDoctors = () => {
+	// code below requires server call
+	return MOCK_ADMIN_DOCTORS;
+}
+
+/*
+	sends server request to delete doctor
+	Note: admin functionality
+*/
+export const deleteDoctor = (doctorID) => {
+	// code below requires server call
+	return true;
+}
+
+/*
+	sends server request to get doctor with id, doctorID
+*/
+export const getDoctor = (doctorID) => {
+	// code below requires server call
+	const doctor = MOCK_ADMIN_DOCTOR_INFO.find(element => element.id === doctorID);
+	
+	return doctor;
+}
+
+/*
+	sends updated doctor object to server
+*/
+export const updateDoctor = (doctor) => {
+	// code below requires server call
+	return true;
+}
+
+/* 
+	Returns a list of patients obtained from the server
+*/
+export const getPatients = () => {
+	// code below requires server call
+	return MOCK_ADMIN_PATIENTS;
+}
+
+/*
+	sends server request to delete patient
+	Note: admin functionality
+*/
+export const deletePatient = (patientID) => {
+	// code below requires server call
+	return true;
+}
+
+/*
+	sends server request to get patient with id, patientID
+*/
+export const getPatient = (patientID) => {
+	// code below requires server call
+	const patient = MOCK_ADMIN_PATIENTS.find(element => element.id === patientID);
+	
+	return patient;
+}
+
+/*
+	sends updated patient object to server
+*/
+export const updatePatient = (patient) => {
+	// code below requires server call
+	return true;
 }
 
 /* Returns the profile info of a user by username */

@@ -1,0 +1,61 @@
+@import '~antd/dist/antd.css';
+
+.AdminDoctorView .container {
+	margin-top: 10px;
+	margin-left: 280px;
+}
+
+.AdminDoctorView .container .doctor-info {
+	margin-bottom: 30px;
+}
+
+.AdminDoctorView .container .title {
+	display: inline-block;
+	margin-bottom: 20px;
+}
+
+
+
+.AdminDoctorView .container .alert {
+	max-width: 300px;
+	margin: auto;
+	padding: auto;
+}
+
+.AdminDoctorView .container table {
+    background-color: white;
+    margin-right: 20px;
+}
+  
+.AdminDoctorView .container th, td {
+    padding: 10px 10px 10px 30px;
+    height: 55px;
+}
+
+.AdminDoctorView .container th, tr {
+    border-bottom: 1px solid rgb(231, 231, 231);
+}
+
+.AdminDoctorView .container th:first-child, td:first-child {
+    padding-left:20px;
+}
+
+.AdminDoctorView .container th:last-child, td:last-child {
+    padding-right:20px;
+}
+
+.AdminDoctorView .container .alert {
+	max-width: 300px;
+	margin: auto;
+	padding: auto;
+}
+
+.AdminDoctorView .container .delete-doctor-button {
+	float: right;
+	margin-top: 10px;
+	margin-right: 245px;
+}
+
+.AdminDoctorView .container tr input {
+	max-width: 100px;
+}

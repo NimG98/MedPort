@@ -77,6 +77,7 @@ class DoctorSignUp extends React.Component {
 					institutionID={this.state.institutionID}
 					handleChange={this.handleInputChange}
 					next={this.nextStatus}
+					back={() => this.props.back()}
 			   />,
 			// institution selection
 			1: <InstitutionSelector 
@@ -142,8 +143,7 @@ class DoctorSignUp extends React.Component {
 		
 		const success = addDoctor(doctor);
 		
-		// navigate back to login page
-		redirect(this, '/');
+		this.props.submit();
 		
 	}
 	

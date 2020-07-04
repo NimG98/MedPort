@@ -7,8 +7,16 @@ import SignUp from './react-components/SignUp';
 import Dashboard from './react-components/Dashboard';
 import Upload from './react-components/Upload';
 import Request from './react-components/Request';
+
+import AdminInstitutions from './react-components/AdminInstitutions';
+import AdminInstitutionView from './react-components/AdminInstitutionView';
+import AdminDoctors from "./react-components/AdminDoctors";
+import AdminDoctorView from "./react-components/AdminDoctorView";
+import AdminPatients from "./react-components/AdminPatients";
+import AdminPatientView from "./react-components/AdminPatientView";
 import Result from './react-components/Results';
 import Profile from './react-components/Profile';
+
 
 class App extends React.Component {
 
@@ -31,6 +39,18 @@ class App extends React.Component {
                             (<Upload appComponent={this} />)}/>
             <Route exact path='/request' render={() => 
                             (<Request appComponent={this} />)}/>
+			<Route exact path='/admin/institutions' render={() =>
+							(<AdminInstitutions appComponent={this} />)}/>
+			<Route exact path='/admin/institutions/:id' render={() =>
+							(<AdminInstitutionView appComponent={this} />)}/>
+			<Route exact path='/admin/doctors' render={() =>
+							(<AdminDoctors appComponent={this} />)}/>
+			<Route exact path='/admin/doctors/:id' render={() =>
+							(<AdminDoctorView appComponent={this} />)}/>
+			<Route exact path='/admin/patients' render={() =>
+							(<AdminPatients appComponent={this} />)}/>
+			<Route exact path='/admin/patients/:id' render={() =>
+							(<AdminPatientView appComponent={this} />)}/>
       <Route exact path='/results' render={() => 
                             (<Result appComponent={this} />)}/>
             <Route exact path='/profile' render={() => 
