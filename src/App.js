@@ -7,12 +7,16 @@ import SignUp from './react-components/SignUp';
 import Dashboard from './react-components/Dashboard';
 import Upload from './react-components/Upload';
 import Request from './react-components/Request';
+
 import AdminInstitutions from './react-components/AdminInstitutions';
 import AdminInstitutionView from './react-components/AdminInstitutionView';
 import AdminDoctors from "./react-components/AdminDoctors";
 import AdminDoctorView from "./react-components/AdminDoctorView";
 import AdminPatients from "./react-components/AdminPatients";
 import AdminPatientView from "./react-components/AdminPatientView";
+import Result from './react-components/Results';
+import Profile from './react-components/Profile';
+
 
 class App extends React.Component {
 
@@ -29,11 +33,11 @@ class App extends React.Component {
                             (<Home appComponent={this}/>)}/>
             <Route exact path='/signup' render={() => 
                             (<SignUp appComponent={this} />)}/>
-			      <Route exact path='/dashboard' render={() => 
+            <Route exact path='/dashboard' render={() => 
                             (<Dashboard appComponent={this} />)}/>
-          	<Route exact path='/upload' render={() => 
+            <Route exact path='/upload' render={() => 
                             (<Upload appComponent={this} />)}/>
-			      <Route exact path='/request' render={() => 
+            <Route exact path='/request' render={() => 
                             (<Request appComponent={this} />)}/>
 			<Route exact path='/admin/institutions' render={() =>
 							(<AdminInstitutions appComponent={this} />)}/>
@@ -47,6 +51,10 @@ class App extends React.Component {
 							(<AdminPatients appComponent={this} />)}/>
 			<Route exact path='/admin/patients/:id' render={() =>
 							(<AdminPatientView appComponent={this} />)}/>
+      <Route exact path='/results' render={() => 
+                            (<Result appComponent={this} />)}/>
+            <Route exact path='/profile' render={() => 
+                            (<Profile appComponent={this} />)}/>
           </Switch>
         </BrowserRouter>
       </div>

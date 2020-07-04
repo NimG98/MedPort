@@ -6,35 +6,11 @@ import 'antd/dist/antd.css';
 
 import Header from './../Header';
 import LoginForm from './../LoginForm';
-import bgImage from "./static/doctor-patient-online2.png";
+import bgImage from "./static/home-bg-doctor-patient-online.png";
 import { Card, Row, Col } from "antd";
-
-import { validateLogin } from "../../actions/app";
-import { redirect } from "../../actions/router";
 
 /* Component for the Home page */
 class Home extends React.Component {
-
-  constructor(props) {
-    super(props);
-    console.log(this.props);
-  }
-
-  login = loginValues => {
-    const username = loginValues.username;
-    const password = loginValues.password;
-    console.log('Received values of form: ', username, password);
-    const isValid = validateLogin(this.props.appComponent, username, password);
-
-    if(isValid){
-      document.cookie = "LoggedInSession=Valid; " + "path=/";
-      redirect(this, '/dashboard');
-      // window.location.href = "/dashboard";
-      console.log("Login was successful!");
-    } else {
-      console.log("Invalid credentials");
-    }
-  }
 
   render() {
     return (
@@ -43,33 +19,35 @@ class Home extends React.Component {
         <Row className="login-background">
           <img alt={"bgImagelogo"} src={bgImage} className="home__bg-image"/>
           <LoginForm
-            onFinish={this.login}
+            appComponent={this.props.appComponent}
           />
         </Row>
         <Row className="featureDisplay">
           <Col span={8}>
-            <Card title="Feature 1" bordered={false} className="roundedCardLeft">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis 
-            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore 
-            eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-            sunt in culpa qui officia deserunt mollit anim id est laborum.
+            <Card title="View your medical test reports online" bordered={false} className="roundedCardLeft">
+              After a patient gets a medical test done, their test report will be uploaded online 
+              in one convenient place for them and their family doctor to review.
+              This removes the need for you to have to go into the doctor’s office to receive your test results.
+              You can also upload your previously received test results from other doctors or specialists for further analysis.
             </Card>
           </Col>
           <Col span={8}>
-            <Card title="Feature 2" bordered={false}>
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium 
-            doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore 
-            veritatis et quasi architecto beatae vitae dicta sunt explicabo. 
-            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut 
-            fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+            <Card title="Receive feedback along with test reports" bordered={false}>
+              A family doctor can upload test results with attached notes to discuss with you.
+              By commenting on a thread under the test result, a doctor and patient can easily discuss test results with each other.
+              You can reply to the doctor's feedback, ask any questions, and raise any concerns.
+              In case you forget what your doctor recommended; no worries!
+              You can easily refer back to the documented record of the discussion.
+              This keeps conversations organized as they are attached to the specific test result in discussion.
             </Card>
           </Col>
           <Col span={8}>
-            <Card title="Feature 3" bordered={false} className="roundedCardRight">
-            Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam 
-            nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
+            <Card title="Doctor-Patient communication made easy" bordered={false} className="roundedCardRight">
+              Further discussion between the doctor and the patient can be facilitated on
+              the website by requesting an in-person or over-the-phone appointment. You or your doctor can submit a request
+              to set a time to call each other or visit the doctor's office. After a doctor looks at a test result and thinks
+              you need a new follow-up test conducted, they can easily send you a request to get the test done and provide more information
+              inside the request itself!
             </Card>
           </Col>
         </Row>

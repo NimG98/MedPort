@@ -15,19 +15,16 @@ class RequestForm extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log("requestform", this.props.loggedInUser);
 
         this.state = {
             user: this.props.loggedInUser,
             userType: getUserType(this.props.loggedInUser),
             
         }
-        // this.userType = getUserType(this.state.user);
-        // this.patients = getPatientsByDoctor(getDoctorID(this.state.user));
+
         this.onClick = this.onClick.bind(this);
         this.onFinish = this.onFinish.bind(this);
         this.displayPatients = this.displayPatients.bind(this);
-        // this.getPatients = this.getPatients.bind(this);
     }
 
     onFinish = (formValues) => {
@@ -36,10 +33,7 @@ class RequestForm extends React.Component {
 
     getPatients () {
         if(this.state.userType === UserType.doctor) {
-            console.log("being called")
             const patients = getPatientsByDoctor(getDoctorID(this.state.user))
-            // this.setState({ ...this.state, patients: patients})
-            console.log(patients);
             return patients;
         }
     }

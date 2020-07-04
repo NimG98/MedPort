@@ -13,6 +13,8 @@ class ProfileDropdown extends React.Component {
         super(props);
 
         this.logout = this.logout.bind(this);
+        this.getUserProfileImage = this.getUserProfileImage.bind(this);
+        this.goToProfile = this.goToProfile.bind(this);
     }
 
     getUserProfileImage() {
@@ -29,11 +31,16 @@ class ProfileDropdown extends React.Component {
         redirect(this, '/');
     }
 
+    goToProfile() {
+        redirect(this, '/profile')
+    }
+
     render() {
         return(
             <div className="profileDropdown">
                 <img alt="profileImageforLoggedInUser" className="userProfileImage" src={this.getUserProfileImage()}/>
                 <div className="dropdownContent">
+                    <Link className="profileLink" onClick={this.goToProfile} to="/profile">Profile</Link>
                     <Link className="logout" onClick={this.logout} to="/">Log out</Link>
                 </div>
             </div>

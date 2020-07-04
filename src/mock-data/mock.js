@@ -9,7 +9,12 @@ export const MOCK_USERS = {
         image: "./userPatientProfilePicture.png"
     },
     jdoe: {
-        password: "12345",
+        password: "123456",
+        type: UserType.patient,
+        image: null
+    },
+    billybob: {
+        password: "yoyoyo",
         type: UserType.patient,
         image: null
     },
@@ -18,12 +23,6 @@ export const MOCK_USERS = {
         password: "user2",
         type: UserType.doctor,
         image: "./user2DoctorProfilePicture.png"
-    },
-    // Secretary
-    user3: {
-        password: "user3",
-        type: UserType.secretary,
-        image: null
     },
     // Admin
     admin: {
@@ -120,8 +119,7 @@ export const MOCK_REFERRALS = {
 // mock data for usernames
 export const MOCK_USERNAMES = [
 	'user',
-	'user2',
-	'user3',
+	'user2'
 ]
 
 export const MOCK_ADMIN_INSTITUTION_INFO = [
