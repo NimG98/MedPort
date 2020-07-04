@@ -31,7 +31,7 @@ class AdminPatients extends React.Component {
 		return(
 			<div className="AdminPatients">
 				<Header appComponent={this.props.appComponent}/>
-				<NavBar />
+				<NavBar appComponent={this.props.appComponent} />
 				
 				{this.getView(this.state.statusIndex)}
 			</div>

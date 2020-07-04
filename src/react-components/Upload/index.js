@@ -19,7 +19,7 @@ class Upload extends React.Component {
             <Container >
                 
                 <Row>
-                    <NavBar />
+                    <NavBar appComponent={this.props.appComponent} />
                 </Row>
                 
                 

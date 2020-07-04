@@ -56,7 +56,7 @@ class Profile extends React.Component {
         return(
             <div className="profilePage">
                 <Header appComponent={this.props.appComponent}/>
-                <NavBar />
+                <NavBar appComponent={this.props.appComponent} />
                 <div className="profilePageContent">
                     <ImgCrop rotate grid shape='round'>
                         <Upload showUploadList={false}>

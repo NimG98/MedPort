@@ -61,7 +61,7 @@ class Request extends React.Component {
         return (
             <div className="request-page">
                 <Header appComponent={this.props.appComponent}/>
-                <NavBar />
+                <NavBar appComponent={this.props.appComponent} />
                 {this.changeView()}
             </div>
         );

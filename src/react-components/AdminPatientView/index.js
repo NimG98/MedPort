@@ -75,7 +75,7 @@ class AdminPatientView extends React.Component {
 		return(
 			<div className="AdminPatientView">
 				<Header appComponent={this.props.appComponent}/>
-				<NavBar />
+				<NavBar appComponent={this.props.appComponent} />
 				<div className="container">
 					{this.state.error ? <Alert type="error" message={this.state.errorCode} className="alert" closable onClose={this.handleClose}></Alert> : null}
 				

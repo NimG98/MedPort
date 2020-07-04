@@ -75,7 +75,7 @@ class NavBar extends React.Component{
                     </Nav>
                 
                 }
-                {this.state.userType === UserType.doctor || this.state.userType === UserType.doctor &&
+                {this.state.userType === UserType.patient &&
                 <Nav className="col-lg-12 d-none d-inline rounded shadow-lg sidebar">
                 {this.state.collapse &&
                     <div>
@@ -113,6 +113,46 @@ class NavBar extends React.Component{
                 
                 </Nav>
                 }
+
+                {this.state.userType === UserType.doctor &&
+                <Nav className="col-lg-12 d-none d-inline rounded shadow-lg sidebar">
+                {this.state.collapse &&
+                    <div>
+                        <div type="button" className="butt2" onClick={this.changeVal}>&#9776;</div>
+                    </div>
+                }
+                {this.state.collapse === false &&
+                    <div>
+                        <div type="button" className="butt" onClick={this.changeVal}>&#9776;</div>
+                    </div>
+                }
+                <Nav.Item>
+                    <Nav.Link onClick={() => this.redirectRequest("/request")}>Request</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link onClick={() => this.redirectRequest("/results")}>Results</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link href="/profiles" disabled="true">Profiles</Nav.Link>
+                </Nav.Item>
+                
+                <div className="fixed-bottom">
+                <Nav.Item>
+                    <Nav.Link onClick={() => this.redirectRequest("/upload")}>
+                    Upload
+                    </Nav.Link>
+                </Nav.Item>
+                
+                <Nav.Item>
+                    <Nav.Link onClick={() => this.redirectRequest("/setting")} disabled="true">
+                    Settings
+                    </Nav.Link>
+                </Nav.Item>
+                </div>
+                
+                </Nav>
+                }   
+
                 </div>
                 
                 
