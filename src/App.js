@@ -7,6 +7,7 @@ import SignUp from './react-components/SignUp';
 import Dashboard from './react-components/Dashboard';
 import Upload from './react-components/Upload';
 import Request from './react-components/Request';
+import Result from './react-components/Results';
 import Profile from './react-components/Profile';
 // import Header from './react-components/Header';
 
@@ -31,6 +32,8 @@ class App extends React.Component {
                             (<Upload appComponent={this} />)}/>
             <Route exact path='/request' render={() => 
                             (<Request appComponent={this} />)}/>
+      <Route exact path='/results' render={() => 
+                            (<Result appComponent={this} />)}/>
             <Route exact path='/profile' render={() => 
                             (<Profile appComponent={this} />)}/>
           </Switch>
