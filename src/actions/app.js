@@ -237,3 +237,21 @@ export const deletePatient = (patientID) => {
 	// code below requires server call
 	return true;
 }
+
+/*
+	sends server request to get patient with id, patientID
+*/
+export const getPatient = (patientID) => {
+	// code below requires server call
+	const patient = MOCK_ADMIN_PATIENTS.find(element => element.id === patientID);
+	
+	return patient;
+}
+
+/*
+	sends updated patient object to server
+*/
+export const updatePatient = (patient) => {
+	// code below requires server call
+	return true;
+}

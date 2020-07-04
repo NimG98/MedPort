@@ -1,0 +1,55 @@
+@import '~antd/dist/antd.css';
+
+.AdminPatientView .container {
+	margin-top: 10px;
+	margin-left: 280px;
+}
+
+.AdminPatientView .container .patient-info {
+	margin-bottom: 30px;
+}
+
+.AdminPatientView .container .title {
+	display: inline-block;
+	margin-bottom: 20px;
+}
+
+
+
+.AdminPatientView .container .alert {
+	max-width: 300px;
+	margin: auto;
+	padding: auto;
+}
+
+.AdminPatientView .container table {
+    background-color: white;
+    margin-right: 20px;
+}
+  
+.AdminPatientView .container th, td {
+    padding: 10px 10px 10px 30px;
+    height: 55px;
+}
+
+.AdminPatientView .container th, tr {
+    border-bottom: 1px solid rgb(231, 231, 231);
+}
+
+.AdminPatientView .container th:first-child, td:first-child {
+    padding-left:20px;
+}
+
+.AdminPatientView .container th:last-child, td:last-child {
+    padding-right:20px;
+}
+
+.AdminPatientView .container .delete-patient-button {
+	float: right;
+	margin-top: 10px;
+	margin-right: 245px;
+}
+
+.AdminPatientView .container tr input {
+	max-width: 60px;
+}
