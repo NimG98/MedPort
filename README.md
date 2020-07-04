@@ -119,34 +119,41 @@ Password: **admin**
         - ex. `password`
         
 5. i. Select an existing institution and press `Submit`.
+
    ii. Press `Create` to link your medical institution since it wasn't there before.
        - fill out the info for the institution and press `Submit`
    
 6. Log in using the [doctor credentials](#doctor-credentials) and you will be taken to the dashboard.
     - If you want to navigate back to this dashboard from other pages, press the heart website logo.
     
-6. Click `Requests` on the navbar on the left-hand side.
+7. Click `Requests` on the navbar on the left-hand side.
     - On the "Pending Requests" tab, you will see requests that is in the pending state that were made either by you (doctor) or a patient.\
       A request is pending if the person to whom the request was sent to has not yet accepted the request.
     - You can see there is a request pending on you (doctor). You can click the `Confirm` button to confirm this request.
     - You can click the "Confirmed Requests" tab to see previous and upcoming events from requests that have been confirmed by both parties.
    
-7. Click `Submit a new Request`, select which patient you want to send the request to, and fill out the fields to fill out a request and then press `Submit`.
+8. Click `Submit a new Request`, select which patient you want to send the request to, and fill out the fields to fill out a request and then press `Submit`.
     - You can press the back button beside the "Submit a New Request" title to go back to the table of requests.
 
-8. Click `Results` on the navbar on the left-hand side. 
+9. Click `Results` on the navbar on the left-hand side. 
     - "File" would show the test report.
     - You can see your notes and the patient's comment attached to the file.
     - Type in a comment below to add to the test result for the patient to see, then press `Comment`.
 
-9. Click `Upload` on the navbar on the left-hand side. 
+10. Click `Upload` on the navbar on the left-hand side. 
     - You can see previously uploaded files on the bottom.
     - Click `Browse` or `Upload` to open up a window to select a test report file to upload.
     
-10. Hover over the user profile icon on the top right of the site, and click `Profile`.
+11. Hover over the user profile icon on the top right of the site, and click `Profile`.
     - You can see the doctor's personal info, medical ID number, and assigned medical institution info.
     - You can press the edit button beside the personal info to edit the personal details.
     - You can click on the profile icon or pencil to select a new file as a profile picture.
     
-11. Hover over the user profile icon on the top right of the site, and click `Log out`.
+12. Hover over the user profile icon on the top right of the site, and click `Log out`.
 
+
+## Admin
+
+1. Log in using the [admin credentials](#admin-credentials) and you will be taken to the admin dashboard.
+    - If you want to navigate back to this dashboard from other pages, press the heart website logo.
+2. 
