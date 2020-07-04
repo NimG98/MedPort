@@ -2,7 +2,7 @@ import React from "react";
 import { withRouter } from "react-router";
 
 import "./styles.css";
-import logo from "./static/heart (2).png"
+import logo from "./static/logo.png"
 
 import { redirect } from "../../actions/router";
 import ProfileDropdown from "../ProfileDropdown";
@@ -12,8 +12,6 @@ class Header extends React.Component {
 
     constructor(props) {
         super(props);
-
-        console.log(this.props);
 
         this.state = {
           user: this.props.appComponent.state.loggedInUser

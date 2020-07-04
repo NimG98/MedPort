@@ -9,7 +9,6 @@ import Upload from './react-components/Upload';
 import Request from './react-components/Request';
 import Result from './react-components/Results';
 import Profile from './react-components/Profile';
-// import Header from './react-components/Header';
 
 class App extends React.Component {
 

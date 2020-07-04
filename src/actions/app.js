@@ -54,7 +54,9 @@ export const addPatient = (patient, code) => {
 	return true;
 };
 
-// submits referral code to server and gets a refferrerID on success
+/* 
+	Submits referral code to server and gets a refferrerID on success
+ */
 export const submitReferralCode = (code) => {
 	// code below requires server call
 	const refferrerID = MOCK_REFERRALS[code];
@@ -73,8 +75,8 @@ export const checkUserName = (username) => {
 	return MOCK_USERNAMES.includes(formattedUsername);
 }
 
-// Validates if the username is associated with a registered user,
-// and that the user's password is correct
+/* Validates if the username is associated with a registered user,
+and that the user's password is correct */
 export const validateLogin = (app, username, password) => {
 	var isValid = false;
 	
@@ -94,7 +96,7 @@ export const validateLogin = (app, username, password) => {
 	return isValid;
 }
 
-// Gets a list of requests with a certain status from a certain user
+/* Gets a list of requests with a certain status from a certain user */
 export const getUserRequestsByStatus = (username, status) => {
 
 	var userRequests = [];
@@ -113,7 +115,7 @@ export const getUserRequestsByStatus = (username, status) => {
 	return userRequests;
 }
 
-// Gets the type of the user (patient/doctor/secretary/admin)
+/* Gets the type of the user (patient/doctor/admin) */
 export const getUserType = (username) => {
 
 	// code below requires server call
@@ -123,9 +125,8 @@ export const getUserType = (username) => {
 	return users[username].type;
 }
 
-// Gets the patients assigned to a specific doctor
+/* Gets the patients assigned to a specific doctor */
 export const getPatientsByDoctor = (doctorID) => {
-	console.log(doctorID);
 
 	var patients = []
 
@@ -135,18 +136,16 @@ export const getPatientsByDoctor = (doctorID) => {
 	// allPatients is MOCK_PATIENTS from ../mock-data/mock.js
 
 	for (var patientUsername in allPatients) {
-		console.log(patientUsername);
 		var patientInfo = getUserProfileInfo(patientUsername);
 		if(patientInfo.doctorID === doctorID) {
 			patients.push(patientInfo)
 		}
 	}
 
-	console.log("getPatientsByDoctor");
-
 	return patients;
 }
 
+/* Returns the doctor ID of a doctor by username */
 export const getDoctorID = (username) => {
 	// code below requires server call
 	// to look at the doctor database
@@ -155,6 +154,7 @@ export const getDoctorID = (username) => {
 	return allDoctors[username].doctorID;
 }
 
+/* Returns the doctor username when given doctorID */
 export const getDoctorbyID = (doctorID) => {
 	// code below requires server call
 	// to look at the doctor database
@@ -167,15 +167,17 @@ export const getDoctorbyID = (doctorID) => {
 	}
 }
 
+/* Returns the image url of the profile image associated with a user
+If no image set, it returns the default image url */
 export const getUserProfileImageUrl = (username) => {
+	const defaultProfileImageUrl = "./default-profile-icon.png";
+	
+	var userProfileImageUrl = null;
+
 	// code below requires server call
 	// to look at the user database and see user's profile pics
 
 	// users is MOCK_USERS from ../mock-data/mock.js
-
-	const defaultProfileImageUrl = "./default-profile-icon.png";
-	
-	var userProfileImageUrl = null;
 
 	if(users[username].image) {
 		userProfileImageUrl = users[username].image;
@@ -186,13 +188,15 @@ export const getUserProfileImageUrl = (username) => {
 	return userProfileImageUrl;
 }
 
+/* Returns the profile info of a user by username */
 export const getUserProfileInfo = (username) => {
+
+	const userType = getUserType(username);
+
 	// code below requires server call
 	// to look at the patients and doctor database and see their profile info
 
 	// allPatients is MOCK_PATIENTS, allDoctors is MOCK_DOCTORS from ../mock-data/mock.js
-	const userType = getUserType(username);
-
 	if(userType === UserType.patient) {
 		return allPatients[username];
 	} else if(userType === UserType.doctor) {

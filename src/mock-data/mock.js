@@ -24,12 +24,6 @@ export const MOCK_USERS = {
         type: UserType.doctor,
         image: "./user2DoctorProfilePicture.png"
     },
-    // Secretary
-    user3: {
-        password: "user3",
-        type: UserType.secretary,
-        image: null
-    },
     // Admin
     admin: {
         password: "admin",
@@ -124,7 +118,6 @@ export const MOCK_REFERRALS = {
 // mock data for usernames
 export const MOCK_USERNAMES = [
 	'user',
-	'user2',
-	'user3',
+	'user2'
 ]
 

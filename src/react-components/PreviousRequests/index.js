@@ -83,8 +83,6 @@ class PreviousRequests extends React.Component {
     displayTableHeaders = (status) => {
         var tableHeaders = [];
         var headers = [...this.tableHeaderNames];
-        console.log(this.tableHeaderNames)
-
 
         if(status === "pending") {
             headers.push(this.actionHeaderName);
@@ -107,11 +105,6 @@ class PreviousRequests extends React.Component {
         } else if(status === "confirmed") {
             requestData = this.state.confirmedRequests;
         }
-
-        console.log(requestData)
-        console.log(this.state.user)
-
-        
 
         for(var req in requestData) {
             var actionNeeded = this.displayActionNeeded(requestData[req]);
@@ -154,13 +147,12 @@ class PreviousRequests extends React.Component {
                     <Modal
                         title="Do you want to confirm the following request?"
                         icon={<InfoCircleOutlined />}
-                        // content={"Request by" + req.created_by + "for a" + req.request_type
-                        //         + "on" + req.date + "at" + req.time}
                         onOk={this.handleModalOk}
                         onCancel={this.handleModalCancel}
                         visible={this.state.modalVisible}
                     >
-                        {"Request by " + req.created_by + " for a " + req.request_type
+                        {"Request by " + getUserProfileInfo(req.created_by).firstName 
+                                + " " + getUserProfileInfo(req.created_by).lastName + " for a " + req.request_type
                                 + " on " + req.date + " at " + req.time}
                     </Modal>
                 </td>
