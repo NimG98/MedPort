@@ -32,10 +32,10 @@ class Dashboard extends React.Component {
     }
     return (
         <div>
-        
-            <NavBar appComponent={this.props.appComponent}/>
-
             <Header appComponent={this.props.appComponent}/>
+            <NavBar />
+
+            
 
             
             <div className="container2">

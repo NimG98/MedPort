@@ -19,19 +19,17 @@ class Result extends React.Component {
 
         console.log(this.props.appComponent);
         console.log(`logged in user = [${this.props.appComponent.state.loggedInUser}]`);
+        //const x = this.props.appComponent.state.loggedInUser;
         
        
 
         this.state = {
-            userType: "",
+            userType: getUserType(this.props.appComponent.state.loggedInUser),
             value:'',
             list: ["Please come to the Doctors office tomorrow to discuss your results"],
             pList:["Okay, I will schedule an appointment"]
         };
-        const x = this.props.appComponent.state.loggedInUser;
-        if(x !== null){
-            this.setState( {...this.state, userType: getUserType(this.props.appComponent.state.loggedInUser)} );
-        }
+        
         this.updateValue = this.updateValue.bind(this);
         this.AddItemOnClick = this.AddItemOnClick.bind(this);
     }
@@ -81,7 +79,7 @@ class Result extends React.Component {
         
         <div>
 
-            <Header />
+            <Header appComponent={this.props.appComponent}/>
             <NavBar />
             <div className="container2">
                 <Card className="ant-card1">
