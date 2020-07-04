@@ -10,6 +10,9 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { validateLogin } from "../../actions/app";
 import { redirect } from "../../actions/router";
 
+import { getUserType} from "../../actions/app";
+import { UserType } from "../../constants/userType";
+
 class LoginForm extends React.Component {
     
     constructor(props) {
@@ -29,8 +32,14 @@ class LoginForm extends React.Component {
         const isValid = validateLogin(this.props.appComponent, username, password);
     
         if(isValid){
+			const userType = getUserType(this.props.appComponent.state.loggedInUser);
+			
             document.cookie = "LoggedInSession=Valid; " + "path=/";
-            redirect(this, '/dashboard');
+			if (userType === UserType.admin){
+				redirect(this, '/admin/institutions');
+			} else {
+				redirect(this, '/dashboard');
+			}
         } else {
             this.displayInvalidCredentials();
         }
