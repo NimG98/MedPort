@@ -156,4 +156,17 @@ Password: **admin**
 
 1. Log in using the [admin credentials](#admin-credentials) and you will be taken to the admin dashboard.
     - If you want to navigate back to this dashboard from other pages, press the heart website logo.
-2. 
+1. Login (username: admin, password: admin)
+2. Press Red Delete button on St. Josephs Hospital
+3. Press the Blue Create Insitution Button on the top-right corner of the view
+4. Fill out into an click submit
+5. Click Blue View button on top institution (Hospital A)
+6. Click Blue Edit button on institution info table
+7. Play around with the info 
+8. Click Submit
+9. Click Blue View button on first doctor (Bob)
+10. Click Blue View button on first patient (UserFn)
+11. Click Blue Edit button on patient info table
+12. Edit info and Cancel
+13. Click Red Delete Patient button on top-right corner
+14. Done
