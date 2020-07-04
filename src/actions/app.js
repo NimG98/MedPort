@@ -7,6 +7,7 @@ import { MOCK_REFERRALS } from "../mock-data/mock";
 import { MOCK_USERNAMES } from "../mock-data/mock";
 import { MOCK_ADMIN_INSTITUTION_INFO } from "../mock-data/mock";
 import { MOCK_ADMIN_DOCTORS } from "../mock-data/mock"; 
+import { MOCK_ADMIN_DOCTOR_INFO } from "../mock-data/mock";
 
 /* 
 	submits new doctor information to server for account creation
@@ -197,6 +198,24 @@ export const getDoctors = () => {
 	Note: admin functionality
 */
 export const deleteDoctor = (doctorID) => {
+	// code below requires server call
+	return true;
+}
+
+/*
+	sends server request to get doctor with id, doctorID
+*/
+export const getDoctor = (doctorID) => {
+	// code below requires server call
+	const doctor = MOCK_ADMIN_DOCTOR_INFO.find(element => element.id === doctorID);
+	
+	return doctor;
+}
+
+/*
+	sends updated doctor object to server
+*/
+export const updateDoctor = (doctor) => {
 	// code below requires server call
 	return true;
 }
