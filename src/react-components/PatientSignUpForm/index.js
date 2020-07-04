@@ -65,6 +65,10 @@ class PatientSignUpForm extends React.Component {
 	}
 	
 	render() {
+		const {
+			back,
+		} = this.props;
+		
 		return (
 			<form className="PatientSignUpForm" onSubmit={this.submit}>
 			
@@ -162,9 +166,7 @@ class PatientSignUpForm extends React.Component {
 					{this.state.errors.password ? <p className="error-message" >{this.state.errorCodes.password}</p> : null}
 				</div>
 					
-				<Link to="/">
-					<button type="button" className="login">Login</button>
-				</Link>	
+				<button type="button" className="back" onClick={back}>Back</button>
 				
 				<button type="submit" className="submit">Submit</button>
 				
@@ -211,7 +213,7 @@ class PatientSignUpForm extends React.Component {
 			
 			const success = addPatient(patient, this.props.code);
 			
-			redirect(this, "/");
+			this.props.submit();
 		}
 	}
 	

@@ -11,6 +11,7 @@ import AdminInstitutions from './react-components/AdminInstitutions';
 import AdminInstitutionView from './react-components/AdminInstitutionView';
 import AdminDoctors from "./react-components/AdminDoctors";
 import AdminDoctorView from "./react-components/AdminDoctorView";
+import AdminPatients from "./react-components/AdminPatients";
 
 class App extends React.Component {
 
@@ -41,6 +42,8 @@ class App extends React.Component {
 							(<AdminDoctors appComponent={this} />)}/>
 			<Route exact path='/admin/doctors/:id' render={() =>
 							(<AdminDoctorView appComponent={this} />)}/>
+			<Route exact path='/admin/patients' render={() =>
+							(<AdminPatients appComponent={this} />)}/>
           </Switch>
         </BrowserRouter>
       </div>

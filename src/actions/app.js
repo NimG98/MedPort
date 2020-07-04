@@ -8,6 +8,7 @@ import { MOCK_USERNAMES } from "../mock-data/mock";
 import { MOCK_ADMIN_INSTITUTION_INFO } from "../mock-data/mock";
 import { MOCK_ADMIN_DOCTORS } from "../mock-data/mock"; 
 import { MOCK_ADMIN_DOCTOR_INFO } from "../mock-data/mock";
+import { MOCK_ADMIN_PATIENTS } from "../mock-data/mock"; 
 
 /* 
 	submits new doctor information to server for account creation
@@ -216,6 +217,23 @@ export const getDoctor = (doctorID) => {
 	sends updated doctor object to server
 */
 export const updateDoctor = (doctor) => {
+	// code below requires server call
+	return true;
+}
+
+/* 
+	Returns a list of patients obtained from the server
+*/
+export const getPatients = () => {
+	// code below requires server call
+	return MOCK_ADMIN_PATIENTS;
+}
+
+/*
+	sends server request to delete patient
+	Note: admin functionality
+*/
+export const deletePatient = (patientID) => {
 	// code below requires server call
 	return true;
 }

@@ -142,3 +142,9 @@ export const MOCK_ADMIN_DOCTOR_INFO = [
 		{ id: 2, username: "jdoe",  firstName: 'Jane', lastName: 'Doe', address: '123 Main St', postalCode: 'H3B 2JC', HCN: '5555555123XX', email: 'jdoe@example.com' },
 	]},
 ]
+
+export const MOCK_ADMIN_PATIENTS = [
+	{id: 1, username: "user", firstName: 'UserFn', lastName: 'UserLn', address: '4 User St', postalCode: 'H3B 2JC', HCN: '5555555123XX', email: 'user@user.com', doctorID: 1},
+	{id: 2, username: "jdoe", firstName: 'Jane', lastName: 'Doe', address: '123 Main St', postalCode: 'H3B 2JC', HCN: '5555555123XX', email: 'jdoe@example.com', doctorID: 1},
+	
+]
