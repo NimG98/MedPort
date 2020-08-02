@@ -4,7 +4,7 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs');
-const { UserType } = require('../client/src/constants/userType');
+// import { UserType } from '../client/src/constants/userType';
 
 // Making a Mongoose model a little differently: a Mongoose Schema
 // Allows us to add additional functionality.
@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema({
     },
     userType: {
         type: String,
-        enum: Object.values(UserType) // patient, doctor, admin
+        enum: ["patient", "doctor", "admin"] // patient, doctor, admin
     }
 })
 
