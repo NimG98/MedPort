@@ -24,6 +24,33 @@ app.use(bodyParser.json());
 const session = require("express-session");
 app.use(bodyParser.urlencoded({ extended: true }));
 
+/*** Helper functions below **********************************/
+function isMongoError(error) { // checks for first error returned by promise rejection if Mongo database suddently disconnects
+	return typeof error === 'object' && error !== null && error.name === "MongoNetworkError"
+}
+
+/* // Our own express middleware to check for
+// an active user on the session cookie (indicating a logged in user.)
+const sessionChecker = (req, res, next) => {
+    if (req.session.user) {
+        res.redirect('/dashboard'); // redirect to dashboard if logged in.
+    } else {
+        next(); // next() moves on to the route.
+    }
+}; */
+
+// middleware for mongo connection error for routes that need it
+const mongoChecker = (req, res, next) => {
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	} else {
+		next()
+	}
+}
+
 /*** Session handling **************************************/
 // Create a session cookie
 app.use(
@@ -39,7 +66,7 @@ app.use(
 );
 
 // A route to login and create a session
-app.post("/api/users/login", (req, res) => {
+app.post("/api/users/login", mongoChecker, (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
@@ -55,7 +82,11 @@ app.post("/api/users/login", (req, res) => {
             res.send({ currentUser: user.username });
         })
         .catch(error => {
-            res.status(400).send()
+            if (isMongoError(error)) {
+                res.status(500).send(error);
+            } else {
+                res.status(400).send(error);
+            }
         });
 });
 
@@ -100,15 +131,35 @@ app.post("/users", (req, res) => {
     });
 
     // Save the user
-    user.save().then(
-        user => {
-            res.send(user);
-        },
-        error => {
-            res.status(400).send(error); // 400 for bad request
-        }
-    );
+    user.save().then(user => {
+        res.send(user);
+    })
+    .catch((error) => {
+		if (isMongoError(error)) { // check for if mongo server suddenly disconnected before this request.
+			res.status(500).send('Internal server error')
+		} else {
+			res.status(400).send('Bad Request')
+		}
+	})
 });
+
+// Middleware for authentication of resources
+const authenticate = (req, res, next) => {
+	if (req.session.user) {
+		User.findById(req.session.user).then((user) => {
+			if (!user) {
+				return Promise.reject()
+			} else {
+				req.user = user
+				next()
+			}
+		}).catch((error) => {
+			res.status(401).send("Unauthorized")
+		})
+	} else {
+		res.status(401).send("Unauthorized")
+	}
+}
 
 /*** Webpage routes below **********************************/
 // Serve the build
