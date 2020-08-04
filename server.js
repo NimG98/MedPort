@@ -112,10 +112,9 @@ app.get("/api/users/check-session", (req, res) => {
 });
 
 // A route to get the userType of a user
-app.get("/api/users/userType", mongoChecker, (req, res) => {
-    const username = req.body.username;
+app.get("/api/users/userType/:username", mongoChecker, (req, res) => {
+    const username = req.params.username;
 
-    log(username);
     // Use the static method on the User model to find a user
     // by their username and return their userType
     User.findByUsernameUserType(username)

@@ -12,7 +12,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 //import { getUserType} from "../../actions/app";
 import { UserType } from "../../constants/userType";
-import { login, getUserType } from "../../actions/user";
+import { login } from "../../actions/user";
 
 class LoginForm extends React.Component {
     

@@ -18,9 +18,15 @@ class NavBar extends React.Component{
         this.redirectRequest = this.redirectRequest.bind(this);
         this.changeVal = this.changeVal.bind(this);
         this.state={
-            userType: getUserType(this.props.appComponent.state.loggedInUser),
+            //userType: getUserType(this.props.appComponent.state.loggedInUser, setStateUserType),
             collapse: false
         };
+        getUserType(this.props.appComponent.state.loggedInUser, setStateUserType);
+    }
+
+    setStateUserType(userType) {
+        console.log(userType);
+        this.setState( {...this.state, userType: userType} );
     }
 
     redirectRequest(val) {
