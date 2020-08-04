@@ -119,16 +119,6 @@ export const getUserRequestsByStatus = (username, status) => {
 	return userRequests;
 }
 
-/* Gets the type of the user (patient/doctor/admin) */
-export const getUserType = (username) => {
-
-	// code below requires server call
-	// to look at the user database and see usernames/passwords
-
-	// users is MOCK_USERS from ../mock-data/mock.js
-	return users[username].type;
-}
-
 /* Gets the patients assigned to a specific doctor */
 export const getPatientsByDoctor = (doctorID) => {
 

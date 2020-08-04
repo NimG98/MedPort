@@ -7,11 +7,12 @@ import 'antd/dist/antd.css';
 import { Row, Card, Form, Input, Button} from "antd";
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
-import { validateLogin } from "../../actions/app";
-import { redirect } from "../../actions/router";
+//import { validateLogin } from "../../actions/app";
+//import { redirect } from "../../actions/router";
 
-import { getUserType} from "../../actions/app";
+//import { getUserType} from "../../actions/app";
 import { UserType } from "../../constants/userType";
+import { login, getUserType } from "../../actions/user";
 
 class LoginForm extends React.Component {
     
@@ -19,7 +20,9 @@ class LoginForm extends React.Component {
         super(props);
 
         this.state = {
-            displayInvalid: false
+            displayInvalid: false,
+            username: "",
+            password: ""
         };
 
         this.login = this.login.bind(this);
@@ -29,18 +32,13 @@ class LoginForm extends React.Component {
     login = loginValues => {
         const username = loginValues.username;
         const password = loginValues.password;
-        const isValid = validateLogin(this.props.appComponent, username, password);
+        updateLoginForm(this, {name: "username", value: username});
+        updateLoginForm(this, {name: "password", value: password});
+        login(this, this.props.appComponent);
+        //const isValid = validateLogin(this.props.appComponent, username, password);
+        const isValid = this.props.appComponent.state.loggedInUser ? true : false;
     
-        if(isValid){
-			const userType = getUserType(this.props.appComponent.state.loggedInUser);
-			
-            document.cookie = "LoggedInSession=Valid; " + "path=/";
-			if (userType === UserType.admin){
-				redirect(this, '/admin/institutions');
-			} else {
-				redirect(this, '/dashboard');
-			}
-        } else {
+        if(!isValid){
             this.displayInvalidCredentials();
         }
       }

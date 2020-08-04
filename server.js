@@ -79,7 +79,7 @@ app.post("/api/users/login", mongoChecker, (req, res) => {
             // We can check later if this exists to ensure we are logged in.
             req.session.user = user._id;
             req.session.username = user.username;
-            res.send({ currentUser: user.username });
+            res.send({ loggedInUser: user.username });
         })
         .catch(error => {
             if (isMongoError(error)) {
@@ -105,10 +105,30 @@ app.get("/api/users/logout", (req, res) => {
 // A route to check if a user is logged in on the session cookie
 app.get("/api/users/check-session", (req, res) => {
     if (req.session.user) {
-        res.send({ currentUser: req.session.username });
+        res.send({ loggedInUser: req.session.username });
     } else {
         res.status(401).send();
     }
+});
+
+// A route to get the userType of a user
+app.get("/api/users/userType", mongoChecker, (req, res) => {
+    const username = req.body.username;
+
+    log(username);
+    // Use the static method on the User model to find a user
+    // by their username and return their userType
+    User.findByUsernameUserType(username)
+        .then(user => {
+            res.send({ userType: user.userType });
+        })
+        .catch(error => {
+            if (isMongoError(error)) {
+                res.status(500).send(error);
+            } else {
+                res.status(400).send(error);
+            }
+        });
 });
 
 /*********************************************************/
@@ -120,7 +140,7 @@ app.get("/api/users/check-session", (req, res) => {
 
 /** User routes below **/
 // Set up a POST route to *create* a user of your web app.
-app.post("/users", (req, res) => {
+app.post("/users", mongoChecker, (req, res) => {
     log(req.body);
 
     // Create a new user
