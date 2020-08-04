@@ -12,6 +12,11 @@ import { Card, Row, Col } from "antd";
 /* Component for the Home page */
 class Home extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.props.history.push("/");
+  }
+
   render() {
     return (
       <div className="home__bg">
