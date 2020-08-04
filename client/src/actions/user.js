@@ -2,10 +2,17 @@
 
 /* Gets the type of the user (patient/doctor/admin) */
 export const getUserType = (username) => {
-    const url = "/api/users/userType";
+    const request = new Request("/api/users/login", {
+        method: "get",
+        body: JSON.stringify({"username": username}),
+        headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json"
+        }
+    });
     var userType = null;
     
-    return fetch(url)
+    return fetch(request)
         .then(res => {
             if (res.status === 200) {
                 return res.json();
