@@ -280,18 +280,3 @@ export const updatePatient = (patient) => {
 	return true;
 }
 
-/* Returns the profile info of a user by username */
-export const getUserProfileInfo = (username) => {
-
-	const userType = getUserType(username);
-
-	// code below requires server call
-	// to look at the patients and doctor database and see their profile info
-
-	// allPatients is MOCK_PATIENTS, allDoctors is MOCK_DOCTORS from ../mock-data/mock.js
-	if(userType === UserType.patient) {
-		return allPatients[username];
-	} else if(userType === UserType.doctor) {
-		return allDoctors[username];
-	}
-}
