@@ -130,7 +130,7 @@ export const getPatientsByDoctor = (doctorID) => {
 	// allPatients is MOCK_PATIENTS from ../mock-data/mock.js
 
 	for (var patientUsername in allPatients) {
-		var patientInfo = getUserProfileInfo(patientUsername);
+		var patientInfo = null;//getUserProfileInfo(patientUsername);
 		if(patientInfo.doctorID === doctorID) {
 			patients.push(patientInfo)
 		}
@@ -146,19 +146,6 @@ export const getDoctorID = (username) => {
 
 	// allDoctors is MOCK_DOCTORS from ../mock-data/mock.js
 	return allDoctors[username].doctorID;
-}
-
-/* Returns the doctor username when given doctorID */
-export const getDoctorbyID = (doctorID) => {
-	// code below requires server call
-	// to look at the doctor database
-
-	// allDoctors is MOCK_DOCTORS from ../mock-data/mock.js
-	for(var doctor in allDoctors) {
-		if(allDoctors[doctor].doctorID === doctorID) {
-			return doctor;
-		}
-	}
 }
 
 /* Returns the image url of the profile image associated with a user
