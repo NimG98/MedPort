@@ -12,8 +12,10 @@ import ProfileDetail from '../ProfileDetail';
 import uploadPlusImage from './static/opaque-upload-profile.png';
 import editProfileImagePencil from './static/pencil-edit-icon.png';
 
-import { getUserProfileImageUrl, getUserProfileInfo, getDoctorbyID, getInstitutionInfo } from '../../actions/app';
-import { getUserType } from '../../actions/user';
+import { getUserProfileImageUrl } from '../../actions/app';
+import { getUserType, getUserProfileInfo } from '../../actions/user';
+import { getDoctorByID } from '../../actions/doctor';
+import { getInstitutionInfo } from '../../actions/institution';
 import { UserType } from '../../constants/userType';
 
 class Profile extends React.Component {
@@ -21,7 +23,9 @@ class Profile extends React.Component {
     constructor(props) {
         super(props);
 
-        this.setStateUserType = this.setStateUserType.bind(this);
+        this.setProfileDetails = this.setProfileDetails.bind(this);
+        this.setDoctorInfo = this.setDoctorInfo.bind(this);
+        this.setInstitutionInfo = this.setInstitutionInfo.bind(this);
 
         this.state = {
             user: this.props.appComponent.state.loggedInUser,
@@ -29,24 +33,35 @@ class Profile extends React.Component {
         }
         // sets this.state.userType to the appropriate userType
         getUserType(this.props.appComponent.state.loggedInUser, null, this);
-
-        this.firstName = getUserProfileInfo(this.state.user).firstName;
-        this.lastName = getUserProfileInfo(this.state.user).lastName;
-        this.email = getUserProfileInfo(this.state.user).email;
-
-        if(this.state.userType === UserType.patient) {
-            this.address = getUserProfileInfo(this.state.user).address;
-            this.postalCode = getUserProfileInfo(this.state.user).postalCode;
-            this.HCN = getUserProfileInfo(this.state.user).HCN;
-            this.doctor = getUserProfileInfo(getDoctorbyID(getUserProfileInfo(this.state.user).doctorID));
-        } else if(this.state.userType === UserType.doctor) {
-            this.MID = getUserProfileInfo(this.state.user).MID;
-            this.institutionID = getUserProfileInfo(this.state.user).institutionID;
-            this.institutionInfo = getInstitutionInfo(this.institutionID);
-        }
+        getUserProfileInfo(null, this.setProfileDetails);
 
         this.getUserProfileImage = this.getUserProfileImage.bind(this);
 
+    }
+
+    setProfileDetails(profileInfo) {
+        this.firstName = profileInfo.firstName;
+        this.lastName = profileInfo.lastName;
+        this.email = profileInfo.email;
+
+        if(this.state.userType === UserType.patient) {
+            this.address = profileInfo.address;
+            this.postalCode = profileInfo.postalCode;
+            this.HCN = profileInfo.HCN;
+            getDoctorByID(profileInfo.doctorID, this.setDoctorInfo)
+            
+        } else if(this.state.userType === UserType.doctor) {
+            this.MID = profileInfo.MID;
+            getInstitutionInfo(profileInfo.institutionID, this.setInstitutionInfo);
+        }
+    }
+
+    setDoctorInfo(doctorInfo) {
+        this.doctor = doctorInfo.generalProfile;
+    }
+
+    setInstitutionInfo(institutionInfo) {
+        this.institutionInfo = institutionInfo;
     }
 
     getUserProfileImage() {

@@ -5,7 +5,8 @@ import 'antd/dist/antd.css';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Tabs, Button, Modal }  from "antd";
 
-import { getUserRequestsByStatus, getUserProfileInfo } from "../../actions/app";
+import { getUserRequestsByStatus} from "../../actions/app";
+import { getUserProfileInfo } from '../../actions/user';
 
 const { TabPane } = Tabs;
 
@@ -108,21 +109,27 @@ class PreviousRequests extends React.Component {
 
         for(var req in requestData) {
             var actionNeeded = this.displayActionNeeded(requestData[req]);
-            var createdByName = getUserProfileInfo(requestData[req].created_by).firstName 
-                                + " " + getUserProfileInfo(requestData[req].created_by).lastName
-            var toName = getUserProfileInfo(requestData[req].to).firstName 
-                                + " " + getUserProfileInfo(requestData[req].to).lastName
-            tableRows.push(
-                <tr key={req}>
-                    <td>{createdByName}</td>
-                    <td>{toName}</td>
-                    <td>{requestData[req].request_type}</td>
-                    <td>{requestData[req].date}</td>
-                    <td>{requestData[req].time}</td>
-                    <td>{requestData[req].reason}</td>
-                    {status === "pending" && actionNeeded}
-                </tr>
-            );
+            var createdByName = null;
+            var toName = null;
+            getUserProfileInfo(requestData[req].created_by, null).then( createdByUser => {
+                createdByName = createdByUser.firstName + " " + createdByUser.lastName
+                return getUserProfileInfo(requestData[req].to, null);
+            })
+            .then( toUser => {
+                toName = toUser.firstName + " " + toUser.lastName
+            }).then( () => {
+                tableRows.push(
+                    <tr key={req}>
+                        <td>{createdByName}</td>
+                        <td>{toName}</td>
+                        <td>{requestData[req].request_type}</td>
+                        <td>{requestData[req].date}</td>
+                        <td>{requestData[req].time}</td>
+                        <td>{requestData[req].reason}</td>
+                        {status === "pending" && actionNeeded}
+                    </tr>
+                );
+            })
         }
 
         return (tableRows);
@@ -130,6 +137,12 @@ class PreviousRequests extends React.Component {
 
     // Note: function only called for pending requests, since action is pending
     displayActionNeeded = (req) => {
+        var modalMessage = null;
+        getUserProfileInfo(req.created_by, null).then( userInfo => {
+            modalMessage = "Request by " + userInfo.firstName + " " + userInfo.lastName
+            + " for a " + req.request_type + " on " + req.date + " at " + req.time
+        })
+
         // Pending on other person
         if(req.created_by === this.state.user) {
             return (
@@ -151,9 +164,7 @@ class PreviousRequests extends React.Component {
                         onCancel={this.handleModalCancel}
                         visible={this.state.modalVisible}
                     >
-                        {"Request by " + getUserProfileInfo(req.created_by).firstName 
-                                + " " + getUserProfileInfo(req.created_by).lastName + " for a " + req.request_type
-                                + " on " + req.date + " at " + req.time}
+                        {modalMessage}
                     </Modal>
                 </td>
             );
