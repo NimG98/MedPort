@@ -53,7 +53,6 @@ class ReferralSignUpForm extends React.Component {
 				
 				<div className="secondary_form">
 					<p>Are you a Doctor? </p>
-					{/* <button className="signup" onClick={doctorSignUp}>Sign Up</button> */}
 					<a className="signup" onClick={doctorSignUp}>Sign Up</a>
 				</div>
 			</div>
