@@ -9,7 +9,7 @@ const DoctorSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    generalInfo: GeneralProfile.schema,
+    generalProfile: GeneralProfile.schema,
     MID: {
         type: String,
         required: true,
