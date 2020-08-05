@@ -20,15 +20,15 @@ const GeneralProfileSchema = new mongoose.Schema({
         trim: true,
     },
     email: {
-		type: String,
-		required: true,
-		minlength: 1,
-		trim: true,
-		validate: {
-			validator: validator.isEmail,   // custom validator
-			message: 'Not valid email'
-		}
-	}, 
+        type: String,
+        required: true,
+        minlength: 1,
+        trim: true,
+        validate: {
+            validator: validator.isEmail,   // custom validator
+            message: 'Not valid email'
+        }
+    }
 })
 
 const GeneralProfile = mongoose.model('GeneralProfile', GeneralProfileSchema)

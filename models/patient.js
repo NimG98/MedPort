@@ -21,21 +21,21 @@ const PatientSchema = new mongoose.Schema({
         type: String,
         required: true,
         validate: {
-			validator: (value) => {
+            validator: (value) => {
                 return validator.isPostalCode(value, "CA")   // custom validator
             },
-			message: 'Not valid email'
-		}
+            message: 'Not valid email'
+        }
     },
     HCN: {
         type: String,
         required: true,
         validate: {
-			validator: (value) => {
+            validator: (value) => {
                 return /^[0-9]{4}[ -]?[0-9]{3}[ -]?[0-9]{3}[ -]?[a-zA-Z]{2}$/.test(value)
             },
-			message: 'Not valid Health Card Number'
-		}
+            message: 'Not valid Health Card Number'
+        }
     },
     doctor: {
         type: mongoose.Schema.Types.ObjectId,

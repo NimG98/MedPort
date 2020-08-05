@@ -14,11 +14,11 @@ const DoctorSchema = new mongoose.Schema({
         type: String,
         required: true,
         validate: {
-			validator: (value) => {
+            validator: (value) => {
                 return /^([a-zA-Z]{4})([0-9]{8})$/.test(value)
             },
-			message: 'Not valid Medical ID Number'
-		}
+            message: 'Not valid Medical ID Number'
+        }
     },
     institutionID: {
         type: mongoose.Schema.Types.ObjectId,
