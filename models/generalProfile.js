@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const validator = require('validator')
 
 
-// Both patients and doctos share these common profile details
+// Both patients and doctors share these common profile details
 const GeneralProfileSchema = new mongoose.Schema({
     firstName: {
         type: String,
