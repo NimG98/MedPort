@@ -1,18 +1,11 @@
 // Functions to help with user actions.
 
 /* Gets the type of the user (patient/doctor/admin) */
-export const getUserType = (username) => {
-    const request = new Request("/api/users/login", {
-        method: "get",
-        body: JSON.stringify({"username": username}),
-        headers: {
-            Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/json"
-        }
-    });
+export const getUserType = (username, callback) => {
+    const url = "/api/users/userType/" + username
     var userType = null;
     
-    return fetch(request)
+    return fetch(url)
         .then(res => {
             if (res.status === 200) {
                 return res.json();
@@ -21,6 +14,9 @@ export const getUserType = (username) => {
         .then(json => {
             if (json) {
                 userType = json.userType;
+                if(callback) {
+                    callback(userType);
+                }
                 return userType;
             }
         })
@@ -103,3 +99,32 @@ export const logout = (app) => {
             console.log(error);
         });
 };
+
+/* Returns the profile info of the loggedInUser or a different user by username */
+export const getUserProfileInfo = (username, callback) => { 
+    // get all of the profile info for the loggedInUser
+    var url = "/api/profile/";
+
+    // get general profile info for a different user (firstname, lastname, email)
+    if(username){
+        url += username;
+    }
+
+    fetch(url)
+        .then(res => {
+            if (res.status === 200) {
+                return res.json();
+            }
+        })
+        .then(profileInfoJson => {
+            if (profileInfoJson) {
+                if(callback){
+                    callback(profileInfoJson);
+                }
+                return profileInfoJson;
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}
