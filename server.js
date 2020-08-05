@@ -114,6 +114,56 @@ app.get("/api/users/check-session", (req, res) => {
     }
 });
 
+/*********************************************************/
+
+/*** API Routes below ************************************/
+// NOTE: The JSON routes are not protected in this react server (no authentication required). 
+//       You can (and should!) add this using similar middleware techniques we used in lecture.
+
+
+/** User routes below **/
+// Set up a POST route to *create* a user of your web app.
+app.post("/api/users", mongoChecker, (req, res) => {
+    log(req.body);
+
+    // Create a new user
+    const user = new User({
+        username: req.body.username,
+        password: req.body.password,
+        userType: req.body.userType
+    });
+
+    // Save the user
+    user.save().then(user => {
+        res.send(user);
+    })
+    .catch((error) => {
+		if (isMongoError(error)) { // check for if mongo server suddenly disconnected before this request.
+			res.status(500).send('Internal server error')
+		} else {
+			res.status(400).send('Bad Request')
+		}
+	})
+});
+
+// Middleware for authentication of resources
+const authenticate = (req, res, next) => {
+	if (req.session.user) {
+		User.findById(req.session.user).then((user) => {
+			if (!user) {
+				return Promise.reject()
+			} else {
+				req.user = user
+				next()
+			}
+		}).catch((error) => {
+			res.status(401).send("Unauthorized")
+		})
+	} else {
+		res.status(401).send("Unauthorized")
+	}
+}
+
 // A route to get the userType of a user
 app.get("/api/users/userType/:username", mongoChecker, (req, res) => {
     const username = req.params.username;
@@ -196,55 +246,7 @@ app.get("/api/profile/:username", mongoChecker, authenticate, (req, res) => {
 
 });
 
-/*********************************************************/
-
-/*** API Routes below ************************************/
-// NOTE: The JSON routes are not protected in this react server (no authentication required). 
-//       You can (and should!) add this using similar middleware techniques we used in lecture.
-
-
-/** User routes below **/
-// Set up a POST route to *create* a user of your web app.
-app.post("/api/users", mongoChecker, (req, res) => {
-    log(req.body);
-
-    // Create a new user
-    const user = new User({
-        username: req.body.username,
-        password: req.body.password,
-        userType: req.body.userType
-    });
-
-    // Save the user
-    user.save().then(user => {
-        res.send(user);
-    })
-    .catch((error) => {
-		if (isMongoError(error)) { // check for if mongo server suddenly disconnected before this request.
-			res.status(500).send('Internal server error')
-		} else {
-			res.status(400).send('Bad Request')
-		}
-	})
-});
-
-// Middleware for authentication of resources
-const authenticate = (req, res, next) => {
-	if (req.session.user) {
-		User.findById(req.session.user).then((user) => {
-			if (!user) {
-				return Promise.reject()
-			} else {
-				req.user = user
-				next()
-			}
-		}).catch((error) => {
-			res.status(401).send("Unauthorized")
-		})
-	} else {
-		res.status(401).send("Unauthorized")
-	}
-}
+/** Doctor routes below **/
 
 // A route to get the doctor document given the doctor's id
 app.get("/api/doctor/:id", mongoChecker, authenticate, (req, res) => {
