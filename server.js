@@ -14,6 +14,7 @@ mongoose.set('useFindAndModify', false); // for some deprecation issues
 const { User } = require("./models/user");
 const { Patient } = require("./models/patient");
 const { Doctor } = require("./models/doctor");
+const { Institution } = require("./models/institution");
 
 // to validate object IDs
 const { ObjectID } = require("mongodb");
@@ -246,10 +247,13 @@ app.get("/api/profile/:username", mongoChecker, authenticate, (req, res) => {
 
 });
 
+/** Patient routes below **/
+
+
 /** Doctor routes below **/
 
 // A route to get the doctor document given the doctor's id
-app.get("/api/doctor/:id", mongoChecker, authenticate, (req, res) => {
+app.get("/api/doctors/:id", mongoChecker, authenticate, (req, res) => {
     const doctorId = req.params.id;
 
     if(!ObjectID.isValid(doctorId)) {
@@ -269,7 +273,28 @@ app.get("/api/doctor/:id", mongoChecker, authenticate, (req, res) => {
     })
 });
 
+/** Institution routes below **/
 
+// A route to get the institution document given the institution's id
+app.get("/api/institutions/:id", mongoChecker, authenticate, (req, res) => {
+    const institutionId = req.params.id;
+
+    if(!ObjectID.isValid(institutionId)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+    
+    Institution.findById(institutionId).then( institution => {
+        if(!institution) {
+			res.status(404).send("Resource not found");
+		} else {
+            res.send(institution);
+        }
+    }).catch(error => {
+        log(error);
+        res.status(500).send("Internal Server Error");
+    })
+});
 
 
 
