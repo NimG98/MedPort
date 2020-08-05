@@ -73,7 +73,7 @@ class PatientSignUpForm extends React.Component {
 			<form className="PatientSignUpForm" onSubmit={this.submit}>
 			
 				<div className="title">
-					<h2><b>Patient Sign Up</b></h2>
+					<label><b>Patient Sign Up</b></label>
 				</div>
 			
 				<div className="container">
