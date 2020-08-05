@@ -53,7 +53,7 @@ class DoctorSignUpForm extends React.Component {
 		return (
 			<form className="DoctorSignUpForm" onSubmit={this.submit}>
 				<div className="title">
-					<h2><b>Doctor Sign Up</b></h2>
+					<label><b>Doctor Sign Up</b></label>
 				</div>
 			
 				<div className="container">
@@ -124,7 +124,7 @@ class DoctorSignUpForm extends React.Component {
 					{this.state.errors.password ? <p className="error-message" >{this.state.errorCodes.password}</p> : null}
 				</div>
 					
-				<button type="button" className="back" onClick={back}>back</button>
+				<button type="button" className="back" onClick={back}>Back</button>
 				
 				<button type="submit" className="next">Next</button>
 			</form>
