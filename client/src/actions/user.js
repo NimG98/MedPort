@@ -1,7 +1,7 @@
 // Functions to help with user actions.
 
 /* Gets the type of the user (patient/doctor/admin) */
-export const getUserType = (username, callback) => {
+export const getUserType = (username, callback, component) => {
     const url = "/api/users/userType/" + username
     var userType = null;
     
@@ -12,8 +12,11 @@ export const getUserType = (username, callback) => {
             }
         })
         .then(json => {
-            if (json) {
+            if (json && json.userType) {
                 userType = json.userType;
+                if(component) {
+                    component.setState({...component.state, userType: json.userType });
+                }
                 if(callback) {
                     callback(userType);
                 }

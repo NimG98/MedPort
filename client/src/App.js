@@ -35,7 +35,7 @@ class App extends React.Component {
   getInitialView(loggedInUser, history) {
       let view;
       if(loggedInUser) {
-          getUserType(loggedInUser, null).then(userType => {
+          getUserType(loggedInUser, null, null).then(userType => {
               if(userType === UserType.admin) {
                   view = <AdminInstitutions history={history} appComponent={this} />
               } else {

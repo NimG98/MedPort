@@ -12,7 +12,8 @@ import ProfileDetail from '../ProfileDetail';
 import uploadPlusImage from './static/opaque-upload-profile.png';
 import editProfileImagePencil from './static/pencil-edit-icon.png';
 
-import { getUserProfileImageUrl, getUserType, getUserProfileInfo, getDoctorbyID, getInstitutionInfo } from '../../actions/app';
+import { getUserProfileImageUrl, getUserProfileInfo, getDoctorbyID, getInstitutionInfo } from '../../actions/app';
+import { getUserType } from '../../actions/user';
 import { UserType } from '../../constants/userType';
 
 class Profile extends React.Component {
@@ -20,11 +21,15 @@ class Profile extends React.Component {
     constructor(props) {
         super(props);
 
+        this.setStateUserType = this.setStateUserType.bind(this);
+
         this.state = {
             user: this.props.appComponent.state.loggedInUser,
-            userType: getUserType(this.props.appComponent.state.loggedInUser),
-            
+            userType: null,
         }
+        // sets this.state.userType to the appropriate userType
+        getUserType(this.props.appComponent.state.loggedInUser, null, this);
+
         this.firstName = getUserProfileInfo(this.state.user).firstName;
         this.lastName = getUserProfileInfo(this.state.user).lastName;
         this.email = getUserProfileInfo(this.state.user).email;
