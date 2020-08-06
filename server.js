@@ -3,8 +3,10 @@
 const log = console.log;
 
 const express = require("express");
+const cors = require('cors');
 // starting the express server
 const app = express();
+app.use(cors());
 
 // mongoose and mongo connection
 const { mongoose } = require("./db/mongoose");
@@ -82,7 +84,7 @@ app.post("/api/users/login", mongoChecker, (req, res) => {
             // We can check later if this exists to ensure we are logged in.
             req.session.user = user._id;
             req.session.username = user.username;
-            res.send({ loggedInUser: user.username });
+            res.send({ loggedInUser: user.username, userType: user.userType });
         })
         .catch(error => {
             if (isMongoError(error)) {
@@ -248,7 +250,10 @@ app.get("/api/profile/:username", mongoChecker, authenticate, (req, res) => {
 });
 
 /** Patient routes below **/
+// A route to make a new patient (can be called when new user made)
+app.post("/api/patients", mongoChecker, authenticate, (req, res) => {
 
+});
 
 /** Doctor routes below **/
 

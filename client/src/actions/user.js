@@ -79,7 +79,7 @@ export const login = (loginComp, app) => {
         })
         .then(json => {
             if (json.loggedInUser !== undefined) {
-                app.setState({ loggedInUser: json.loggedInUser });
+                app.setState({ loggedInUser: json.loggedInUser, userType: json.userType });
             }
         })
         .catch(error => {

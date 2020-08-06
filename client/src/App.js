@@ -25,45 +25,41 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     readCookie(this); // sees if a user is logged in.
+    this.getLoggedInUserView = this.getLoggedInUserView.bind(this);
+    this.getDefaultView = this.getDefaultView.bind(this);
   }
 
   state = {
 	  loggedInUser: null
   }
 
+  getLoggedInUserView() {
+    if(this.state.userType === UserType.admin) {
+        return <AdminInstitutions history={this.history} appComponent={this}/>
+    } return <Dashboard history={this.history} appComponent={this}/>
+  }
 
-  getInitialView(loggedInUser, history) {
-      let view;
-      if(loggedInUser) {
-          getUserType(loggedInUser, null, null).then(userType => {
-              if(userType === UserType.admin) {
-                  view = <AdminInstitutions history={history} appComponent={this} />
-              } else {
-                  view = <Dashboard history={history} appComponent={this} />
-              }
-          })
-      } else {
-          view = <Home history={history} appComponent={this} />
-      }
-      return view;
+  getDefaultView() {
+    return <Home history={this.history} appComponent={this}/>
   }
 
   render(){
-
-    const { loggedInUser } = this.state;
 
     return (
       <BrowserRouter>
           <Switch>
               <Route
                   exact path={["/", "/dashboard"] /* any of these URLs are accepted. */ }
-                  render={({ history }) => (
-                      <div className="App">
-                          { /* Different componenets rendered depending on if someone is logged in. */}
-                          { /*!loggedInUser ? <Home history={history} appComponent={this} /> : <Dashboard history={history} appComponent={this} /> */}
-                          { this.getInitialView(loggedInUser, history) }
-                      </div>
-                  )}
+                  render={({ history }) => {
+                    //   this.history = history;
+                    //   console.log("history: ", this.history);
+                        
+                      return(
+                        <div className="App">
+                            { !this.state.loggedInUser ? this.getDefaultView() : this.getLoggedInUserView()}
+                        </div>
+                      )
+                  }}
               />
 
 
