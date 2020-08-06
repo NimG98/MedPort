@@ -7,7 +7,7 @@ import 'antd/dist/antd.css';
 import Header from './../Header';
 import NavBar from './../NavBar';
 
-import { getUserType} from "../../actions/app";
+import { getUserType } from '../../actions/user';
 import { UserType } from "../../constants/userType";
 
 import { Card, Button }  from "antd";
@@ -24,11 +24,13 @@ class Result extends React.Component {
        
 
         this.state = {
-            userType: getUserType(this.props.appComponent.state.loggedInUser),
+            userType: null,
             value:'',
             list: ["Please come to the Doctors office tomorrow to discuss your results"],
             pList:["Okay, I will schedule an appointment"]
         };
+        // sets this.state.userType to the appropriate userType
+        getUserType(this.props.appComponent.state.loggedInUser, null, this);
         
         this.updateValue = this.updateValue.bind(this);
         this.AddItemOnClick = this.AddItemOnClick.bind(this);

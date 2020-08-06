@@ -3,8 +3,10 @@
 const log = console.log;
 
 const express = require("express");
+const cors = require('cors');
 // starting the express server
 const app = express();
+app.use(cors());
 
 // mongoose and mongo connection
 const { mongoose } = require("./db/mongoose");
@@ -12,6 +14,9 @@ mongoose.set('useFindAndModify', false); // for some deprecation issues
 
 // import the mongoose models
 const { User } = require("./models/user");
+const { Patient } = require("./models/patient");
+const { Doctor } = require("./models/doctor");
+const { Institution } = require("./models/institution");
 
 // to validate object IDs
 const { ObjectID } = require("mongodb");
@@ -79,13 +84,15 @@ app.post("/api/users/login", mongoChecker, (req, res) => {
             // We can check later if this exists to ensure we are logged in.
             req.session.user = user._id;
             req.session.username = user.username;
-            res.send({ currentUser: user.username });
+            req.session.userType = user.userType
+            res.send({ loggedInUser: user.username, userType: user.userType });
         })
         .catch(error => {
             if (isMongoError(error)) {
-                res.status(500).send(error);
+                res.status(500).send('Internal server error');
             } else {
-                res.status(400).send(error);
+                log(error);
+                res.status(400).send('Bad Request');
             }
         });
 });
@@ -105,7 +112,7 @@ app.get("/api/users/logout", (req, res) => {
 // A route to check if a user is logged in on the session cookie
 app.get("/api/users/check-session", (req, res) => {
     if (req.session.user) {
-        res.send({ currentUser: req.session.username });
+        res.send({ loggedInUser: req.session.username, userType: req.session.userType});
     } else {
         res.status(401).send();
     }
@@ -120,7 +127,7 @@ app.get("/api/users/check-session", (req, res) => {
 
 /** User routes below **/
 // Set up a POST route to *create* a user of your web app.
-app.post("/users", (req, res) => {
+app.post("/api/users", mongoChecker, (req, res) => {
     log(req.body);
 
     // Create a new user
@@ -160,6 +167,223 @@ const authenticate = (req, res, next) => {
 		res.status(401).send("Unauthorized")
 	}
 }
+
+// A route to get the userType of a user
+app.get("/api/users/userType/:username", mongoChecker, (req, res) => {
+    const username = req.params.username;
+
+    // Use the static method on the User model to find a user
+    // by their username and return their userType
+    User.findByUsernameUserType(username)
+        .then(userType => {
+            res.send({ userType: userType });
+        })
+        .catch(error => {
+            log(error);
+            res.status(500).send("Internal Server Error");
+        });
+});
+
+// A route to get the profile info of the loggedInUser
+app.get("/api/profile/", mongoChecker, authenticate, (req, res) => {
+    if(req.user.userType === "patient") {
+        Patient.findOne({user: req.user._id}).then( (patient) => {
+            if(!patient){
+                res.status(404).send('Resource not found')  // could not find this patient
+            } else {
+                res.send(patient)
+            }
+        }).catch(error => {
+            log(error);
+            res.status(500).send("Internal Server Error");
+        })
+    } else if(req.user.userType === "doctor"){
+        Doctor.findOne({user: req.user._id}).then( (doctor) => {
+            if(!doctor){
+                res.status(404).send('Resource not found')  // could not find this doctor
+            } else {
+                res.send(doctor)
+            }
+        }).catch(error => {
+            log(error);
+            res.status(500).send("Internal Server Error");
+        })
+    }
+});
+
+// A route to get the general profile info (firstName, lastName, email) of another user
+app.get("/api/profile/:username", mongoChecker, authenticate, (req, res) => {
+    const username = req.params.username;
+
+    User.findOne({username: username}).then( (user) => {
+        if(!user){
+            res.status(404).send('Resource not found')  // could not find this user
+        } else {
+            const userType = user.userType;
+            const userId = user._id;
+            return {userType: userType, userId: userId}
+        }
+    }).then( (userJson) => {
+        if(userJson) {
+            if(userJson.userType === "patient") {
+                Patient.findOne({user: userJson.userId}).then( (patient) => {
+                    if(!patient){
+                        res.status(404).send('Resource not found')  // could not find this patient
+                    } else {
+                        res.send(patient.generalProfile)
+                    }
+                })
+            } else if(userJson.userType === "doctor") {
+                Doctor.findOne({user: userJson.userId}).then( (doctor) => {
+                    if(!doctor){
+                        res.status(404).send('Resource not found')  // could not find this doctor
+                    } else {
+                        res.send(doctor.generalProfile)
+                    }
+                })
+            }
+        }
+    }).catch(error => {
+        log(error);
+        res.status(500).send("Internal Server Error");
+    })
+
+});
+
+/** Patient routes below **/
+// A route to make a new patient (can be called when new user made)
+app.post("/api/patients", mongoChecker, (req, res) => {
+    const userID = req.body.userID;
+
+    // Create a new user
+    const patient = new Patient({
+        user: userID,
+        generalProfile: {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email
+        },
+        address: req.body.address,
+        postalCode: req.body.postalCode,
+        HCN: req.body.HCN,
+        doctor: req.body.doctor
+    });
+
+    // Save the user
+    patient.save().then(patient => {
+        res.send(patient);
+    })
+    .catch((error) => {
+		if (isMongoError(error)) { // check for if mongo server suddenly disconnected before this request.
+			res.status(500).send('Internal server error')
+		} else {
+            console.log(error);
+			res.status(400).send('Bad Request')
+		}
+	})
+});
+
+/** Doctor routes below **/
+
+// A route to make a new doctor (can be called when new user made)
+app.post("/api/doctors", mongoChecker, (req, res) => {
+    const userID = req.body.userID;
+
+    // Create a new user
+    const doctor = new Doctor({
+        user: userID,
+        generalProfile: {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email
+        },
+        MID: req.body.MID,
+        institutionID: req.body.institutionID
+    });
+
+    // Save the user
+    doctor.save().then(doctor => {
+        res.send(doctor);
+    })
+    .catch((error) => {
+		if (isMongoError(error)) { // check for if mongo server suddenly disconnected before this request.
+			res.status(500).send('Internal server error')
+		} else {
+            console.log(error);
+			res.status(400).send('Bad Request')
+		}
+	})
+});
+
+// A route to get the doctor document given the doctor's id
+app.get("/api/doctors/:id", mongoChecker, authenticate, (req, res) => {
+    const doctorId = req.params.id;
+
+    if(!ObjectID.isValid(doctorId)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+    
+    Doctor.findById(doctorId).then( doctor => {
+        if(!doctor) {
+			res.status(404).send("Resource not found");
+		} else {
+            res.send(doctor);
+        }
+    }).catch(error => {
+        log(error);
+        res.status(500).send("Internal Server Error");
+    })
+});
+
+/** Institution routes below **/
+
+// A route to make a new institution (can be called when new user made)
+app.post("/api/institutions", mongoChecker, (req, res) => {
+    // Create a new institution
+    const institution = new Institution({
+        name: req.body.name,
+        address: req.body.address,
+        postalCode: req.body.postalCode,
+        phoneNumber: req.body.phoneNumber
+    });
+
+    // Save the user
+    institution.save().then(institution => {
+        res.send(institution);
+    })
+    .catch((error) => {
+		if (isMongoError(error)) { // check for if mongo server suddenly disconnected before this request.
+			res.status(500).send('Internal server error')
+		} else {
+            console.log(error);
+			res.status(400).send('Bad Request')
+		}
+	})
+});
+
+// A route to get the institution document given the institution's id
+app.get("/api/institutions/:id", mongoChecker, authenticate, (req, res) => {
+    const institutionId = req.params.id;
+
+    if(!ObjectID.isValid(institutionId)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+    
+    Institution.findById(institutionId).then( institution => {
+        if(!institution) {
+			res.status(404).send("Resource not found");
+		} else {
+            res.send(institution);
+        }
+    }).catch(error => {
+        log(error);
+        res.status(500).send("Internal Server Error");
+    })
+});
+
+
 
 /*** Webpage routes below **********************************/
 // Serve the build

@@ -5,7 +5,7 @@ import {Nav} from "react-bootstrap";
 import { Card, Button }  from "antd";
 import { redirect } from "../../actions/router";
 import { withRouter } from "react-router";
-import { getUserType} from "../../actions/app";
+import { getUserType } from '../../actions/user';
 import { UserType } from "../../constants/userType";
 
 class NavBar extends React.Component{
@@ -18,9 +18,11 @@ class NavBar extends React.Component{
         this.redirectRequest = this.redirectRequest.bind(this);
         this.changeVal = this.changeVal.bind(this);
         this.state={
-            userType: getUserType(this.props.appComponent.state.loggedInUser),
+            userType: null,
             collapse: false
         };
+        // sets this.state.userType to the appropriate userType
+        getUserType(this.props.appComponent.state.loggedInUser, null, this);
     }
 
     redirectRequest(val) {

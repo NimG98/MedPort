@@ -5,7 +5,8 @@ import "./styles.css";
 import 'antd/dist/antd.css';
 import { Row, Card, Form, Input, Button, Select, DatePicker, TimePicker} from "antd";
 
-import { getPatientsByDoctor, getUserType, getDoctorID } from "../../actions/app";
+import { getPatientsByDoctor, getDoctorID } from "../../actions/app";
+import { getUserType } from '../../actions/user';
 import { UserType } from "../../constants/userType";
 import { LeftOutlined } from "@ant-design/icons";
 
@@ -18,9 +19,11 @@ class RequestForm extends React.Component {
 
         this.state = {
             user: this.props.loggedInUser,
-            userType: getUserType(this.props.loggedInUser),
+            userType: null,
             
         }
+        // sets this.state.userType to the appropriate userType
+        getUserType(this.state.user, null, this);
 
         this.onClick = this.onClick.bind(this);
         this.onFinish = this.onFinish.bind(this);

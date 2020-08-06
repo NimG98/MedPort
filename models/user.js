@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
 	password: {
 		type: String,
 		required: true,
-		minlength: 6
+		minlength: 3
     },
     userType: {
         type: String,
@@ -68,6 +68,21 @@ UserSchema.statics.findByUsernamePassword = function(username, password) {
 				}
 			})
 		})
+	})
+}
+
+// A static method on the document model.
+// Allows us to find a User's userType (patient, doctor, admin)
+UserSchema.statics.findByUsernameUserType = function(username) {
+	const User = this // binds this to the User model
+
+	// First find the user by their username
+	return User.findOne({ username: username }).then((user) => {
+		if (!user) {
+			return Promise.reject()  // a rejected promise
+		}
+		// if the user exists, return the userType
+		return Promise.resolve(user.userType)
 	})
 }
 

@@ -119,16 +119,6 @@ export const getUserRequestsByStatus = (username, status) => {
 	return userRequests;
 }
 
-/* Gets the type of the user (patient/doctor/admin) */
-export const getUserType = (username) => {
-
-	// code below requires server call
-	// to look at the user database and see usernames/passwords
-
-	// users is MOCK_USERS from ../mock-data/mock.js
-	return users[username].type;
-}
-
 /* Gets the patients assigned to a specific doctor */
 export const getPatientsByDoctor = (doctorID) => {
 
@@ -140,7 +130,7 @@ export const getPatientsByDoctor = (doctorID) => {
 	// allPatients is MOCK_PATIENTS from ../mock-data/mock.js
 
 	for (var patientUsername in allPatients) {
-		var patientInfo = getUserProfileInfo(patientUsername);
+		var patientInfo = null;//getUserProfileInfo(patientUsername);
 		if(patientInfo.doctorID === doctorID) {
 			patients.push(patientInfo)
 		}
@@ -156,19 +146,6 @@ export const getDoctorID = (username) => {
 
 	// allDoctors is MOCK_DOCTORS from ../mock-data/mock.js
 	return allDoctors[username].doctorID;
-}
-
-/* Returns the doctor username when given doctorID */
-export const getDoctorbyID = (doctorID) => {
-	// code below requires server call
-	// to look at the doctor database
-
-	// allDoctors is MOCK_DOCTORS from ../mock-data/mock.js
-	for(var doctor in allDoctors) {
-		if(allDoctors[doctor].doctorID === doctorID) {
-			return doctor;
-		}
-	}
 }
 
 /* Returns the image url of the profile image associated with a user
@@ -290,18 +267,3 @@ export const updatePatient = (patient) => {
 	return true;
 }
 
-/* Returns the profile info of a user by username */
-export const getUserProfileInfo = (username) => {
-
-	const userType = getUserType(username);
-
-	// code below requires server call
-	// to look at the patients and doctor database and see their profile info
-
-	// allPatients is MOCK_PATIENTS, allDoctors is MOCK_DOCTORS from ../mock-data/mock.js
-	if(userType === UserType.patient) {
-		return allPatients[username];
-	} else if(userType === UserType.doctor) {
-		return allDoctors[username];
-	}
-}
