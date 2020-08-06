@@ -2,6 +2,7 @@
 'use strict';
 
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const InstitutionSchema = new mongoose.Schema({
     name: {
