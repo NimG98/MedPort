@@ -24,7 +24,7 @@ const InstitutionSchema = new mongoose.Schema({
             validator: (value) => {
                 return validator.isPostalCode(value, "CA")   // custom validator
             },
-            message: 'Not valid email'
+            message: 'Not valid postal code'
         }
     },
     phoneNumber: {
