@@ -52,7 +52,7 @@ class InstitutionCreationForm extends React.Component {
 		return(
 			<form className="InstitutionCreationForm" onSubmit={this.submit}>
 				<div className="title">
-					<h2><b>Create an Institution</b></h2>
+					<label><b>Create an Institution</b></label>
 				</div>
 			
 				<div className="container">
