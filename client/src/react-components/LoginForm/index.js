@@ -12,7 +12,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 //import { getUserType} from "../../actions/app";
 import { UserType } from "../../constants/userType";
-import { login } from "../../actions/user";
+import { login, updateLoginForm } from "../../actions/user";
 
 class LoginForm extends React.Component {
     
@@ -35,16 +35,10 @@ class LoginForm extends React.Component {
         updateLoginForm(this, {name: "username", value: username});
         updateLoginForm(this, {name: "password", value: password});
         login(this, this.props.appComponent);
-        //const isValid = validateLogin(this.props.appComponent, username, password);
-        const isValid = this.props.appComponent.state.loggedInUser ? true : false;
-    
-        if(!isValid){
-            this.displayInvalidCredentials();
-        }
       }
 
-    displayInvalidCredentials() {
-        this.setState({ displayInvalid: true });
+    displayInvalidCredentials(displayInvalid) {
+        this.setState({ displayInvalid });
     }
     
     render() {
