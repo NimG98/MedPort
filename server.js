@@ -252,11 +252,66 @@ app.get("/api/profile/:username", mongoChecker, authenticate, (req, res) => {
 
 /** Patient routes below **/
 // A route to make a new patient (can be called when new user made)
-app.post("/api/patients", mongoChecker, authenticate, (req, res) => {
+app.post("/api/patients", mongoChecker, (req, res) => {
+    const userID = req.body.userID;
 
+    // Create a new user
+    const patient = new Patient({
+        user: userID,
+        generalProfile: {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email
+        },
+        address: req.body.address,
+        postalCode: req.body.postalCode,
+        HCN: req.body.HCN,
+        doctor: req.body.doctor
+    });
+
+    // Save the user
+    patient.save().then(patient => {
+        res.send(patient);
+    })
+    .catch((error) => {
+		if (isMongoError(error)) { // check for if mongo server suddenly disconnected before this request.
+			res.status(500).send('Internal server error')
+		} else {
+			res.status(400).send('Bad Request')
+		}
+	})
 });
 
 /** Doctor routes below **/
+
+// A route to make a new doctor (can be called when new user made)
+app.post("/api/doctors", mongoChecker, (req, res) => {
+    const userID = req.body.userID;
+
+    // Create a new user
+    const doctor = new Doctor({
+        user: userID,
+        generalProfile: {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email
+        },
+        MID: req.body.MID,
+        institutionID: req.body.institutionID
+    });
+
+    // Save the user
+    doctor.save().then(doctor => {
+        res.send(doctor);
+    })
+    .catch((error) => {
+		if (isMongoError(error)) { // check for if mongo server suddenly disconnected before this request.
+			res.status(500).send('Internal server error')
+		} else {
+			res.status(400).send('Bad Request')
+		}
+	})
+});
 
 // A route to get the doctor document given the doctor's id
 app.get("/api/doctors/:id", mongoChecker, authenticate, (req, res) => {
@@ -280,6 +335,30 @@ app.get("/api/doctors/:id", mongoChecker, authenticate, (req, res) => {
 });
 
 /** Institution routes below **/
+
+// A route to make a new institution (can be called when new user made)
+app.post("/api/institutions", mongoChecker, (req, res) => {
+    // Create a new institution
+    const institution = new Institution({
+        name: req.body.name,
+        address: req.body.address,
+        postalCode: req.body.postalCode,
+        phoneNumber: req.body.phoneNumber
+    });
+
+    // Save the user
+    institution.save().then(institution => {
+        res.send(institution);
+    })
+    .catch((error) => {
+		if (isMongoError(error)) { // check for if mongo server suddenly disconnected before this request.
+			res.status(500).send('Internal server error')
+		} else {
+            console.log(error);
+			res.status(400).send('Bad Request')
+		}
+	})
+});
 
 // A route to get the institution document given the institution's id
 app.get("/api/institutions/:id", mongoChecker, authenticate, (req, res) => {
