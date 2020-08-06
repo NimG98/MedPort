@@ -84,6 +84,7 @@ app.post("/api/users/login", mongoChecker, (req, res) => {
             // We can check later if this exists to ensure we are logged in.
             req.session.user = user._id;
             req.session.username = user.username;
+            req.session.userType = user.userType
             res.send({ loggedInUser: user.username, userType: user.userType });
         })
         .catch(error => {
@@ -111,7 +112,7 @@ app.get("/api/users/logout", (req, res) => {
 // A route to check if a user is logged in on the session cookie
 app.get("/api/users/check-session", (req, res) => {
     if (req.session.user) {
-        res.send({ loggedInUser: req.session.username });
+        res.send({ loggedInUser: req.session.username, userType: req.session.userType});
     } else {
         res.status(401).send();
     }

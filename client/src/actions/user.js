@@ -40,7 +40,7 @@ export const readCookie = (app) => {
         })
         .then(json => {
             if (json && json.loggedInUser) {
-                app.setState({ loggedInUser: json.loggedInUser });
+                app.setState({ loggedInUser: json.loggedInUser, userType: json.userType });
             }
         })
         .catch(error => {
@@ -71,7 +71,7 @@ export const login = (loginComp, app) => {
     });
 
     // Send the request with fetch()
-    fetch(request)
+    return fetch(request)
         .then(res => {
             if (res.status === 200) {
                 return res.json();
@@ -80,9 +80,13 @@ export const login = (loginComp, app) => {
         .then(json => {
             if (json.loggedInUser !== undefined) {
                 app.setState({ loggedInUser: json.loggedInUser, userType: json.userType });
+                loginComp.displayInvalidCredentials(false);
+            } else {
+                loginComp.displayInvalidCredentials(true);
             }
         })
         .catch(error => {
+            loginComp.displayInvalidCredentials(true);
             console.log(error);
         });
 };

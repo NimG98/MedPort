@@ -35,16 +35,10 @@ class LoginForm extends React.Component {
         updateLoginForm(this, {name: "username", value: username});
         updateLoginForm(this, {name: "password", value: password});
         login(this, this.props.appComponent);
-        //const isValid = validateLogin(this.props.appComponent, username, password);
-        const isValid = this.props.appComponent.state.loggedInUser ? true : false;
-    
-        if(!isValid){
-            this.displayInvalidCredentials();
-        }
       }
 
-    displayInvalidCredentials() {
-        this.setState({ displayInvalid: true });
+    displayInvalidCredentials(displayInvalid) {
+        this.setState({ displayInvalid });
     }
     
     render() {
