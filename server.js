@@ -277,6 +277,7 @@ app.post("/api/patients", mongoChecker, (req, res) => {
 		if (isMongoError(error)) { // check for if mongo server suddenly disconnected before this request.
 			res.status(500).send('Internal server error')
 		} else {
+            console.log(error);
 			res.status(400).send('Bad Request')
 		}
 	})
@@ -308,6 +309,7 @@ app.post("/api/doctors", mongoChecker, (req, res) => {
 		if (isMongoError(error)) { // check for if mongo server suddenly disconnected before this request.
 			res.status(500).send('Internal server error')
 		} else {
+            console.log(error);
 			res.status(400).send('Bad Request')
 		}
 	})
