@@ -6,5 +6,6 @@ export const ApiRoutes = {
     checkSession: baseUrl + '/api/users/check-session',
     logout: baseUrl + '/api/users/logout',
     createUser: baseUrl + "/api/users",
-    profile: baseUrl + "/api/profile/"
+    profile: baseUrl + "/api/profile/",
+    doctorById: baseUrl + "/api/doctors/"
 }

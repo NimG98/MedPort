@@ -1,8 +1,10 @@
 // Functions to help with doctor actions.
 
+import { ApiRoutes } from "../constants/apiRoutes";
+
 /* Returns the doctor document info when given doctorID */
 export const getDoctorByID = (doctorID, callback) => {
-    const url = "/api/doctors/" + doctorID;
+    const url = ApiRoutes.doctorById + doctorID;
 
     fetch(url)
         .then(res => {
