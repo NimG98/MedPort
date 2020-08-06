@@ -6,6 +6,7 @@ import "./styles.css";
 
 import { getUserProfileImageUrl } from '../../actions/app';
 import { redirect } from '../../actions/router';
+import { logout } from '../../actions/user';
 
 class ProfileDropdown extends React.Component {
 
@@ -27,8 +28,8 @@ class ProfileDropdown extends React.Component {
     
 
     logout() {
-        this.props.appComponent.setState( {loggedInUser: null} );
-        redirect(this, '/');
+        this.props.history.push("/");
+        logout(this.props.appComponent);
     }
 
     goToProfile() {
