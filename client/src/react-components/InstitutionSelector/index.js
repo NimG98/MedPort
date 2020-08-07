@@ -4,7 +4,7 @@ import { uid } from 'react-uid';
 import './styles.css';
 
 // importing actions/required methods
-import { getInstitutions } from "../../actions/app";
+import { getInstitutions } from "../../actions/institution";
 
 // importing form validators
 import { validateInstitutionID } from "../../validators/form-validators";

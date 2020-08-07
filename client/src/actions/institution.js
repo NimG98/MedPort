@@ -43,15 +43,16 @@ export const addInstitution = (institution) => {
 	// making the request to the server
 	fetch(request)
 	.then(res => {
+		// parse json
 		if (res.status === 200) {
 			return res.json();
 		}
-	})
-	.then(institutionInfo => {
+	}).then(institutionInfo => {
+		// return institution id
 		return institutionInfo._id;
-	})
-	.catch(error => {
-		
+	}).catch(error => {
+		// log error
+		console.log(error);
 	});
 }
 
@@ -59,6 +60,18 @@ export const addInstitution = (institution) => {
 	Returns a list of institutions obtained from the server
 */
 export const getInstitutions = () => {
-	// code below requires server call
-	return MOCK_INSTITUTIONS;
+	const url = "/api/institutions"
+	
+	fetch(url).then(res => {
+		// parse json
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(institutions => {
+		// return list of institutions
+		return institutions;
+	}).catch(error => {
+		// log error
+		console.log(error);
+	});
 };

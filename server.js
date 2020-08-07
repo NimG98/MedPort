@@ -362,6 +362,21 @@ app.post("/api/institutions", mongoChecker, (req, res) => {
 	})
 });
 
+app.get("/api/institutions", mongoChecker, (req, res) => {
+	
+	Institution.find().then(institutions => {
+		
+		res.send(institutions);
+		
+	}).catch(error => {
+		
+		log(error);
+		res.status(500).send("Internal Server Error");
+		
+	});
+	
+});
+
 // A route to get the institution document given the institution's id
 app.get("/api/institutions/:id", mongoChecker, authenticate, (req, res) => {
     const institutionId = req.params.id;
