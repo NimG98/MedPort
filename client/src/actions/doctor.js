@@ -24,3 +24,35 @@ export const getDoctorByID = (doctorID, callback) => {
             console.log(error);
         });
 }
+
+/* 
+	submits new doctor information to server for account creation
+*/
+export const addDoctor = (doctor) => {
+	const url = ApiRoutes.doctor;
+	
+	// creating the request
+	const request = new Request(url, {
+		method: "post",
+		body: JSON.stringify(doctor),
+		headers: {
+			"Accept": "application/json, text/plain, */*",
+			"Content-Type": "application/json"
+		},
+	});
+	
+	// making the request to the server
+	fetch(request)
+	.then(res => {
+		// parse json
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(doctorInfo => {
+		// return newly created doctor object
+		return doctorInfo;
+	}).catch(error => {
+		// log error
+		console.log(error);
+	});
+};

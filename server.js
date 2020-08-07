@@ -287,32 +287,51 @@ app.post("/api/patients", mongoChecker, (req, res) => {
 
 // A route to make a new doctor (can be called when new user made)
 app.post("/api/doctors", mongoChecker, (req, res) => {
-    const userID = req.body.userID;
-
-    // Create a new user
-    const doctor = new Doctor({
-        user: userID,
-        generalProfile: {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email
-        },
-        MID: req.body.MID,
-        institutionID: req.body.institutionID
-    });
-
-    // Save the user
-    doctor.save().then(doctor => {
-        res.send(doctor);
-    })
-    .catch((error) => {
-		if (isMongoError(error)) { // check for if mongo server suddenly disconnected before this request.
-			res.status(500).send('Internal server error')
+	
+	// create a new user
+	const user = new User({
+		username: req.body.username,
+		password: req.body.password,
+		userType: "doctor"
+	});
+	
+	// save the user
+	user.save().then(user => {
+		// Create a new doctor
+		const doctor = new Doctor({
+			user: user._id,
+			generalProfile: {
+				firstName: req.body.firstName,
+				lastName: req.body.lastName,
+				email: req.body.email
+			},
+			MID: req.body.MID,
+			institutionID: req.body.institutionID
+		});
+		
+		// save the doctor
+		doctor.save().then(doctor => {
+			res.send(doctor);
+		}).catch(error => {
+			// check for if mongo server suddenly disconnected before this request.
+			if (isMongoError(error)) { 
+				res.status(500).send('Internal Server Error')
+			} else {
+				console.log(error);
+				res.status(400).send('Bad Request')
+			}
+		});
+		
+	}).catch(error => {
+		// check for if mongo server suddenly disconnected before this request.
+		if (isMongoError(error)) { 
+			res.status(500).send('Internal Server Error')
 		} else {
             console.log(error);
 			res.status(400).send('Bad Request')
 		}
-	})
+	});
+
 });
 
 // A route to get the doctor document given the doctor's id

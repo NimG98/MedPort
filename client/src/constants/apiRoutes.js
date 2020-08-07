@@ -1,5 +1,5 @@
-export const baseUrl = 'http://localhost:5000'; // LEAVE THIS UNCOMMENTED
-// export const baseUrl = '';
+// export const baseUrl = 'http://localhost:5000'; // LEAVE THIS UNCOMMENTED
+export const baseUrl = '';
 export const ApiRoutes = {
     login: baseUrl + '/api/users/login',
     getUserType: baseUrl  +'/api/users/userType/',
@@ -9,4 +9,5 @@ export const ApiRoutes = {
     profile: baseUrl + "/api/profile/",
     doctorById: baseUrl + "/api/doctors/",
 	institution: baseUrl + '/api/institutions',
+	doctor: baseUrl + '/api/doctors',
 }
