@@ -289,26 +289,26 @@ app.post("/api/patients", mongoChecker, (req, res) => {
 app.post("/api/doctors", mongoChecker, (req, res) => {
 	
 	// create a new user
-	const user = new User({
+	const newUser = new User({
 		username: req.body.username,
 		password: req.body.password,
 		userType: "doctor"
 	});
 	
+	// Create a new doctor
+	const doctor = new Doctor({
+		user: newUser._id,
+		generalProfile: {
+			firstName: req.body.firstName,
+			lastName: req.body.lastName,
+			email: req.body.email
+		},
+		MID: req.body.MID,
+		institutionID: req.body.institutionID
+	});
+	
 	// save the user
-	user.save().then(user => {
-		// Create a new doctor
-		const doctor = new Doctor({
-			user: user._id,
-			generalProfile: {
-				firstName: req.body.firstName,
-				lastName: req.body.lastName,
-				email: req.body.email
-			},
-			MID: req.body.MID,
-			institutionID: req.body.institutionID
-		});
-		
+	newUser.save().then(user => {
 		// save the doctor
 		doctor.save().then(doctor => {
 			res.send(doctor);
