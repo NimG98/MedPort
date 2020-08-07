@@ -254,28 +254,53 @@ app.get("/api/profile/:username", mongoChecker, authenticate, (req, res) => {
 
 /** Referral routes below **/
 
+// returns a newly created referral
 app.get("/api/referrals", mongoChecker, authenticate, (req, res) => {
 	
 	// find doctor that made request
 	Doctor.findOne({ user: req.user._id }).then(doctor => {
-		// create new referral
-		const referral = new Referral({
-			code: generateReferralCode(),
-			doctorID: doctor._id
-		});
-		
-		// save the referral
-		referral.save().then(referral => {
-			res.send(referral);
-		}).catch(error => {
-			res.status(500).send('Internal server error');
-			return;
-		});
+		if (!doctor) {
+			// user is not a doctor
+			res.status(401).send("Unauthorized");
+		} else {
+			// create new referral
+			const referral = new Referral({
+				code: generateReferralCode(),
+				doctorID: doctor._id
+			});
+			
+			// save the referral
+			referral.save().then(referral => {
+				res.send(referral);
+			}).catch(error => {
+				log(error);
+				res.status(500).send('Internal server error');
+				return;
+			});
+		}
 	}).catch(error => {
+		log(error);
 		res.status(500).send('Internal server error');
 		return;
 	});
 	
+});
+
+// verifies referral code and return referrerID
+app.post("/api/referrals", mongoChecker, (req, res) => {
+	const refCode = req.body.code;
+	
+	Referral.findOne({ code: refCode }).then(referral => {
+		if(!referral) {
+			res.status(404).send("Resource not found");
+		} else {
+            res.send(referral.doctorID);
+        }
+	}).catch(error => {
+		log(error);
+		res.status(500).send('Internal server error');
+		return;
+	});
 });
 
 /** Patient routes below **/
