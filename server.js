@@ -362,17 +362,15 @@ app.post("/api/institutions", mongoChecker, (req, res) => {
 	})
 });
 
+// A route to get a list of all institutions 
 app.get("/api/institutions", mongoChecker, (req, res) => {
 	
+	// query for all institutions
 	Institution.find().then(institutions => {
-		
 		res.send(institutions);
-		
 	}).catch(error => {
-		
 		log(error);
 		res.status(500).send("Internal Server Error");
-		
 	});
 	
 });
