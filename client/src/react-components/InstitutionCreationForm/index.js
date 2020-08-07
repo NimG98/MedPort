@@ -3,7 +3,7 @@ import React from "react";
 import "./styles.css";
 
 // importing actions/required methods
-import { addInstitution } from "../../actions/app";
+import { addInstitution } from "../../actions/institution";
 
 // import form validators
 import { validateName, validateAddress, validatePostalCode, validatePhoneNumber } from "../../validators/form-validators";
