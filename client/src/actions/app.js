@@ -32,25 +32,6 @@ export const getInstitutionInfo = (institutionID) => {
 	}
 }
 
-/* 
-	submits new patient information to server for account creation
-	Note: submits patient's used referral code as well
-*/
-export const addPatient = (patient, code) => {
-	// code below requires server call
-	return true;
-};
-
-/* 
-	Submits referral code to server and gets a refferrerID on success
- */
-export const submitReferralCode = (code) => {
-	// code below requires server call
-	const refferrerID = MOCK_REFERRALS[code];
-	
-	return refferrerID;
-}
-
 /*
 	checks if username already exists on server
 	returns true iff username exists, otherwise returns false

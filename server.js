@@ -306,34 +306,57 @@ app.post("/api/referrals", mongoChecker, (req, res) => {
 /** Patient routes below **/
 // A route to make a new patient (can be called when new user made)
 app.post("/api/patients", mongoChecker, (req, res) => {
-    const userID = req.body.userID;
-
-    // Create a new user
-    const patient = new Patient({
-        user: userID,
-        generalProfile: {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email
-        },
-        address: req.body.address,
-        postalCode: req.body.postalCode,
-        HCN: req.body.HCN,
-        doctor: req.body.doctor
-    });
-
-    // Save the user
-    patient.save().then(patient => {
-        res.send(patient);
-    })
-    .catch((error) => {
-		if (isMongoError(error)) { // check for if mongo server suddenly disconnected before this request.
-			res.status(500).send('Internal server error')
+    // create a new user
+	const newUser = new User({
+		username: req.body.patient.username,
+		password: req.body.patient.password,
+		userType: "patient"
+	});
+	
+	// Create a new doctor
+	const patient = new Patient({
+		user: newUser._id,
+		generalProfile: {
+			firstName: req.body.patient.firstName,
+			lastName: req.body.patient.lastName,
+			email: req.body.patient.email
+		},
+		address: req.body.patient.address,
+		postalCode: req.body.patient.postalCode,
+		HCN: req.body.patient.HCN,
+		doctor: req.body.patient.doctorID
+	});
+	
+	// save the user
+	newUser.save().then(user => {
+		// save the patient
+		patient.save().then(patient => {
+			// delete referral code
+			Referral.findOneAndRemove({ code: req.body.code }).then(code => {
+				res.send(patient);
+			}).catch(error => {
+				log(error);
+				res.status(500).send("Internal Server Error")
+			})
+		}).catch(error => {
+			// check for if mongo server suddenly disconnected before this request.
+			if (isMongoError(error)) { 
+				res.status(500).send('Internal Server Error')
+			} else {
+				log(error);
+				res.status(400).send('Bad Request')
+			}
+		});
+		
+	}).catch(error => {
+		// check for if mongo server suddenly disconnected before this request.
+		if (isMongoError(error)) { 
+			res.status(500).send('Internal Server Error')
 		} else {
             console.log(error);
 			res.status(400).send('Bad Request')
 		}
-	})
+	});
 });
 
 /** Doctor routes below **/

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import "./styles.css";
 
 // importing actions/required methods
-import { addPatient } from "../../actions/app";
+import { addPatient } from "../../actions/patient";
 import { redirect } from "../../actions/router";
 
 // import form validators
