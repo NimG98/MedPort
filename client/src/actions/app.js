@@ -12,6 +12,14 @@ import { MOCK_ADMIN_PATIENTS } from "../mock-data/mock";
 import { UserType } from "../constants/userType";
 
 /* 
+	Returns a list of institutions obtained from the server
+*/
+export const getInstitutions = () => {
+	// code below requires server call
+	return MOCK_INSTITUTIONS;
+};
+
+/* 
 	Returns the info of an institution based on institutionID
  */
 export const getInstitutionInfo = (institutionID) => {
