@@ -12,22 +12,6 @@ import { MOCK_ADMIN_PATIENTS } from "../mock-data/mock";
 import { UserType } from "../constants/userType";
 
 /* 
-	submits new doctor information to server for account creation
-*/
-export const addDoctor = (doctor) => {
-	// code below requires server call
-	return true;
-};
-
-/* 
-	Returns a list of institutions obtained from the server
-*/
-export const getInstitutions = () => {
-	// code below requires server call
-	return MOCK_INSTITUTIONS;
-};
-
-/* 
 	Returns the info of an institution based on institutionID
  */
 export const getInstitutionInfo = (institutionID) => {
@@ -38,15 +22,6 @@ export const getInstitutionInfo = (institutionID) => {
 			return allInstitutions[institution];
 		}
 	}
-}
-
-/* 
-	submits new institution information to server for account creation.
-	Note: returns newly created institution's ID on success
-*/
-export const addInstitution = (institution) => {
-	// code below requires server call
-	return 3;
 }
 
 /* 
