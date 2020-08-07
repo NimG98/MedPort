@@ -17,6 +17,7 @@ const { User } = require("./models/user");
 const { Patient } = require("./models/patient");
 const { Doctor } = require("./models/doctor");
 const { Institution } = require("./models/institution");
+const { Referral } = require("./models/referral");
 
 // to validate object IDs
 const { ObjectID } = require("mongodb");
@@ -33,6 +34,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 function isMongoError(error) { // checks for first error returned by promise rejection if Mongo database suddently disconnects
 	return typeof error === 'object' && error !== null && error.name === "MongoNetworkError"
 }
+
+const { generateReferralCode } = require('./helpers/referral');
 
 /* // Our own express middleware to check for
 // an active user on the session cookie (indicating a logged in user.)
@@ -123,7 +126,6 @@ app.get("/api/users/check-session", (req, res) => {
 /*** API Routes below ************************************/
 // NOTE: The JSON routes are not protected in this react server (no authentication required). 
 //       You can (and should!) add this using similar middleware techniques we used in lecture.
-
 
 /** User routes below **/
 // Set up a POST route to *create* a user of your web app.
@@ -248,6 +250,32 @@ app.get("/api/profile/:username", mongoChecker, authenticate, (req, res) => {
         res.status(500).send("Internal Server Error");
     })
 
+});
+
+/** Referral routes below **/
+
+app.get("/api/referrals", mongoChecker, authenticate, (req, res) => {
+	
+	// find doctor that made request
+	Doctor.findOne({ user: req.user._id }).then(doctor => {
+		// create new referral
+		const referral = new Referral({
+			code: generateReferralCode(),
+			doctorID: doctor._id
+		});
+		
+		// save the referral
+		referral.save().then(referral => {
+			res.send(referral);
+		}).catch(error => {
+			res.status(500).send('Internal server error');
+			return;
+		});
+	}).catch(error => {
+		res.status(500).send('Internal server error');
+		return;
+	});
+	
 });
 
 /** Patient routes below **/
