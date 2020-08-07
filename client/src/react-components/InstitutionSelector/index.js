@@ -34,10 +34,11 @@ class InstitutionSelector extends React.Component {
 	}
 	
 	componentDidMount() {
-		const data = getInstitutions();
-		
-		this.setState({
-			institutions: data
+		// a promise
+		getInstitutions().then(data => {
+			this.setState({
+				institutions: data
+			});
 		});
 	}
 	

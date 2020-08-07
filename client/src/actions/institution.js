@@ -61,10 +61,11 @@ export const addInstitution = (institution) => {
 /* 
 	Returns a list of institutions obtained from the server
 */
-export const getInstitutions = () => {
+export const getInstitutions = async () => {
 	const url = ApiRoutes.institution;
 	
-	fetch(url).then(res => {
+	// return a promise
+	return fetch(url).then(res => {
 		// parse json
 		if (res.status === 200) {
 			return res.json();
