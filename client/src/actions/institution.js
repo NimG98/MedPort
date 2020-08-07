@@ -1,5 +1,7 @@
 // Functions to help with institution actions.
 
+import { ApiRoutes } from "../constants/apiRoutes";
+
 /* Returns the institution's info when given institutionID */
 export const getInstitutionInfo = (institutionID, callback) => {
     const url = "/api/institutions/" + institutionID;
@@ -28,10 +30,10 @@ export const getInstitutionInfo = (institutionID, callback) => {
 	Note: returns newly created institution's ID on success
 */
 export const addInstitution = (institution) => {
-	const url = "/api/institutions"
+	const url = ApiRoutes.institution;
 	
 	// creating the request
-	const request = new Request(url {
+	const request = new Request(url, {
 		method: "post",
 		body: JSON.stringify(institution),
 		headers: {
@@ -60,7 +62,7 @@ export const addInstitution = (institution) => {
 	Returns a list of institutions obtained from the server
 */
 export const getInstitutions = () => {
-	const url = "/api/institutions"
+	const url = ApiRoutes.institution;
 	
 	fetch(url).then(res => {
 		// parse json

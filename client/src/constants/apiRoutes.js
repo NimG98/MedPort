@@ -8,4 +8,5 @@ export const ApiRoutes = {
     createUser: baseUrl + "/api/users",
     profile: baseUrl + "/api/profile/",
     doctorById: baseUrl + "/api/doctors/"
+	institution: baseUrl + '/api/institutions',
 }

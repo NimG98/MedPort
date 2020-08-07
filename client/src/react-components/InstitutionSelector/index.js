@@ -71,7 +71,7 @@ class InstitutionSelector extends React.Component {
 							{this.state.institutions.map(institution => (
 								<option 
 									key={uid(institution)} 
-									value={institution.id}>
+									value={institution._id}>
 									{institution.name}
 								</option>
 							))}
