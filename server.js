@@ -309,8 +309,8 @@ app.post("/api/referrals", mongoChecker, (req, res) => {
 app.post("/api/patients", mongoChecker, (req, res) => {
     // create a new user
 	const newUser = new User({
-		username: req.body.patient.username,
-		password: req.body.patient.password,
+		username: req.body.username,
+		password: req.body.password,
 		userType: "patient"
 	});
 	
@@ -318,14 +318,14 @@ app.post("/api/patients", mongoChecker, (req, res) => {
 	const patient = new Patient({
 		user: newUser._id,
 		generalProfile: {
-			firstName: req.body.patient.firstName,
-			lastName: req.body.patient.lastName,
-			email: req.body.patient.email
+			firstName: req.body.firstName,
+			lastName: req.body.lastName,
+			email: req.body.email
 		},
-		address: req.body.patient.address,
-		postalCode: req.body.patient.postalCode,
-		HCN: req.body.patient.HCN,
-		doctor: req.body.patient.doctorID
+		address: req.body.address,
+		postalCode: req.body.postalCode,
+		HCN: req.body.HCN,
+		doctor: req.body.doctorID
 	});
 	
 	// save the user

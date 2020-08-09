@@ -2,17 +2,14 @@ import { ApiRoutes } from '../constants/apiRoutes';
 
 /* 
 	submits new patient information to server for account creation
-	Note: submits patient's used referral code as well
 */
-export const addPatient = (patient, code) => {
+export const addPatient = (patient) => {
 	const url = ApiRoutes.patient;
 	
 	// creating the request
 	const request = new Request(url, {
 		method: "post",
-		body: JSON.stringify({ patient: patient, 
-							   code: code 
-							}),
+		body: JSON.stringify(patient),
 		headers: {
 			"Accept": "application/json, text/plain, */*",
 			"Content-Type": "application/json"

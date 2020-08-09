@@ -211,9 +211,12 @@ class PatientSignUpForm extends React.Component {
 		if (valid) {
 			const patient = this.createPatient();
 			
-			const success = addPatient(patient, this.props.code);
+			addPatient(patient).then(patient => {
+				this.props.submit();
+			}).catch(error => {
+				console.log(error);
+			});
 			
-			this.props.submit();
 		}
 	}
 	
