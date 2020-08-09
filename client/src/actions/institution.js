@@ -43,7 +43,8 @@ export const addInstitution = (institution) => {
 	});
 	
 	// making the request to the server
-	fetch(request)
+	// returns a promise
+	return fetch(request)
 	.then(res => {
 		// parse json
 		if (res.status === 200) {

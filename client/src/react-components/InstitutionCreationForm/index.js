@@ -141,10 +141,13 @@ class InstitutionCreationForm extends React.Component {
 			const institution = this.createInstitution();
 			
 			// server call - returns institution id
-			const institutionID = addInstitution(institution);
+			addInstitution(institution).then(institutionID => {
+				// invoke submission in parent component
+				this.props.submit(institutionID);
+			}).catch(error => {
+				console.log(error);
+			})
 			
-			// invoke submission in parent component
-			this.props.submit(institutionID);
 		}
 	}
 	
