@@ -255,6 +255,7 @@ app.get("/api/profile/:username", mongoChecker, authenticate, (req, res) => {
 /** Referral routes below **/
 
 // returns a newly created referral
+/* Depricated - referrals are instead created on doctor creation */
 app.get("/api/referrals", mongoChecker, authenticate, (req, res) => {
 	
 	// find doctor that made request
@@ -286,7 +287,7 @@ app.get("/api/referrals", mongoChecker, authenticate, (req, res) => {
 	
 });
 
-// verifies referral code and return referrerID
+// verifies referral code and returns referrerID
 app.post("/api/referrals", mongoChecker, (req, res) => {
 	const refCode = req.body.code;
 	
@@ -304,7 +305,7 @@ app.post("/api/referrals", mongoChecker, (req, res) => {
 });
 
 /** Patient routes below **/
-// A route to make a new patient (can be called when new user made)
+// A route to make a new patient
 app.post("/api/patients", mongoChecker, (req, res) => {
     // create a new user
 	const newUser = new User({
@@ -313,7 +314,7 @@ app.post("/api/patients", mongoChecker, (req, res) => {
 		userType: "patient"
 	});
 	
-	// Create a new doctor
+	// Create a new patient
 	const patient = new Patient({
 		user: newUser._id,
 		generalProfile: {
@@ -331,29 +332,24 @@ app.post("/api/patients", mongoChecker, (req, res) => {
 	newUser.save().then(user => {
 		// save the patient
 		patient.save().then(patient => {
-			// delete referral code
-			Referral.findOneAndRemove({ code: req.body.code }).then(code => {
-				res.send(patient);
-			}).catch(error => {
-				log(error);
-				res.status(500).send("Internal Server Error")
-			})
+			res.send(patient);
 		}).catch(error => {
 			// check for if mongo server suddenly disconnected before this request.
 			if (isMongoError(error)) { 
+				log(error);
 				res.status(500).send('Internal Server Error')
 			} else {
 				log(error);
 				res.status(400).send('Bad Request')
 			}
 		});
-		
 	}).catch(error => {
 		// check for if mongo server suddenly disconnected before this request.
 		if (isMongoError(error)) { 
+			log(error);
 			res.status(500).send('Internal Server Error')
 		} else {
-            console.log(error);
+            log(error);
 			res.status(400).send('Bad Request')
 		}
 	});
@@ -361,7 +357,7 @@ app.post("/api/patients", mongoChecker, (req, res) => {
 
 /** Doctor routes below **/
 
-// A route to make a new doctor (can be called when new user made)
+// A route to make a new doctor
 app.post("/api/doctors", mongoChecker, (req, res) => {
 	
 	// create a new user
@@ -383,27 +379,41 @@ app.post("/api/doctors", mongoChecker, (req, res) => {
 		institutionID: req.body.institutionID
 	});
 	
+	// create new referral
+	const referral = new Referral({
+		code: generateReferralCode(),
+		doctorID: doctor._id
+	});
+	
 	// save the user
 	newUser.save().then(user => {
 		// save the doctor
 		doctor.save().then(doctor => {
-			res.send(doctor);
+			// save the doctor's referral object
+			referral.save().then(referral => {
+				res.send(doctor);
+			}).catch(error => {
+				log(error);
+				res.status(500).send("Internal Server Error");
+			});
 		}).catch(error => {
 			// check for if mongo server suddenly disconnected before this request.
-			if (isMongoError(error)) { 
+			if (isMongoError(error)) {
+				log(error);
 				res.status(500).send('Internal Server Error')
 			} else {
-				console.log(error);
+				log(error);
 				res.status(400).send('Bad Request')
 			}
 		});
 		
 	}).catch(error => {
 		// check for if mongo server suddenly disconnected before this request.
-		if (isMongoError(error)) { 
+		if (isMongoError(error)) {
+			log(error);
 			res.status(500).send('Internal Server Error')
 		} else {
-            console.log(error);
+            log(error);
 			res.status(400).send('Bad Request')
 		}
 	});
