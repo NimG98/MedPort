@@ -13,7 +13,7 @@ import uploadPlusImage from './static/opaque-upload-profile.png';
 import editProfileImagePencil from './static/pencil-edit-icon.png';
 
 import { getUserProfileImageUrl } from '../../actions/app';
-import { getUserType, getUserProfileInfo } from '../../actions/user';
+import { getUserType, getUserProfileInfo, updateUserProfileInfo } from '../../actions/user';
 import { getDoctorByID } from '../../actions/doctor';
 import { getInstitutionInfo } from '../../actions/institution';
 import { UserType } from '../../constants/userType';
@@ -25,6 +25,7 @@ class Profile extends React.Component {
 
         this.setDoctorInfo = this.setDoctorInfo.bind(this);
         this.setInstitutionInfo = this.setInstitutionInfo.bind(this);
+        this.updateUserProfileDetail = this.updateUserProfileDetail.bind(this);
 
         this.state = {
             user: this.props.appComponent.state.loggedInUser,
@@ -104,13 +105,13 @@ class Profile extends React.Component {
                     <Card className="profileInfoCard">
                         <ul>
                             {this.state.generalProfile && this.state.generalProfile.email &&
-                                <ProfileDetail detailName="Email" detailValue={this.state.generalProfile.email} isEditable={true}/>
+                                <ProfileDetail detailName="Email" detailValue={this.state.generalProfile.email} isEditable={true} detail="generalProfile.email" profileComponent={this}/>
                             }
                             {this.state.userType === UserType.patient && this.state.address && this.state.postalCode && this.state.HCN && this.state.doctor &&
                             this.state.doctor.firstName && this.state.doctor.lastName &&
                                 <div className="specificUserTypeDetails">
-                                    <ProfileDetail detailName="Address" detailValue={this.state.address} isEditable={true}/>
-                                    <ProfileDetail detailName="Postal Code" detailValue={this.state.postalCode} isEditable={true}/>
+                                    <ProfileDetail detailName="Address" detailValue={this.state.address} isEditable={true} detail="address" profileComponent={this}/>
+                                    <ProfileDetail detailName="Postal Code" detailValue={this.state.postalCode} isEditable={true} detail="postalCode" profileComponent={this}/>
                                     <ProfileDetail detailName="Health Card Number" detailValue={this.state.HCN} isEditable={false}/>
                                     <ProfileDetail detailName="Doctor" 
                                                    detailValue={this.state.doctor.firstName + " " + this.state.doctor.lastName}
@@ -137,6 +138,15 @@ class Profile extends React.Component {
                 </div>
             </div>
         );
+    }
+
+    updateUserProfileDetail(profileDetail, value) {
+        updateUserProfileInfo({name: profileDetail, value: value}, this).then( (profileInfoJson) => {
+            console.log(profileInfoJson);
+            console.log(this.state);
+            
+        })
+        // this.forceUpdate();
     }
 }
 export default withRouter(Profile);

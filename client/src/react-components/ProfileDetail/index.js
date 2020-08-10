@@ -28,7 +28,10 @@ class ProfileDetail extends React.Component {
         this.setState({ inEditMode: true });
     }
 
-    onPressEnter(){
+    onPressEnter(e){
+        this.props.profileComponent.updateUserProfileDetail(this.props.detail, this.detailValue);
+        this.detailValue = e.target.value;
+
         this.setState({ inEditMode: false });
     }
 

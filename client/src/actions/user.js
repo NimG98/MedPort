@@ -149,3 +149,36 @@ export const getUserProfileInfo = (username, callback, profileComponent) => {
             console.log(error);
         });
 }
+
+export const updateUserProfileInfo = (profileDetail, profileComponent) => {
+    const url = ApiRoutes.profile;
+
+    const request = new Request(url, {
+        method: "PATCH",
+        body: JSON.stringify(
+            { "op": "replace", "path": "/" + profileDetail.name, "value": profileDetail.value }
+        ),
+        headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json"
+        }
+    });
+
+    return fetch(request)
+        .then(res => {
+            if (res.status === 200) {
+                return res.json();
+            }
+        })
+        .then(profileInfoJson => {
+            if (profileInfoJson && profileInfoJson[profileDetail.name]) {
+                if(profileComponent){
+                    profileComponent.setState({ [profileDetail.name]: profileInfoJson[profileDetail.name] });
+                }
+                return profileInfoJson;
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}
