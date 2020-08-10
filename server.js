@@ -252,6 +252,24 @@ app.get("/api/profile/:username", mongoChecker, authenticate, (req, res) => {
 
 });
 
+// a route that checks if a given username already exists
+app.post("/api/users/check-username", mongoChecker, (req, res) => {
+	const username = req.body.username;
+	
+	User.findOne({ username: username }).then(user => {
+		if (!user) {
+			// username DNE
+			res.status(404).send("Resource not found");
+		} else {
+			// username exists
+			res.send("Username Exists");
+		}
+	}).catch(error => {
+		log(error);
+		res.status(500).send("Internal Server Error");
+	});
+});
+
 /** Referral routes below **/
 
 // returns a newly created referral
