@@ -42,7 +42,7 @@ export const addDoctor = (doctor) => {
 	});
 	
 	// making the request to the server
-	fetch(request)
+	return fetch(request)
 	.then(res => {
 		// parse json
 		if (res.status === 200) {

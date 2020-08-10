@@ -141,9 +141,13 @@ class DoctorSignUp extends React.Component {
 	submit() {
 		const doctor = this.createDoctor();
 		
-		const success = addDoctor(doctor);
+		addDoctor(doctor).then(doctorInfo => {
+			this.props.submit();
+		}).catch(error => {
+			console.log(error);
+		});
 		
-		this.props.submit();
+		
 		
 	}
 	
