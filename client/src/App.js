@@ -92,9 +92,9 @@ class App extends React.Component {
             <Route exact path='/admin/patients/:id' render={() =>
                 (<AdminPatientView appComponent={this} />)}/>
             <Route exact path='/results' render={() =>
-                (<Result appComponent={this} />)}/>
+                (<Result appComponent={this} />)}/> */}
             <Route exact path='/profile' render={() =>
-                (<Profile appComponent={this} />)}/> */}
+                (<Profile appComponent={this} />)}/>
 
             { /* 404 if URL isn't expected. */}
             <Route render={() => <div>404 Not found</div>} />
