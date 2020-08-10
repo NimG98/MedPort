@@ -39,6 +39,8 @@ class InstitutionSelector extends React.Component {
 			this.setState({
 				institutions: data
 			});
+		}).catch(error => {
+			console.log(error);
 		});
 	}
 	
