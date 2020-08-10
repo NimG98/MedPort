@@ -16,7 +16,8 @@ import {
 	validateHCN, 
 	validateEmail, 
 	validatePassword, 
-	validateUserName } from "../../validators/form-validators"; 
+	validateUserName,
+	validateUserNameAsync } from "../../validators/form-validators"; 
 
 class PatientSignUpForm extends React.Component {
 	
@@ -206,22 +207,23 @@ class PatientSignUpForm extends React.Component {
 		// prevents page reload
 		event.preventDefault(); 
 		
-		const valid = this.validate();
-		
-		if (valid) {
-			const patient = this.createPatient();
-			
-			addPatient(patient).then(patient => {
-				this.props.submit();
-			}).catch(error => {
-				console.log(error);
-			});
-			
-		}
+		this.validate().then(valid => {
+			if (valid) {
+				const patient = this.createPatient();
+				
+				addPatient(patient).then(patientInfo => {
+					this.props.submit();
+				}).catch(error => {
+					console.log(error);
+				});
+			}
+		}).catch(error => {
+			console.log(error);
+		});
 	}
 	
 	// validates inputs on submission
-	validate() {
+	async validate() {
 		
 		const valid = (
 			validateName('firstName', this.state.firstName, this.setError) &&
@@ -231,6 +233,7 @@ class PatientSignUpForm extends React.Component {
 			validateHCN('HCN', this.state.HCN, this.setError) &&
 			validateEmail('email', this.state.email, this.setError) &&
 			validateUserName('username', this.state.username, this.setError) &&
+			await validateUserNameAsync('username', this.state.username, this.setError) &&
 			validatePassword('password', this.state.password, this.setError));
 		
 		return valid;

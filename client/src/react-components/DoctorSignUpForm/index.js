@@ -4,7 +4,12 @@ import { Link } from "react-router-dom";
 import "./styles.css";
 
 // import form validators
-import { validateName, validateMID, validateEmail, validatePassword, validateUserName } from "../../validators/form-validators";
+import { validateName, 
+		 validateMID, 
+		 validateEmail, 
+		 validatePassword, 
+		 validateUserName, 
+		 validateUserNameAsync } from "../../validators/form-validators";
 
 class DoctorSignUpForm extends React.Component {
 	
@@ -136,15 +141,17 @@ class DoctorSignUpForm extends React.Component {
 		// prevents page reload
 		event.preventDefault();
 		
-		const valid = this.validate();
-		
-		if (valid) {
-			this.props.next();
-		}
+		this.validate().then(valid => {
+			if (valid) {
+				this.props.next();
+			}
+		}).catch(error => {
+			console.log(error);
+		});
 	}
 	
 	// validates inputs on submission
-	validate() {
+	async validate() {
 		
 		const valid = (
 			validateName('firstName', this.props.firstName, this.setError) &&
@@ -152,6 +159,7 @@ class DoctorSignUpForm extends React.Component {
 			validateMID('MID', this.props.MID, this.setError) &&
 			validateEmail('email', this.props.email, this.setError) &&
 			validateUserName('username', this.props.username, this.setError) &&
+			await validateUserNameAsync('username', this.props.username, this.setError) &&
 			validatePassword('password', this.props.password, this.setError));
 		
 		return valid;

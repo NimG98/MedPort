@@ -137,6 +137,7 @@ export const validateReferralCode = (referralCode, setError) => {
 	}
 }
 
+// validates the username field
 export const validateUserName = (fieldName, username, setError) => {
 	if (!isRequired(username)) {
 		setError(fieldName, true, 'Please fill out this field');
@@ -144,7 +145,18 @@ export const validateUserName = (fieldName, username, setError) => {
 	} else if (!isMinLength(username, 3)) {
 		setError(fieldName, true, 'Minimum 3 characters');
 		return false;
-	} else if (!isNewUserName(username)) {
+	} else {
+		setError(fieldName, false, '');
+		return true;
+	}
+}
+
+// applies asynchronous validators to the username field
+// Note: returns a promise.
+export const validateUserNameAsync = async (fieldName, username, setError) => {
+	const isNew = await isNewUserName(username);
+	
+	if (!isNew) {
 		setError(fieldName, true, 'Username already exists');
 		return false;
 	} else {
