@@ -41,7 +41,9 @@ class ProfileDropdown extends React.Component {
             <div className="profileDropdown">
                 <img alt="profileImageforLoggedInUser" className="userProfileImage" src={this.getUserProfileImage()}/>
                 <div className="dropdownContent">
-                    <Link className="profileLink" onClick={this.goToProfile} to="/profile">Profile</Link>
+                    {this.props.appComponent.state.userType !== "admin" &&
+                        <Link className="profileLink" onClick={this.goToProfile} to="/profile">Profile</Link>
+                    }
                     <Link className="logout" onClick={this.logout} to="/">Log out</Link>
                 </div>
             </div>
