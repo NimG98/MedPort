@@ -135,3 +135,34 @@ export const getUserProfileInfo = (username, callback) => {
             console.log(error);
         });
 }
+
+/*
+	checks if username already exists on server
+	returns true iff username exists, otherwise returns false
+*/
+export const checkUserName = (username) => {
+	// code below requires server call
+	const url = ApiRoutes.user + "/check-username";
+	
+	// creating the request
+	const request = new Request(url, {
+		method: "post",
+		body: JSON.stringify({ username: username }),
+		headers: {
+			"Accept": "application/json, text/plain, */*",
+			"Content-Type": "application/json"
+		},
+	});
+	
+	return fetch(request).then(res => {
+		if (res.status === 200) {
+			// username exists
+			return true;
+		} else if (res.status === 404) {
+			// username DNE
+			return false;
+		}
+	}).catch(error => {
+		console.log(error);
+	});
+}

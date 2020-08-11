@@ -3,7 +3,7 @@ import React from "react";
 import "./styles.css";
 
 // importing actions/required methods
-import { addInstitution } from "../../actions/app";
+import { addInstitution } from "../../actions/institution";
 
 // import form validators
 import { validateName, validateAddress, validatePostalCode, validatePhoneNumber } from "../../validators/form-validators";
@@ -141,10 +141,13 @@ class InstitutionCreationForm extends React.Component {
 			const institution = this.createInstitution();
 			
 			// server call - returns institution id
-			const institutionID = addInstitution(institution);
+			addInstitution(institution).then(institutionID => {
+				// invoke submission in parent component
+				this.props.submit(institutionID);
+			}).catch(error => {
+				console.log(error);
+			})
 			
-			// invoke submission in parent component
-			this.props.submit(institutionID);
 		}
 	}
 	

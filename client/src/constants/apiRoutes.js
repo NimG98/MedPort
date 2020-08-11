@@ -7,5 +7,10 @@ export const ApiRoutes = {
     logout: baseUrl + '/api/users/logout',
     createUser: baseUrl + "/api/users",
     profile: baseUrl + "/api/profile/",
-    doctorById: baseUrl + "/api/doctors/"
+    doctorById: baseUrl + "/api/doctors/",
+	institution: baseUrl + '/api/institutions',
+	doctor: baseUrl + '/api/doctors',
+	referral: baseUrl + '/api/referrals',
+	patient: baseUrl + '/api/patients',
+	user: baseUrl + '/api/users',
 }
