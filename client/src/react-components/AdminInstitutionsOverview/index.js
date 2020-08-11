@@ -7,7 +7,7 @@ import "./styles.css";
 import 'antd/dist/antd.css';
 
 // importing actions/required methods
-import { getInstitutions, deleteInstitution } from "../../actions/app";
+import { getInstitutions, deleteInstitution } from "../../actions/institution";
 import { redirect } from "../../actions/router"
 
 // importing components
@@ -18,11 +18,12 @@ class AdminInstitutionsOverview extends React.Component {
 	headers = ["Name", "Address", "Postal Code", "Phone Number"];
 	
 	componentDidMount() {
-		const data = getInstitutions();
-		
-		
-		this.setState({
-			institutions: data
+		getInstitutions().then(data => {
+			this.setState({
+				institutions: data
+			});
+		}).catch(error => {
+			console.log(error);
 		});
 	}
 	
@@ -100,13 +101,13 @@ class AdminInstitutionsOverview extends React.Component {
 					<td>{institution.phoneNumber}</td>
 					<td><Button
 							type="primary"
-							onClick={() => {redirect(this, "/admin/institutions/" + institution.id)}}
+							onClick={() => {redirect(this, "/admin/institutions/" + institution._id)}}
 						>View</Button>
 					</td>
 					<td>
 						<Button 
 							type="danger"
-							onClick={() => {this.removeInstitution(institution.id)}}
+							onClick={() => {this.removeInstitution(institution._id)}}
 						>Delete</Button>
 					</td>
 				</tr>
@@ -123,7 +124,7 @@ class AdminInstitutionsOverview extends React.Component {
 		
 		if (success) {
 			// delete Institution
-			const filtered = this.state.institutions.filter(institution => institution.id !== institutionID);
+			const filtered = this.state.institutions.filter(institution => institution._id !== institutionID);
 			
 			this.setState({
 				institutions: filtered

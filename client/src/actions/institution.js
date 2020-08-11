@@ -79,3 +79,12 @@ export const getInstitutions = async () => {
 		console.log(error);
 	});
 };
+
+/*
+	sends server request to delete institution
+	Note: admin functionality
+*/
+export const deleteInstitution = (institutionID) => {
+	// code below requires server call
+	return true;
+}
