@@ -171,9 +171,13 @@ export const updateUserProfileInfo = (profileDetail, profileComponent) => {
             }
         })
         .then(profileInfoJson => {
-            if (profileInfoJson && profileInfoJson[profileDetail.name]) {
+            /* if generalProfile.email for example, then replace entire generalProfile,
+            since  profileInfoJson[generalProfile.email] doesn't work */
+            const profileDetailName = profileDetail.name.split(".")[0];
+
+            if (profileInfoJson && profileInfoJson[profileDetailName]) {
                 if(profileComponent){
-                    profileComponent.setState({ [profileDetail.name]: profileInfoJson[profileDetail.name] });
+                    profileComponent.setState({ [profileDetailName]: profileInfoJson[profileDetailName] });
                 }
                 return profileInfoJson;
             }

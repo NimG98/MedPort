@@ -11,16 +11,20 @@ class ProfileDetail extends React.Component {
     constructor(props){
         super(props)
 
-        this.detailName = this.props.detailName;
-        this.detailValue = this.props.detailValue;
+        // this.detailName = this.props.detailName;
+        // this.detailValue = this.props.detailValue;
 
         this.state = {
             inEditMode: false,
-            isEditable: this.props.isEditable
+            isEditable: this.props.isEditable,
+            detailName: this.props.detailName,
+            detailValue: this.props.detailValue,
+            displayInvalid: false
         }
 
         this.displayEdit = this.displayEdit.bind(this);
         this.displayView = this.displayView.bind(this);
+        this.displayInvalidinput = this.displayInvalidinput.bind(this);
         this.onPressEnter = this.onPressEnter.bind(this);
     }
 
@@ -28,9 +32,13 @@ class ProfileDetail extends React.Component {
         this.setState({ inEditMode: true });
     }
 
+    displayInvalidinput(displayInvalid) {
+        this.setState({ displayInvalid });
+    }
+
     onPressEnter(e){
-        this.props.profileComponent.updateUserProfileDetail(this.props.detail, this.detailValue);
-        this.detailValue = e.target.value;
+        this.props.profileComponent.updateUserProfileDetail(this.props.detail, e.target.value, this);
+        //this.state.detailValue = e.target.value;
 
         this.setState({ inEditMode: false });
     }
@@ -39,14 +47,14 @@ class ProfileDetail extends React.Component {
         if(this.state.inEditMode) {
             return(
                 <div className="profileDetail">
-                    <h5>{this.detailName}:</h5>
-                    <Input placeholder={this.detailName} defaultValue={this.detailValue} onPressEnter={this.onPressEnter} />
+                    <h5>{this.state.detailName}:</h5>
+                    <Input placeholder={this.state.detailName} defaultValue={this.state.detailValue} onPressEnter={this.onPressEnter} />
                 </div>
             );
         } else {
             return(
                 <div className="profileDetail">
-                    <h5>{this.detailName}:</h5><span className="profileDetailValue">{this.detailValue}</span>
+                    <h5>{this.state.detailName}:</h5><span className="profileDetailValue">{this.state.detailValue}</span>
                 </div>
             );
         }
@@ -61,6 +69,9 @@ class ProfileDetail extends React.Component {
                     <Button className="editProfileDetailButton" onClick={this.displayEdit}>
                         <EditOutlined />
                     </Button>
+                }
+                {this.state.displayInvalid &&
+                    <span className="invalidInputMessage">Invalid input for {this.state.detailName}</span>
                 }
             </li>
         );

@@ -140,13 +140,28 @@ class Profile extends React.Component {
         );
     }
 
-    updateUserProfileDetail(profileDetail, value) {
+    updateUserProfileDetail(profileDetail, value, profileDetailComponent) {
         updateUserProfileInfo({name: profileDetail, value: value}, this).then( (profileInfoJson) => {
             console.log(profileInfoJson);
             console.log(this.state);
+            console.log("profileInfoJson[profileDetail]" + profileInfoJson[profileDetail])
+            /* if generalProfile.email for example, then replace entire generalProfile,
+            since  profileInfoJson[generalProfile.email] doesn't work */
+            if(profileDetail.split(".").length > 1) {
+                const profileDetailName = profileDetail.split(".")[0];
+                const profileDetailName2 = profileDetail.split(".")[1];
+                console.log("profileInfoJson[profileDetailName]" + profileInfoJson[profileDetailName])
+                profileDetailComponent.setState({detailValue: profileInfoJson[profileDetailName][profileDetailName2]});
+            } else {
+                console.log("here")
+                profileDetailComponent.setState({detailValue: profileInfoJson[profileDetail]});
+            }
             
+            profileDetailComponent.displayInvalidinput(false);
+        }).catch( error => {
+            profileDetailComponent.displayInvalidinput(true);
         })
-        // this.forceUpdate();
+        this.forceUpdate();
     }
 }
 export default withRouter(Profile);
