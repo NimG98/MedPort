@@ -243,7 +243,7 @@ app.patch("/api/profile/", mongoChecker, authenticate, (req, res) => {
             }
         })
     } else if(req.user.userType === "doctor"){
-        Doctor.findOneAndUpdate({user: req.user._id}, {$set: fieldsToUpdate}, {new: true, useFindAndModify: false}).then( (doctor) => {
+        Doctor.findOneAndUpdate({user: req.user._id}, {$set: fieldsToUpdate}, {new: true, useFindAndModify: false, runValidators: true, context: 'query'}).then( (doctor) => {
             if(!doctor){
                 res.status(404).send('Resource not found')  // could not find this doctor
             } else {
