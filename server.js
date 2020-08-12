@@ -498,6 +498,38 @@ app.get("/api/institutions", mongoChecker, (req, res) => {
 	
 });
 
+// A route to update an institution with institutionID
+app.put("/api/institutions/:id", mongoChecker, authenticate, (req, res) => {
+	const institutionID = req.params.id;
+	
+	// checks if user making request is an admin
+	if (req.user.userType !== "admin") {
+		res.status(401).send("Unauthorized");
+		return;
+	}
+	
+	if (!ObjectID.isValid(institutionID)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+	
+	Institution.findOneAndReplace({ _id: institutionID }, req.body, {new: true, useFindAndModify: false}).then(institution => {
+		if (!institution) {
+			res.status(404).send("Resource Not Found");
+			return;
+		} else {
+			res.send(institution);
+		}
+	}).catch(error => {
+		if (isMongoError(error)) {
+			res.status(500).send('Internal server error')
+		} else {
+            console.log(error);
+			res.status(400).send('Bad Request')
+		}
+	});
+});
+
 // A route to get the institution document given the institution's id
 app.get("/api/institutions/:id", mongoChecker, authenticate, (req, res) => {
     const institutionId = req.params.id;
