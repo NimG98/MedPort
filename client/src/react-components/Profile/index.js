@@ -69,8 +69,6 @@ class Profile extends React.Component {
     }
 
     uploadProfileImage = data => {
-        console.log(data);
-        console.log(data.file.status)
         this.setState({profileImageFile: data.file})
     }
 
@@ -153,7 +151,6 @@ class Profile extends React.Component {
 }
 
 function beforeCrop(file) {
-    console.log(file.type);
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
         message.error('You can only upload JPG/PNG file!');

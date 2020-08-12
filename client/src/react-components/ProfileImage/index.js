@@ -29,7 +29,6 @@ class ProfileImage extends React.Component {
 
     getUserProfileImage() {
         getUserProfileImage(this).then( (json) => {
-            console.log(json.imageBase64);
             if(json.imageBase64 === null) {
                 this.setState({profileImageSrc: defaultProfileImage})
             }
@@ -38,28 +37,14 @@ class ProfileImage extends React.Component {
 
     setUserProfileImage() {
         const file = this.props.file;
-        console.log("setUserProfileImage")
         if (file.status === 'done') {
             getBase64(file.originFileObj, profileImageSrc => {
-                //this.setState({profileImageSrc})
-                updateUserProfileImage(profileImageSrc, this).then( () => {
-                    console.log(this.state)
-                });
+                updateUserProfileImage(profileImageSrc, this)
             });
         }
     }
 
     render() {
-        /* if(this.state.profileImageSrc) {
-            return(
-                <img className={this.props.imgClassName} alt={this.props.altName} src={this.state.profileImageSrc}/>
-            );
-        } else{
-            console.log("else statement")
-            return(
-                <img className={this.props.imgClassName} alt={this.props.altName} src={defaultProfileImage}/>
-            );
-        } */
 
         return(
             <>

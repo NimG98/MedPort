@@ -300,9 +300,7 @@ app.post("/api/profile/image", mongoChecker, authenticate, (req, res) => {
     // Find the fields to update and their values.
 	const fieldToUpdate = {};
     const imagePropertyLocation = "generalProfile.profileImage.imageBase64"
-    log(imagePropertyLocation);
     fieldToUpdate[imagePropertyLocation] = req.body.imageBase64;
-    log(fieldToUpdate);
     
     if(req.user.userType === "patient") {
         Patient.findOneAndUpdate({user: req.user._id}, {$set: fieldToUpdate}, {new: true, useFindAndModify: false, runValidators: true, context: 'query'}).then( (patient) => {
@@ -603,7 +601,7 @@ app.post("/api/institutions", mongoChecker, (req, res) => {
 		if (isMongoError(error)) { // check for if mongo server suddenly disconnected before this request.
 			res.status(500).send('Internal server error')
 		} else {
-            console.log(error);
+            log(error);
 			res.status(400).send('Bad Request')
 		}
 	})
