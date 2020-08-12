@@ -19,9 +19,15 @@ class AdminInstitutionsOverview extends React.Component {
 	
 	componentDidMount() {
 		getInstitutions().then(data => {
-			this.setState({
-				institutions: data
-			});
+			if (data) {
+				this.setState({
+					institutions: data
+				});
+			} else {
+				// set error message
+				this.setError(true, "An error occurred while getting institutions.");
+			}
+			
 		}).catch(error => {
 			console.log(error);
 		});
@@ -120,19 +126,28 @@ class AdminInstitutionsOverview extends React.Component {
 	// deletes institution with a specific id
 	removeInstitution(institutionID) {
 		// api call
-		const success = deleteInstitution(institutionID);
-		
-		if (success) {
-			// delete Institution
-			const filtered = this.state.institutions.filter(institution => institution._id !== institutionID);
+		deleteInstitution(institutionID).then(institutionInfo => {
+			if (institutionInfo) {
+				// institution deleted
+				
+				// delete institution from institutions list
+				const filtered = this.state.institutions.filter(institution => institution._id !== institutionID);
+				
+				this.setState({
+					institutions: filtered
+				});
+			} else {
+				// institution not deleted
+				
+				// set error message
+				this.setError(true, "An error occurred, please try again.");
+			}
 			
-			this.setState({
-				institutions: filtered
-			});
-		} else {
+		}).catch(error => {
+			console.log(error);
 			// set error message
 			this.setError(true, "An error occurred, please try again.");
-		}
+		});
 	}
 	
 	// sets error value in component state

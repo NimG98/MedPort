@@ -85,6 +85,21 @@ export const getInstitutions = async () => {
 	Note: admin functionality
 */
 export const deleteInstitution = (institutionID) => {
-	// code below requires server call
-	return true;
+	const url = ApiRoutes.institution + "/" + institutionID;
+	
+	// creating the request
+	const request = new Request(url, {
+		method: "delete",
+	});
+	
+	return fetch(request).then(res => {
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(institutionInfo => {
+		// returns deleted institution info (not used)
+		return institutionInfo;
+	}).catch(error => {
+		console.log(error);
+	});
 }
