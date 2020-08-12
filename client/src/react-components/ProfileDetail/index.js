@@ -11,9 +11,6 @@ class ProfileDetail extends React.Component {
     constructor(props){
         super(props)
 
-        // this.detailName = this.props.detailName;
-        // this.detailValue = this.props.detailValue;
-
         this.state = {
             inEditMode: false,
             isEditable: this.props.isEditable,

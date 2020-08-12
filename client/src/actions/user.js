@@ -18,7 +18,6 @@ export const getUserType = (username, callback, component) => {
                 userType = json.userType;
                 if(component) {
                     component.setState({...component.state, userType: userType });
-                    console.log(component.state.userType);
                 }
                 if(callback) {
                     callback(userType);
@@ -66,7 +65,7 @@ export const login = (loginComp, app) => {
         method: "post",
         body: JSON.stringify(loginComp.state),
         headers: {
-            Accept: "application/json, text/plain, */*",
+            "Accept": "application/json, text/plain, */*",
             "Content-Type": "application/json"
         }
     });
@@ -121,7 +120,6 @@ export const getUserProfileInfo = (username, callback, profileComponent) => {
     return fetch(url)
         .then(res => {
             if (res.status === 200) {
-                console.log("fetch 200")
                 return res.json();
             }
         })
@@ -131,13 +129,8 @@ export const getUserProfileInfo = (username, callback, profileComponent) => {
                     callback(profileInfoJson);
                 }
                 if(profileComponent){
-                    console.log(profileInfoJson);
-                    console.log(Object.keys(profileInfoJson));
-                    
                     Object.keys(profileInfoJson).map( (profileDetail) => {
                         if(["_id", "user", "__v"].includes(profileDetail) === false ) {
-                            console.log("profileDetail: " + profileDetail)
-                            console.log({[profileDetail]: profileInfoJson[profileDetail]})
                             profileComponent.setState({ [profileDetail]: profileInfoJson[profileDetail] });
                         }
                     })
@@ -159,7 +152,7 @@ export const updateUserProfileInfo = (profileDetail, profileComponent) => {
             { "op": "replace", "path": "/" + profileDetail.name, "value": profileDetail.value }
         ),
         headers: {
-            Accept: "application/json, text/plain, */*",
+            "Accept": "application/json, text/plain, */*",
             "Content-Type": "application/json"
         }
     });

@@ -219,13 +219,10 @@ app.get("/api/profile/", mongoChecker, authenticate, (req, res) => {
 */
 app.patch("/api/profile/", mongoChecker, authenticate, (req, res) => {
     // Find the fields to update and their values.
-    log(req.body.path, req.body.value)
 
 	const fieldsToUpdate = {};
     const propertyToChange = req.body.path.substr(1) // getting rid of the '/' character
-    log(propertyToChange);
     fieldsToUpdate[propertyToChange] = req.body.value;
-    log(fieldsToUpdate);
     
     if(req.user.userType === "patient") {
         Patient.findOneAndUpdate({user: req.user._id}, {$set: fieldsToUpdate}, {new: true, useFindAndModify: false, runValidators: true, context: 'query'}).then( (patient) => {

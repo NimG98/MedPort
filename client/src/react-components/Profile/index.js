@@ -39,29 +39,22 @@ class Profile extends React.Component {
     }
 
     setProfileDetails = () => {
-        console.log(this.state);
         getUserType(this.props.appComponent.state.loggedInUser, null, this).then( (userType) => {
-            console.log(this.state);
             return this.state;
         })
         .then( (state) => {
             return getUserProfileInfo(null, null, this).then( (profileInfoJson) => {
-                console.log(this.state);
                 return this.state;
             })
         }).then( (state) => {
             if(this.state.userType === UserType.patient) {
                 getDoctorByID(this.state.doctor, this.setDoctorInfo).then( (doctorJson) => {
-                    console.log("doctorJson");
-                    console.log(doctorJson)
-                    console.log(this.state)
+                    return this.state;
                 })
             }
             else if(this.state.userType === UserType.doctor) {
                 getInstitutionInfo(this.state.institutionID, this.setInstitutionInfo).then( (institutionJson) => {
-                    console.log("institutionJson");
-                    console.log(institutionJson)
-                    console.log(this.state)
+                    return this.state;
                 });
             }
         })
@@ -142,18 +135,13 @@ class Profile extends React.Component {
 
     updateUserProfileDetail(profileDetail, value, profileDetailComponent) {
         updateUserProfileInfo({name: profileDetail, value: value}, this).then( (profileInfoJson) => {
-            console.log(profileInfoJson);
-            console.log(this.state);
-            console.log("profileInfoJson[profileDetail]" + profileInfoJson[profileDetail])
             /* if generalProfile.email for example, then replace entire generalProfile,
             since  profileInfoJson[generalProfile.email] doesn't work */
             if(profileDetail.split(".").length > 1) {
                 const profileDetailName = profileDetail.split(".")[0];
                 const profileDetailName2 = profileDetail.split(".")[1];
-                console.log("profileInfoJson[profileDetailName]" + profileInfoJson[profileDetailName])
                 profileDetailComponent.setState({detailValue: profileInfoJson[profileDetailName][profileDetailName2]});
             } else {
-                console.log("here")
                 profileDetailComponent.setState({detailValue: profileInfoJson[profileDetail]});
             }
             
