@@ -259,6 +259,84 @@ app.patch("/api/profile/", mongoChecker, authenticate, (req, res) => {
     }
 });
 
+// A route to get the profile image of the loggedInUser
+app.get("/api/profile/image", mongoChecker, authenticate, (req, res) => {
+    if(req.user.userType === "patient") {
+        Patient.findOne({user: req.user._id}).then( (patient) => {
+            if(!patient){
+                res.status(404).send('Resource not found')  // could not find this patient
+            } else {
+                if(!patient.generalProfile.profileImage) {
+                    res.send({ imageBase64: null }) // no custom set profile picture
+                } else {
+                    res.send({ imageBase64: patient.generalProfile.profileImage.imageBase64 })
+                }
+            }
+        }).catch(error => {
+            log(error);
+            res.status(500).send("Internal Server Error");
+        })
+    } else if(req.user.userType === "doctor"){
+        Doctor.findOne({user: req.user._id}).then( (doctor) => {
+            if(!doctor){
+                res.status(404).send('Resource not found')  // could not find this doctor
+            } else {
+                if(!doctor.generalProfile.profileImage) {
+                    res.send({ imageBase64: null }) // no custom set profile picture
+                } else {
+                    res.send({ imageBase64: doctor.generalProfile.profileImage.imageBase64 })
+                }
+            }
+        }).catch(error => {
+            log(error);
+            res.status(500).send("Internal Server Error");
+        })
+    }
+});
+
+// A route to update the profile image of the loggedInUser
+// { "imageBase64": "..." }
+app.post("/api/profile/image", mongoChecker, authenticate, (req, res) => {
+    // Find the fields to update and their values.
+	const fieldToUpdate = {};
+    const imagePropertyLocation = "generalProfile.profileImage.imageBase64"
+    log(imagePropertyLocation);
+    fieldToUpdate[imagePropertyLocation] = req.body.imageBase64;
+    log(fieldToUpdate);
+    
+    if(req.user.userType === "patient") {
+        Patient.findOneAndUpdate({user: req.user._id}, {$set: fieldToUpdate}, {new: true, useFindAndModify: false, runValidators: true, context: 'query'}).then( (patient) => {
+            if(!patient){
+                res.status(404).send('Resource not found')  // could not find this patient
+            } else {
+                res.send({ imageBase64: patient.generalProfile.profileImage.imageBase64 })
+            }
+        }).catch(error => {
+            if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+                res.status(500).send('Internal server error')
+            } else {
+                log(error)
+                res.status(400).send('Bad Request') // bad request for changing the patient.
+            }
+        })
+    } else if(req.user.userType === "doctor"){
+        Doctor.findOneAndUpdate({user: req.user._id}, {$set: fieldToUpdate}, {new: true, useFindAndModify: false, runValidators: true, context: 'query'}).then( (doctor) => {
+            if(!doctor){
+                res.status(404).send('Resource not found')  // could not find this doctor
+            } else {
+                res.send({ imageBase64: doctor.generalProfile.profileImage.imageBase64 })
+            }
+        }).catch(error => {
+            if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+                res.status(500).send('Internal server error')
+            } else {
+                log(error)
+                res.status(400).send('Bad Request') // bad request for changing the doctor.
+            }
+        })
+    }
+});
+
 // A route to get the general profile info (firstName, lastName, email) of another user
 app.get("/api/profile/:username", mongoChecker, authenticate, (req, res) => {
     const username = req.params.username;

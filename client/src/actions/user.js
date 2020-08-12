@@ -180,6 +180,59 @@ export const updateUserProfileInfo = (profileDetail, profileComponent) => {
         });
 }
 
+export const getUserProfileImage = (component) => {
+    const url = ApiRoutes.profile + "image";
+
+    return fetch(url)
+        .then(res => {
+            if (res.status === 200) {
+                return res.json();
+            }
+        })
+        .then(json => {
+            if (json) {
+                if(component){
+                    component.setState({ profileImageSrc: json.imageBase64 });
+                }
+                return json;
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}
+
+export const updateUserProfileImage = (imageBase64, component) => {
+    const url = ApiRoutes.profile + "image";
+
+    const request = new Request(url, {
+        method: "post",
+        body: JSON.stringify(
+            { "imageBase64": imageBase64 }
+        ),
+        headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json"
+        }
+    });
+
+    return fetch(request)
+        .then(res => {
+            if (res.status === 200) {
+                return res.json();
+            }
+        })
+        .then(json => {
+            if (json) {
+                if(component){
+                    component.setState({ profileImageSrc: json.imageBase64 });
+                }
+                return json;
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
 /*
 	checks if username already exists on server
 	returns true iff username exists, otherwise returns false

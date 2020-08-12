@@ -3,7 +3,7 @@ import { withRouter } from "react-router";
 
 import "./styles.css";
 import 'antd/dist/antd.css';
-import { Card, Upload } from "antd";
+import { Card, Upload, message } from "antd";
 import ImgCrop from 'antd-img-crop';
 
 import Header from '../Header';
@@ -12,16 +12,17 @@ import ProfileDetail from '../ProfileDetail';
 import uploadPlusImage from './static/opaque-upload-profile.png';
 import editProfileImagePencil from './static/pencil-edit-icon.png';
 
-import { getUserProfileImageUrl } from '../../actions/app';
 import { getUserType, getUserProfileInfo, updateUserProfileInfo } from '../../actions/user';
 import { getDoctorByID } from '../../actions/doctor';
 import { getInstitutionInfo } from '../../actions/institution';
 import { UserType } from '../../constants/userType';
+import ProfileImage from '../ProfileImage';
 
 class Profile extends React.Component {
 
     constructor(props) {
         super(props);
+        this.props.history.push("/profile");
 
         this.setDoctorInfo = this.setDoctorInfo.bind(this);
         this.setInstitutionInfo = this.setInstitutionInfo.bind(this);
@@ -31,7 +32,6 @@ class Profile extends React.Component {
             user: this.props.appComponent.state.loggedInUser,
             userType: null,
         }
-        this.getUserProfileImage = this.getUserProfileImage.bind(this);
     }
 
     componentDidMount () {
@@ -68,12 +68,10 @@ class Profile extends React.Component {
         this.setState({institutionInfo: institutionInfo});
     }
 
-    getUserProfileImage() {
-        const images = require.context('../../mock-data/user_profile_images', true);
-        const profileImageUrl = getUserProfileImageUrl(this.props.appComponent.state.loggedInUser);
-        const profileImage = images(profileImageUrl);
-
-        return profileImage;
+    uploadProfileImage = data => {
+        console.log(data);
+        console.log(data.file.status)
+        this.setState({profileImageFile: data.file})
     }
 
     render() {
@@ -82,9 +80,10 @@ class Profile extends React.Component {
                 <Header appComponent={this.props.appComponent}/>
                 <NavBar appComponent={this.props.appComponent} />
                 <div className="profilePageContent">
-                    <ImgCrop rotate grid shape='round'>
-                        <Upload showUploadList={false}>
-                            <img alt="bigProfileImageforLoggedInUser" className="bigUserProfileImage" src={this.getUserProfileImage()}/>
+                    <ImgCrop rotate grid shape='round' beforeCrop={beforeCrop}>
+                        <Upload showUploadList={false} onChange={this.uploadProfileImage} action="/api/profile/image">
+                            <ProfileImage file={this.state.profileImageFile} altName="bigProfileImageforLoggedInUser" imgClassName="bigUserProfileImage"/>
+                            {/*<img alt="bigProfileImageforLoggedInUser" className="bigUserProfileImage" src={this.getUserProfileImage()}/> */}
                             <img alt="uploadImageOverlay" className="uploadProfileImageOverlay" src={uploadPlusImage} />
                             <img alt="editProfileImagePencil" className="editProfileImagePencil" src={editProfileImagePencil} />
                         </Upload>
@@ -152,4 +151,18 @@ class Profile extends React.Component {
         this.forceUpdate();
     }
 }
+
+function beforeCrop(file) {
+    console.log(file.type);
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+        message.error('You can only upload JPG/PNG file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+        message.error('Image must smaller than 2MB!');
+    }
+    return isJpgOrPng && isLt2M;
+}
+
 export default withRouter(Profile);

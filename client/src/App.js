@@ -51,7 +51,7 @@ class App extends React.Component {
               <Route
                   exact path={["/", "/dashboard"] /* any of these URLs are accepted. */ }
                   render={({ history }) => {
-                    //   this.history = history;
+                    this.history = history;
                     //   console.log("history: ", this.history);
                         
                       return(
@@ -94,9 +94,10 @@ class App extends React.Component {
                 (<AdminPatientView appComponent={this} />)}/>
             <Route exact path='/results' render={() =>
                 (<Result appComponent={this} />)}/> */}
-            <Route exact path='/profile' render={() =>
-                (<Profile appComponent={this} />)}/>
-
+            {(this.state.userType === "patient" || this.state.userType === "doctor") && 
+            <Route exact path='/profile' render={({ history }) =>
+                (<Profile history={this.history} appComponent={this} />)}/>
+            }
             { /* 404 if URL isn't expected. */}
             <Route render={() => <div>404 Not found</div>} />
           </Switch>
