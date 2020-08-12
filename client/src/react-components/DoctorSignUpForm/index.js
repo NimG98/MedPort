@@ -4,7 +4,12 @@ import { Link } from "react-router-dom";
 import "./styles.css";
 
 // import form validators
-import { validateName, validateMID, validateEmail, validatePassword, validateUserName } from "../../validators/form-validators";
+import { validateName, 
+		 validateMID, 
+		 validateEmail, 
+		 validatePassword, 
+		 validateUserName, 
+		 validateUserNameAsync } from "../../validators/form-validators";
 
 class DoctorSignUpForm extends React.Component {
 	
@@ -53,7 +58,7 @@ class DoctorSignUpForm extends React.Component {
 		return (
 			<form className="DoctorSignUpForm" onSubmit={this.submit}>
 				<div className="title">
-					<h2><b>Doctor Sign Up</b></h2>
+					<label><b>Doctor Sign Up</b></label>
 				</div>
 			
 				<div className="container">
@@ -124,7 +129,7 @@ class DoctorSignUpForm extends React.Component {
 					{this.state.errors.password ? <p className="error-message" >{this.state.errorCodes.password}</p> : null}
 				</div>
 					
-				<button type="button" className="back" onClick={back}>back</button>
+				<button type="button" className="back" onClick={back}>Back</button>
 				
 				<button type="submit" className="next">Next</button>
 			</form>
@@ -136,15 +141,17 @@ class DoctorSignUpForm extends React.Component {
 		// prevents page reload
 		event.preventDefault();
 		
-		const valid = this.validate();
-		
-		if (valid) {
-			this.props.next();
-		}
+		this.validate().then(valid => {
+			if (valid) {
+				this.props.next();
+			}
+		}).catch(error => {
+			console.log(error);
+		});
 	}
 	
 	// validates inputs on submission
-	validate() {
+	async validate() {
 		
 		const valid = (
 			validateName('firstName', this.props.firstName, this.setError) &&
@@ -152,6 +159,7 @@ class DoctorSignUpForm extends React.Component {
 			validateMID('MID', this.props.MID, this.setError) &&
 			validateEmail('email', this.props.email, this.setError) &&
 			validateUserName('username', this.props.username, this.setError) &&
+			await validateUserNameAsync('username', this.props.username, this.setError) &&
 			validatePassword('password', this.props.password, this.setError));
 		
 		return valid;

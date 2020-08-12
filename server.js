@@ -17,6 +17,7 @@ const { User } = require("./models/user");
 const { Patient } = require("./models/patient");
 const { Doctor } = require("./models/doctor");
 const { Institution } = require("./models/institution");
+const { Referral } = require("./models/referral");
 
 // to validate object IDs
 const { ObjectID } = require("mongodb");
@@ -33,6 +34,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 function isMongoError(error) { // checks for first error returned by promise rejection if Mongo database suddently disconnects
 	return typeof error === 'object' && error !== null && error.name === "MongoNetworkError"
 }
+
+const { generateReferralCode } = require('./helpers/referral');
 
 /* // Our own express middleware to check for
 // an active user on the session cookie (indicating a logged in user.)
@@ -123,7 +126,6 @@ app.get("/api/users/check-session", (req, res) => {
 /*** API Routes below ************************************/
 // NOTE: The JSON routes are not protected in this react server (no authentication required). 
 //       You can (and should!) add this using similar middleware techniques we used in lecture.
-
 
 /** User routes below **/
 // Set up a POST route to *create* a user of your web app.
@@ -374,69 +376,190 @@ app.get("/api/profile/:username", mongoChecker, authenticate, (req, res) => {
 
 });
 
-/** Patient routes below **/
-// A route to make a new patient (can be called when new user made)
-app.post("/api/patients", mongoChecker, (req, res) => {
-    const userID = req.body.userID;
-
-    // Create a new user
-    const patient = new Patient({
-        user: userID,
-        generalProfile: {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email
-        },
-        address: req.body.address,
-        postalCode: req.body.postalCode,
-        HCN: req.body.HCN,
-        doctor: req.body.doctor
-    });
-
-    // Save the user
-    patient.save().then(patient => {
-        res.send(patient);
-    })
-    .catch((error) => {
-		if (isMongoError(error)) { // check for if mongo server suddenly disconnected before this request.
-			res.status(500).send('Internal server error')
+// a route that checks if a given username already exists
+app.post("/api/users/check-username", mongoChecker, (req, res) => {
+	const username = req.body.username;
+	
+	User.findOne({ username: username }).then(user => {
+		if (!user) {
+			// username DNE
+			res.status(404).send("Resource not found");
 		} else {
-            console.log(error);
+			// username exists
+			res.send("Username Exists");
+		}
+	}).catch(error => {
+		log(error);
+		res.status(500).send("Internal Server Error");
+	});
+});
+
+/** Referral routes below **/
+
+// returns a newly created referral
+/* Depricated - referrals are instead created on doctor creation */
+app.get("/api/referrals", mongoChecker, authenticate, (req, res) => {
+	
+	// find doctor that made request
+	Doctor.findOne({ user: req.user._id }).then(doctor => {
+		if (!doctor) {
+			// user is not a doctor
+			res.status(401).send("Unauthorized");
+		} else {
+			// create new referral
+			const referral = new Referral({
+				code: generateReferralCode(),
+				doctorID: doctor._id
+			});
+			
+			// save the referral
+			referral.save().then(referral => {
+				res.send(referral);
+			}).catch(error => {
+				log(error);
+				res.status(500).send('Internal server error');
+				return;
+			});
+		}
+	}).catch(error => {
+		log(error);
+		res.status(500).send('Internal server error');
+		return;
+	});
+	
+});
+
+// verifies referral code and returns referrerID
+app.post("/api/referrals", mongoChecker, (req, res) => {
+	const refCode = req.body.code;
+	
+	Referral.findOne({ code: refCode }).then(referral => {
+		if(!referral) {
+			res.status(404).send("Resource not found");
+		} else {
+            res.send(referral.doctorID);
+        }
+	}).catch(error => {
+		log(error);
+		res.status(500).send('Internal server error');
+		return;
+	});
+});
+
+/** Patient routes below **/
+// A route to make a new patient
+app.post("/api/patients", mongoChecker, (req, res) => {
+    // create a new user
+	const newUser = new User({
+		username: req.body.username,
+		password: req.body.password,
+		userType: "patient"
+	});
+	
+	// Create a new patient
+	const patient = new Patient({
+		user: newUser._id,
+		generalProfile: {
+			firstName: req.body.firstName,
+			lastName: req.body.lastName,
+			email: req.body.email
+		},
+		address: req.body.address,
+		postalCode: req.body.postalCode,
+		HCN: req.body.HCN,
+		doctor: req.body.doctorID
+	});
+	
+	// save the user
+	newUser.save().then(user => {
+		// save the patient
+		patient.save().then(patient => {
+			res.send(patient);
+		}).catch(error => {
+			// check for if mongo server suddenly disconnected before this request.
+			if (isMongoError(error)) { 
+				log(error);
+				res.status(500).send('Internal Server Error')
+			} else {
+				log(error);
+				res.status(400).send('Bad Request')
+			}
+		});
+	}).catch(error => {
+		// check for if mongo server suddenly disconnected before this request.
+		if (isMongoError(error)) { 
+			log(error);
+			res.status(500).send('Internal Server Error')
+		} else {
+            log(error);
 			res.status(400).send('Bad Request')
 		}
-	})
+	});
 });
 
 /** Doctor routes below **/
 
-// A route to make a new doctor (can be called when new user made)
+// A route to make a new doctor
 app.post("/api/doctors", mongoChecker, (req, res) => {
-    const userID = req.body.userID;
-
-    // Create a new user
-    const doctor = new Doctor({
-        user: userID,
-        generalProfile: {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email
-        },
-        MID: req.body.MID,
-        institutionID: req.body.institutionID
-    });
-
-    // Save the user
-    doctor.save().then(doctor => {
-        res.send(doctor);
-    })
-    .catch((error) => {
-		if (isMongoError(error)) { // check for if mongo server suddenly disconnected before this request.
-			res.status(500).send('Internal server error')
+	
+	// create a new user
+	const newUser = new User({
+		username: req.body.username,
+		password: req.body.password,
+		userType: "doctor"
+	});
+	
+	// Create a new doctor
+	const doctor = new Doctor({
+		user: newUser._id,
+		generalProfile: {
+			firstName: req.body.firstName,
+			lastName: req.body.lastName,
+			email: req.body.email
+		},
+		MID: req.body.MID,
+		institutionID: req.body.institutionID
+	});
+	
+	// create new referral
+	const referral = new Referral({
+		code: generateReferralCode(),
+		doctorID: doctor._id
+	});
+	
+	// save the user
+	newUser.save().then(user => {
+		// save the doctor
+		doctor.save().then(doctor => {
+			// save the doctor's referral object
+			referral.save().then(referral => {
+				res.send(doctor);
+			}).catch(error => {
+				log(error);
+				res.status(500).send("Internal Server Error");
+			});
+		}).catch(error => {
+			// check for if mongo server suddenly disconnected before this request.
+			if (isMongoError(error)) {
+				log(error);
+				res.status(500).send('Internal Server Error')
+			} else {
+				log(error);
+				res.status(400).send('Bad Request')
+			}
+		});
+		
+	}).catch(error => {
+		// check for if mongo server suddenly disconnected before this request.
+		if (isMongoError(error)) {
+			log(error);
+			res.status(500).send('Internal Server Error')
 		} else {
-            console.log(error);
+            log(error);
 			res.status(400).send('Bad Request')
 		}
-	})
+	});
+
 });
 
 // A route to get the doctor document given the doctor's id
@@ -484,6 +607,19 @@ app.post("/api/institutions", mongoChecker, (req, res) => {
 			res.status(400).send('Bad Request')
 		}
 	})
+});
+
+// A route to get a list of all institutions 
+app.get("/api/institutions", mongoChecker, (req, res) => {
+	
+	// query for all institutions
+	Institution.find().then(institutions => {
+		res.send(institutions);
+	}).catch(error => {
+		log(error);
+		res.status(500).send("Internal Server Error");
+	});
+	
 });
 
 // A route to get the institution document given the institution's id

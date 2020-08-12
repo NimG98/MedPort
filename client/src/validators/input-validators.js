@@ -1,4 +1,4 @@
-import { checkUserName } from "../actions/app";
+import { checkUserName } from "../actions/user";
 
 /* 
 	Returns true iff input is not empty, otherwise returns false. 
@@ -78,6 +78,16 @@ export const isHCN = (input) => {
 	return isMatch(input, '^[0-9]{4}[ -]?[0-9]{3}[ -]?[0-9]{3}[ -]?[a-zA-Z]{2}$');
 }
 
+/*
+	Returns true iff input is not a pre-existing username, otherwise returns 
+	false.
+	
+	Note: returns promise.
+*/
 export const isNewUserName = (username) => {
-	return !checkUserName(username);
+	return checkUserName(username).then(exists => {
+		return !exists;
+	}).catch(error => {
+		console.log(error);
+	});
 }

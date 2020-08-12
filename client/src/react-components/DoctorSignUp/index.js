@@ -9,7 +9,7 @@ import InstitutionSelector from "./../InstitutionSelector";
 import InstitutionCreationForm from "./../InstitutionCreationForm";
 
 // importing actions/required methods
-import { addDoctor } from "../../actions/app";
+import { addDoctor } from "../../actions/doctor";
 import { redirect } from "../../actions/router";
 
 // doctor signup component (controls the multi-step registration process)
@@ -141,9 +141,13 @@ class DoctorSignUp extends React.Component {
 	submit() {
 		const doctor = this.createDoctor();
 		
-		const success = addDoctor(doctor);
+		addDoctor(doctor).then(doctorInfo => {
+			this.props.submit();
+		}).catch(error => {
+			console.log(error);
+		});
 		
-		this.props.submit();
+		
 		
 	}
 	

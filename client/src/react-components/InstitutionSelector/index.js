@@ -4,7 +4,7 @@ import { uid } from 'react-uid';
 import './styles.css';
 
 // importing actions/required methods
-import { getInstitutions } from "../../actions/app";
+import { getInstitutions } from "../../actions/institution";
 
 // importing form validators
 import { validateInstitutionID } from "../../validators/form-validators";
@@ -34,10 +34,13 @@ class InstitutionSelector extends React.Component {
 	}
 	
 	componentDidMount() {
-		const data = getInstitutions();
-		
-		this.setState({
-			institutions: data
+		// a promise
+		getInstitutions().then(data => {
+			this.setState({
+				institutions: data
+			});
+		}).catch(error => {
+			console.log(error);
 		});
 	}
 	
@@ -54,7 +57,7 @@ class InstitutionSelector extends React.Component {
 			<div className="InstitutionSelector">
 				<form className="main_form" onSubmit={this.submit}>
 					<div className="title">
-						<h2><b>Select Your Institution</b></h2>
+						<label><b>Select Your Institution</b></label>
 					</div>
 				
 					<div className="container">
@@ -71,7 +74,7 @@ class InstitutionSelector extends React.Component {
 							{this.state.institutions.map(institution => (
 								<option 
 									key={uid(institution)} 
-									value={institution.id}>
+									value={institution._id}>
 									{institution.name}
 								</option>
 							))}
@@ -84,8 +87,8 @@ class InstitutionSelector extends React.Component {
 				</form>
 				
 				<div className="secondary_form">
-					<h3>Can't find your institution? </h3>
-					<button type="button" className="create" onClick={next}>Create</button>
+					<p>Can't find your institution? </p>
+					<a type="button" className="create" onClick={next}>Create</a>
 				</div>
 			</div>
 		);

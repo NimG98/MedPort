@@ -30,7 +30,7 @@ class ReferralSignUpForm extends React.Component {
 			<div className="ReferralSignUpForm">
 				<form className="main_form" onSubmit={this.submit}>
 					<div className="title">
-						<h2><b>Enter Referral Code</b></h2>
+						<label><b>Enter Referral Code</b></label>
 					</div>
 					
 					<div className="container">
@@ -45,15 +45,15 @@ class ReferralSignUpForm extends React.Component {
 					</div>
 						
 					<Link to="/">	
-						<button type="button" className="login" >Login</button>
+						<button type="button" className="login" >Log in</button>
 					</Link>
 						
 					<button type="submit" className="next">Next</button>
 				</form>
 				
 				<div className="secondary_form">
-					<h3>Are you a Doctor? </h3>
-					<button className="signup" onClick={doctorSignUp}>Sign Up</button>
+					<p>Are you a Doctor? </p>
+					<a className="signup" onClick={doctorSignUp}>Sign Up</a>
 				</div>
 			</div>
 		)

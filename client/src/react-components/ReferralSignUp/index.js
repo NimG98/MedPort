@@ -8,7 +8,7 @@ import ReferralSignUpForm from "../ReferralSignUpForm";
 import PatientSignUpForm from "../PatientSignUpForm";
 
 // importing actions/required methods
-import { submitReferralCode } from "../../actions/app";
+import { submitReferralCode } from "../../actions/referral";
 import { redirect } from "../../actions/router";
 
 class ReferralSignUp extends React.Component {
@@ -109,20 +109,21 @@ class ReferralSignUp extends React.Component {
 	submit() {
 		const code = this.state.code;
 		
-		const referrerID = submitReferralCode(code);
+		submitReferralCode(code).then(referrerID => {
+			if (referrerID) {
+				// sets the referrerID
+				this.setReferrerID(referrerID);
+				
+				// patient referral code
+				this.setStatus(1);
+			} else {
+				// invalid referral code
+				this.setError(true, 'Invalid Referral Code')
+			}
+		}).catch(error => {
+			console.log(error);
+		})
 		
-		if (referrerID) {
-			
-			// sets the referrerID
-			this.setReferrerID(referrerID);
-			
-			// patient referral code
-			this.setStatus(1);
-			
-		} else {
-			// invalid referral code
-			this.setError(true, 'Invalid Referral Code')
-		}
 	}
 	
 }

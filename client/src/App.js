@@ -61,6 +61,9 @@ class App extends React.Component {
                       )
                   }}
               />
+			  
+			  <Route exact path='/signup' render={() =>
+                (<SignUp appComponent={this} />)}/>
 
 
 
@@ -71,8 +74,6 @@ class App extends React.Component {
 
             {/* <Route exact path='/' render={() =>
                 (<Home appComponent={this}/>)}/>
-            <Route exact path='/signup' render={() =>
-                (<SignUp appComponent={this} />)}/>
             <Route exact path='/dashboard' render={() =>
                 (<Dashboard appComponent={this} />)}/>
             <Route exact path='/upload' render={() =>
