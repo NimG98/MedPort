@@ -233,6 +233,7 @@ export const updateUserProfileImage = (imageBase64, component) => {
         .catch(error => {
             console.log(error);
         });
+}
 /*
 	checks if username already exists on server
 	returns true iff username exists, otherwise returns false
