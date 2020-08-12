@@ -19,7 +19,9 @@ class PreviousRequests extends React.Component {
             user: this.props.loggedInUser,
             pendingRequests: getUserRequestsByStatus(this.props.loggedInUser, "pending"),
             confirmedRequests: getUserRequestsByStatus(this.props.loggedInUser, "confirmed"),
-            modalVisible: false
+            modalVisible: false,
+            pendingRequestsRowData: null,
+            confirmedRequestsRowData: null
         };
 
         this.displayTableHeaders = this.displayTableHeaders.bind(this);
@@ -29,6 +31,11 @@ class PreviousRequests extends React.Component {
 
     tableHeaderNames = ["Created By", "Request To", "Request Type", "Date", "Time", "Reason"];
     actionHeaderName = "Action Needed";
+
+    componentDidMount(){
+        this.displayTableElements("pending");
+        this.displayTableElements("confirmed");
+    }
 
 
     showModal = () => {
@@ -62,7 +69,8 @@ class PreviousRequests extends React.Component {
                                 <tr>{this.displayTableHeaders("pending")}</tr>
                             </thead>
                             <tbody>
-                                {this.displayTableElements("pending")}
+                                {/* {this.displayTableElements("pending")} */}
+                                {this.state.pendingRequestsRowData}
                             </tbody>
                         </table>
                     </TabPane>
@@ -72,7 +80,8 @@ class PreviousRequests extends React.Component {
                                 <tr>{this.displayTableHeaders("confirmed")}</tr>
                             </thead>
                             <tbody>
-                                {this.displayTableElements("confirmed")}
+                                {/* {this.displayTableElements("confirmed")} */}
+                                {this.state.confirmedRequestsRowData}
                             </tbody>
                         </table>
                     </TabPane>
@@ -106,18 +115,21 @@ class PreviousRequests extends React.Component {
         } else if(status === "confirmed") {
             requestData = this.state.confirmedRequests;
         }
+        console.log(requestData)
 
         for(var req in requestData) {
-            var actionNeeded = this.displayActionNeeded(requestData[req]);
+            // var actionNeeded = this.displayActionNeeded(requestData[req]);
             var createdByName = null;
             var toName = null;
-            getUserProfileInfo(requestData[req].created_by, null).then( createdByUser => {
+            getUserProfileInfo(requestData[req].created_by, null, null).then( createdByUser => {
                 createdByName = createdByUser.firstName + " " + createdByUser.lastName
-                return getUserProfileInfo(requestData[req].to, null);
+                return getUserProfileInfo(requestData[req].to, null, null);
             })
             .then( toUser => {
                 toName = toUser.firstName + " " + toUser.lastName
-            }).then( () => {
+                return "hello"
+            })
+            .then( (whatever) => {
                 tableRows.push(
                     <tr key={req}>
                         <td>{createdByName}</td>
@@ -126,23 +138,23 @@ class PreviousRequests extends React.Component {
                         <td>{requestData[req].date}</td>
                         <td>{requestData[req].time}</td>
                         <td>{requestData[req].reason}</td>
-                        {status === "pending" && actionNeeded}
+                        {status === "pending" && this.displayActionNeeded(requestData[req], createdByName)}
                     </tr>
                 );
+                return tableRows
+            })
+            .then( tableRows => {
+                if(status === "pending") {
+                    this.setState({pendingRequestsRowData: tableRows})
+                } else if(status === "confirmed") {
+                    this.setState({confirmedRequestsRowData: tableRows})
+                }
             })
         }
-
-        return (tableRows);
     }
 
     // Note: function only called for pending requests, since action is pending
-    displayActionNeeded = (req) => {
-        var modalMessage = null;
-        getUserProfileInfo(req.created_by, null).then( userInfo => {
-            modalMessage = "Request by " + userInfo.firstName + " " + userInfo.lastName
-            + " for a " + req.request_type + " on " + req.date + " at " + req.time
-        })
-
+    displayActionNeeded = (req, createdByName) => {
         // Pending on other person
         if(req.created_by === this.state.user) {
             return (
@@ -151,6 +163,7 @@ class PreviousRequests extends React.Component {
                 </td>
             );
         } else {
+            const modalMessage = "Request by " + createdByName + " for a " + req.request_type + " on " + req.date + " at " + req.time + ".";
             return (
                 <td>
                     <Button onClick={this.showModal} className="confirm-request-button">
