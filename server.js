@@ -519,6 +519,34 @@ app.get("/api/institutions/:id", mongoChecker, authenticate, (req, res) => {
     })
 });
 
+// A route to get the doctors associated with a given institution's id
+app.get("/api/institutions/doctors/:id", mongoChecker, authenticate, (req, res) => {
+	const institutionID = req.params.id;
+	
+	// checks if user making request is an admin
+	if (req.user.userType !== "admin") {
+		res.status(401).send("Unauthorized");
+		return;
+	}
+	
+	if (!ObjectID.isValid(institutionID)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+	
+	Doctor.find({ institutionID: institutionID }).then(doctors => {
+		if (!doctors) {
+			res.status(404).send("Resource Not Found");
+			return;
+		} else {
+			res.send(doctors);
+		}
+	}).catch(error => {
+		log(error);
+		res.status(500).send("Internal Server Error");
+	});
+})
+
 
 // A route to delete an institution document with a given id
 app.delete("/api/institutions/:id", mongoChecker, authenticate, (req, res) => {
