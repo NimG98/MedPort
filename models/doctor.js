@@ -22,7 +22,8 @@ const DoctorSchema = new mongoose.Schema({
     },
     institutionID: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Institution'
+        ref: 'Institution',
+        required: true
     }
 })
 

@@ -17,7 +17,7 @@ export const getUserType = (username, callback, component) => {
             if (json && json.userType) {
                 userType = json.userType;
                 if(component) {
-                    component.setState({...component.state, userType: json.userType });
+                    component.setState({...component.state, userType: userType });
                 }
                 if(callback) {
                     callback(userType);
@@ -65,13 +65,13 @@ export const login = (loginComp, app) => {
         method: "post",
         body: JSON.stringify(loginComp.state),
         headers: {
-            Accept: "application/json, text/plain, */*",
+            "Accept": "application/json, text/plain, */*",
             "Content-Type": "application/json"
         }
     });
 
     // Send the request with fetch()
-    return fetch(request)
+    fetch(request)
         .then(res => {
             if (res.status === 200) {
                 return res.json();
@@ -108,7 +108,7 @@ export const logout = (app) => {
 };
 
 /* Returns the profile info of the loggedInUser or a different user by username */
-export const getUserProfileInfo = (username, callback) => { 
+export const getUserProfileInfo = (username, callback, profileComponent) => { 
     // get all of the profile info for the loggedInUser
     var url = ApiRoutes.profile;
 
@@ -117,7 +117,7 @@ export const getUserProfileInfo = (username, callback) => {
         url += username;
     }
 
-    fetch(url)
+    return fetch(url)
         .then(res => {
             if (res.status === 200) {
                 return res.json();
@@ -127,6 +127,50 @@ export const getUserProfileInfo = (username, callback) => {
             if (profileInfoJson) {
                 if(callback){
                     callback(profileInfoJson);
+                }
+                if(profileComponent){
+                    Object.keys(profileInfoJson).map( (profileDetail) => {
+                        if(["_id", "user", "__v"].includes(profileDetail) === false ) {
+                            profileComponent.setState({ [profileDetail]: profileInfoJson[profileDetail] });
+                        }
+                    })
+                }
+                return profileInfoJson;
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}
+
+export const updateUserProfileInfo = (profileDetail, profileComponent) => {
+    const url = ApiRoutes.profile;
+
+    const request = new Request(url, {
+        method: "PATCH",
+        body: JSON.stringify(
+            { "op": "replace", "path": "/" + profileDetail.name, "value": profileDetail.value }
+        ),
+        headers: {
+            "Accept": "application/json, text/plain, */*",
+            "Content-Type": "application/json"
+        }
+    });
+
+    return fetch(request)
+        .then(res => {
+            if (res.status === 200) {
+                return res.json();
+            }
+        })
+        .then(profileInfoJson => {
+            /* if generalProfile.email for example, then replace entire generalProfile,
+            since  profileInfoJson[generalProfile.email] doesn't work */
+            const profileDetailName = profileDetail.name.split(".")[0];
+
+            if (profileInfoJson && profileInfoJson[profileDetailName]) {
+                if(profileComponent){
+                    profileComponent.setState({ [profileDetailName]: profileInfoJson[profileDetailName] });
                 }
                 return profileInfoJson;
             }

@@ -6,7 +6,7 @@ import { ApiRoutes } from "../constants/apiRoutes";
 export const getDoctorByID = (doctorID, callback) => {
     const url = ApiRoutes.doctorById + doctorID;
 
-    fetch(url)
+    return fetch(url)
         .then(res => {
             if (res.status === 200) {
                 return res.json();

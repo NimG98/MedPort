@@ -13,7 +13,7 @@ import uploadPlusImage from './static/opaque-upload-profile.png';
 import editProfileImagePencil from './static/pencil-edit-icon.png';
 
 import { getUserProfileImageUrl } from '../../actions/app';
-import { getUserType, getUserProfileInfo } from '../../actions/user';
+import { getUserType, getUserProfileInfo, updateUserProfileInfo } from '../../actions/user';
 import { getDoctorByID } from '../../actions/doctor';
 import { getInstitutionInfo } from '../../actions/institution';
 import { UserType } from '../../constants/userType';
@@ -23,45 +23,49 @@ class Profile extends React.Component {
     constructor(props) {
         super(props);
 
-        this.setProfileDetails = this.setProfileDetails.bind(this);
         this.setDoctorInfo = this.setDoctorInfo.bind(this);
         this.setInstitutionInfo = this.setInstitutionInfo.bind(this);
+        this.updateUserProfileDetail = this.updateUserProfileDetail.bind(this);
 
         this.state = {
             user: this.props.appComponent.state.loggedInUser,
             userType: null,
         }
-        // sets this.state.userType to the appropriate userType
-        getUserType(this.props.appComponent.state.loggedInUser, null, this);
-        getUserProfileInfo(null, this.setProfileDetails);
-
         this.getUserProfileImage = this.getUserProfileImage.bind(this);
-
     }
 
-    setProfileDetails(profileInfo) {
-        this.firstName = profileInfo.firstName;
-        this.lastName = profileInfo.lastName;
-        this.email = profileInfo.email;
+    componentDidMount () {
+        this.setProfileDetails();
+    }
 
-        if(this.state.userType === UserType.patient) {
-            this.address = profileInfo.address;
-            this.postalCode = profileInfo.postalCode;
-            this.HCN = profileInfo.HCN;
-            getDoctorByID(profileInfo.doctorID, this.setDoctorInfo)
-            
-        } else if(this.state.userType === UserType.doctor) {
-            this.MID = profileInfo.MID;
-            getInstitutionInfo(profileInfo.institutionID, this.setInstitutionInfo);
-        }
+    setProfileDetails = () => {
+        getUserType(this.props.appComponent.state.loggedInUser, null, this).then( (userType) => {
+            return this.state;
+        })
+        .then( (state) => {
+            return getUserProfileInfo(null, null, this).then( (profileInfoJson) => {
+                return this.state;
+            })
+        }).then( (state) => {
+            if(this.state.userType === UserType.patient) {
+                getDoctorByID(this.state.doctor, this.setDoctorInfo).then( (doctorJson) => {
+                    return this.state;
+                })
+            }
+            else if(this.state.userType === UserType.doctor) {
+                getInstitutionInfo(this.state.institutionID, this.setInstitutionInfo).then( (institutionJson) => {
+                    return this.state;
+                });
+            }
+        })
     }
 
     setDoctorInfo(doctorInfo) {
-        this.doctor = doctorInfo.generalProfile;
+        this.setState({doctor: doctorInfo.generalProfile});
     }
 
     setInstitutionInfo(institutionInfo) {
-        this.institutionInfo = institutionInfo;
+        this.setState({institutionInfo: institutionInfo});
     }
 
     getUserProfileImage() {
@@ -85,43 +89,67 @@ class Profile extends React.Component {
                             <img alt="editProfileImagePencil" className="editProfileImagePencil" src={editProfileImagePencil} />
                         </Upload>
                     </ImgCrop>
-                    <h1 className="loggedInUserProfileName">
-                        {this.state.userType === UserType.doctor && "Dr. "}
-                        {this.firstName + " " + this.lastName}
-                    </h1>
+                    {this.state.generalProfile && this.state.generalProfile.firstName && this.state.generalProfile.lastName &&
+                        <h1 className="loggedInUserProfileName">
+                            {this.state.userType === UserType.doctor && "Dr. "}
+                            {this.state.generalProfile.firstName + " " + this.state.generalProfile.lastName}
+                        </h1>
+                    }
                     <Card className="profileInfoCard">
                         <ul>
-                            <ProfileDetail detailName="Email" detailValue={this.email} isEditable={true}/>
-                            {this.state.userType === UserType.patient && 
+                            {this.state.generalProfile && this.state.generalProfile.email &&
+                                <ProfileDetail detailName="Email" detailValue={this.state.generalProfile.email} isEditable={true} detail="generalProfile.email" profileComponent={this}/>
+                            }
+                            {this.state.userType === UserType.patient && this.state.address && this.state.postalCode && this.state.HCN && this.state.doctor &&
+                            this.state.doctor.firstName && this.state.doctor.lastName &&
                                 <div className="specificUserTypeDetails">
-                                    <ProfileDetail detailName="Address" detailValue={this.address} isEditable={true}/>
-                                    <ProfileDetail detailName="Postal Code" detailValue={this.postalCode} isEditable={true}/>
-                                    <ProfileDetail detailName="Health Card Number" detailValue={this.HCN} isEditable={false}/>
+                                    <ProfileDetail detailName="Address" detailValue={this.state.address} isEditable={true} detail="address" profileComponent={this}/>
+                                    <ProfileDetail detailName="Postal Code" detailValue={this.state.postalCode} isEditable={true} detail="postalCode" profileComponent={this}/>
+                                    <ProfileDetail detailName="Health Card Number" detailValue={this.state.HCN} isEditable={false}/>
                                     <ProfileDetail detailName="Doctor" 
-                                                   detailValue={this.doctor.firstName + " " + this.doctor.lastName}
+                                                   detailValue={this.state.doctor.firstName + " " + this.state.doctor.lastName}
                                                    isEditable={false}/>
                                 </div>
                             }
-                            {this.state.userType === UserType.doctor && 
+                            {this.state.userType === UserType.doctor && this.state.MID &&
                                 <div className="specificUserTypeDetails">
-                                    <ProfileDetail detailName="Medical Identification Number" detailValue={this.MID} isEditable={false}/>
+                                    <ProfileDetail detailName="Medical Identification Number" detailValue={this.state.MID} isEditable={false}/>
                                 </div>
                             }
                         </ul>
                     </Card>
-                    {this.state.userType === UserType.doctor && 
+                    {this.state.userType === UserType.doctor && this.state.institutionInfo &&
                         <Card className="institutionInfoCard">
-                            <h3>{this.institutionInfo.name}</h3>
+                            <h3>{this.state.institutionInfo.name}</h3>
                             <ul>
-                                <ProfileDetail detailName="Address" detailValue={this.institutionInfo.address} isEditable={false}/>
-                                <ProfileDetail detailName="Postal Code" detailValue={this.institutionInfo.postalCode} isEditable={false}/>
-                                <ProfileDetail detailName="Phone Number" detailValue={this.institutionInfo.phoneNumber} isEditable={false}/>
+                                <ProfileDetail detailName="Address" detailValue={this.state.institutionInfo.address} isEditable={false}/>
+                                <ProfileDetail detailName="Postal Code" detailValue={this.state.institutionInfo.postalCode} isEditable={false}/>
+                                <ProfileDetail detailName="Phone Number" detailValue={this.state.institutionInfo.phoneNumber} isEditable={false}/>
                             </ul>
                         </Card>
                     }
                 </div>
             </div>
         );
+    }
+
+    updateUserProfileDetail(profileDetail, value, profileDetailComponent) {
+        updateUserProfileInfo({name: profileDetail, value: value}, this).then( (profileInfoJson) => {
+            /* if generalProfile.email for example, then replace entire generalProfile,
+            since  profileInfoJson[generalProfile.email] doesn't work */
+            if(profileDetail.split(".").length > 1) {
+                const profileDetailName = profileDetail.split(".")[0];
+                const profileDetailName2 = profileDetail.split(".")[1];
+                profileDetailComponent.setState({detailValue: profileInfoJson[profileDetailName][profileDetailName2]});
+            } else {
+                profileDetailComponent.setState({detailValue: profileInfoJson[profileDetail]});
+            }
+            
+            profileDetailComponent.displayInvalidinput(false);
+        }).catch( error => {
+            profileDetailComponent.displayInvalidinput(true);
+        })
+        this.forceUpdate();
     }
 }
 export default withRouter(Profile);
