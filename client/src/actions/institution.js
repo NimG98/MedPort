@@ -97,9 +97,42 @@ export const deleteInstitution = (institutionID) => {
 			return res.json();
 		}
 	}).then(institutionInfo => {
-		// returns deleted institution info (not used)
+		// returns deleted institution info
 		return institutionInfo;
 	}).catch(error => {
 		console.log(error);
 	});
+}
+
+/*
+	sends server request to get institution with id, insitutionID
+*/
+export const getInstitution = (institutionID) => {
+	const url = ApiRoutes.institution + "/" + institutionID;
+	
+	return fetch(url).then(res => {
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(institutionInfo => {
+		return institutionInfo;
+	}).catch(error => {
+		console.log(error);
+	});
+}
+
+
+/*
+	sends server request to get list of doctors who belong to the institution with institutionID
+*/
+export const getDoctorsByInstitution = (institutionID) => {
+	return [];
+}
+
+/*
+	sends updated institution object to server
+*/
+export const updateInstitution = (institution) => {
+	// code below requires server call
+	return true;
 }

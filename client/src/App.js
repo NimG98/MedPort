@@ -62,8 +62,14 @@ class App extends React.Component {
                   }}
               />
 			  
-			  <Route exact path='/signup' render={() =>
-                (<SignUp appComponent={this} />)}/>
+			<Route exact path='/signup' render={() =>
+				(<SignUp appComponent={this} />)}/>
+				
+			<Route exact path='/admin/institutions' render={() =>
+				(<AdminInstitutions appComponent={this} />)}/>
+				
+			<Route exact path='/admin/institutions/:id' render={() =>
+				(<AdminInstitutionView appComponent={this} />)}/>
 
 
 
@@ -80,10 +86,6 @@ class App extends React.Component {
                 (<Upload appComponent={this} />)}/>
             <Route exact path='/request' render={() =>
                 (<Request appComponent={this} />)}/>
-            <Route exact path='/admin/institutions' render={() =>
-                (<AdminInstitutions appComponent={this} />)}/>
-            <Route exact path='/admin/institutions/:id' render={() =>
-                (<AdminInstitutionView appComponent={this} />)}/>
             <Route exact path='/admin/doctors' render={() =>
                 (<AdminDoctors appComponent={this} />)}/>
             <Route exact path='/admin/doctors/:id' render={() =>

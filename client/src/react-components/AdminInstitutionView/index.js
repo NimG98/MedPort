@@ -11,7 +11,7 @@ import NavBar from "../NavBar";
 import { Alert, Button } from "antd";
 
 // importing actions/required methods
-import { getInstitution, deleteInstitution, updateInstitution } from "../../actions/app.js";
+import { getInstitution, deleteInstitution, updateInstitution, getDoctorsByInstitution } from "../../actions/institution";
 import { redirect } from "../../actions/router"
 
 class AdminInstitutionView extends React.Component {
@@ -21,22 +21,38 @@ class AdminInstitutionView extends React.Component {
 	doctorHeaders = ["Medical ID", "First Name", "Last Name", "Email"];
 	
 	componentDidMount() {
-		const data = getInstitution(this.state.institutionID);
-		
-		if (data) {
-			this.setState({
-				name: data.name,
-				address: data.address,
-				postalCode: data.postalCode,
-				phoneNumber: data.phoneNumber,
-				institutionInfo: data,
-			});
-			
-			this.setError(false, "");
+		getInstitution(this.state.institutionID).then(data => {
+			if (data) {
+				// institution data was received
+				this.setState({
+					name: data.name,
+					address: data.address,
+					postalCode: data.postalCode,
+					phoneNumber: data.phoneNumber,
+					institutionInfo: data,
+				});
+				
+				this.setError(false, "");
 
+			} else {
+				// no institution data was received
+				this.setError(true, "An error occurred, please try again");
+			}
+		}).catch(error => {
+			console.log(error);
+			this.setError(true, "An error occurred, please try again");
+		});
+		
+		const doctorList = getDoctorsByInstitution(this.state.institutionID);
+		
+		if (doctorList) {
+			this.setState({
+				doctors: doctorList
+			});
 		} else {
 			this.setError(true, "An error occurred, please try again");
 		}
+		
 	}
 	
 	constructor(props) {
@@ -51,8 +67,9 @@ class AdminInstitutionView extends React.Component {
 			error: false,
 			errorCode: '',
 			edit: false,
-			institutionID: parseInt(props.match.params.id),
-			institutionInfo: {doctors: []},
+			institutionID: props.match.params.id,
+			institutionInfo: {},
+			doctors: [],
 		}
 		
 		// binding functions
@@ -136,7 +153,7 @@ class AdminInstitutionView extends React.Component {
 	getDoctorTableRows() {
 		let tableRows = [];
 		
-		this.state.institutionInfo.doctors.map(doctor => (
+		this.state.doctors.map(doctor => (
 			tableRows.push(
 				<tr key={uid(doctor)}>
 					<td>{doctor.MID}</td>
@@ -145,7 +162,7 @@ class AdminInstitutionView extends React.Component {
 					<td>{doctor.email}</td>
 					<td><Button
 							type="primary"
-							onClick={() => {redirect(this, "/admin/doctors/" + doctor.doctorID)}}
+							onClick={() => {redirect(this, "/admin/doctors/" + doctor._id)}}
 						>View</Button>
 					</td>
 				</tr>
@@ -158,14 +175,17 @@ class AdminInstitutionView extends React.Component {
 	// deletes institution with a specific id
 	removeInstitution(institutionID) {
 		// api call
-		const success = deleteInstitution(institutionID);
-		
-		if (success) {
-			redirect(this, "/admin/institutions");
-		} else {
-			// set error message
+		deleteInstitution(institutionID).then(institutionInfo => {
+			if (institutionInfo) {
+				// redirect on success
+				redirect(this, "/admin/institutions");
+			} else {
+				// set error message
+				this.setError(true, "An error occurred, please try again.");
+			}
+		}).catch(error => {
 			this.setError(true, "An error occurred, please try again.");
-		}
+		});
 	}
 	
 	setError(value, message) {

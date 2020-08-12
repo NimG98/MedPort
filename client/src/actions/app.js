@@ -133,34 +133,6 @@ export const getUserProfileImageUrl = (username) => {
 	return userProfileImageUrl;
 }
 
-
-/*
-	sends server request to delete institution
-	Note: admin functionality
-*/
-export const deleteInstitution = (institutionID) => {
-	// code below requires server call
-	return true;
-}
-
-/*
-	sends server request to get institution with id, insitutionID
-*/
-export const getInstitution = (institutionID) => {
-	// code below requires server call
-	const institution = MOCK_ADMIN_INSTITUTION_INFO.find(element => element.id === institutionID);
-	
-	return institution;
-}
-
-/*
-	sends updated institution object to server
-*/
-export const updateInstitution = (institution) => {
-	// code below requires server call
-	return true;
-}
-
 /* 
 	Returns a list of doctors obtained from the server
 */
