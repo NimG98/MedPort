@@ -43,16 +43,19 @@ class AdminInstitutionView extends React.Component {
 			this.setError(true, "An error occurred, please try again");
 		});
 		
-		const doctorList = getDoctorsByInstitution(this.state.institutionID);
-		
-		if (doctorList) {
-			this.setState({
-				doctors: doctorList
-			});
-		} else {
+		getDoctorsByInstitution(this.state.institutionID).then(doctors => {
+			if (doctors || doctors === []) {
+				// doctors list was received
+				this.setState({
+					doctors: doctors
+				});
+			} else {
+				// no doctors list was received
+				this.setError(true, "An error occurred, please try again");
+			}
+		}).catch(error => {
 			this.setError(true, "An error occurred, please try again");
-		}
-		
+		});
 	}
 	
 	constructor(props) {
@@ -157,9 +160,9 @@ class AdminInstitutionView extends React.Component {
 			tableRows.push(
 				<tr key={uid(doctor)}>
 					<td>{doctor.MID}</td>
-					<td>{doctor.firstName}</td>
-					<td>{doctor.lastName}</td>
-					<td>{doctor.email}</td>
+					<td>{doctor.generalProfile.firstName}</td>
+					<td>{doctor.generalProfile.lastName}</td>
+					<td>{doctor.generalProfile.email}</td>
 					<td><Button
 							type="primary"
 							onClick={() => {redirect(this, "/admin/doctors/" + doctor._id)}}

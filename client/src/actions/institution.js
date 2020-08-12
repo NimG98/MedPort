@@ -126,7 +126,17 @@ export const getInstitution = (institutionID) => {
 	sends server request to get list of doctors who belong to the institution with institutionID
 */
 export const getDoctorsByInstitution = (institutionID) => {
-	return [];
+	const url = ApiRoutes.institution + "/doctors/" + institutionID;
+	
+	return fetch(url).then(res => {
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(doctors => {
+		return doctors;
+	}).catch(error => {
+		console.log(error);
+	});
 }
 
 /*
