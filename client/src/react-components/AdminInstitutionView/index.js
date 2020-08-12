@@ -14,6 +14,9 @@ import { Alert, Button } from "antd";
 import { getInstitution, deleteInstitution, updateInstitution, getDoctorsByInstitution } from "../../actions/institution";
 import { redirect } from "../../actions/router"
 
+// import form validators
+import { validateName, validateAddress, validatePostalCode, validatePhoneNumber } from "../../validators/form-validators";
+
 class AdminInstitutionView extends React.Component {
 	
 	// constants
@@ -79,6 +82,8 @@ class AdminInstitutionView extends React.Component {
 		this.getTableHeaders = this.getTableHeaders.bind(this);
 		this.getDoctorTableRows = this.getDoctorTableRows.bind(this);
 		this.removeInstitution = this.removeInstitution.bind(this);
+		this.updateInstitutionInfo = this.updateInstitutionInfo.bind(this);
+		this.validate = this.validate.bind(this);
 		this.setError = this.setError.bind(this);
 		this.toggleEdit = this.toggleEdit.bind(this);
 		this.handleClose = this.handleClose.bind(this);
@@ -117,7 +122,7 @@ class AdminInstitutionView extends React.Component {
 									{this.state.edit ? <td><input name="address" value={this.state.address} onChange={this.handleInputChange}></input></td> : <td>{this.state.institutionInfo.address}</td>}
 									{this.state.edit ? <td><input name="postalCode" value={this.state.postalCode} onChange={this.handleInputChange}></input></td> : <td>{this.state.institutionInfo.postalCode}</td>}
 									{this.state.edit ? <td><input name="phoneNumber" value={this.state.phoneNumber} onChange={this.handleInputChange}></input></td> : <td>{this.state.institutionInfo.phoneNumber}</td>}
-									{this.state.edit ? <td><Button type="primary" onClick={() => { updateInstitution(this.createInstitution()); this.toggleEdit(); }}>Submit</Button></td> : <td><Button type="primary" onClick={() => this.toggleEdit()}>Edit</Button></td>}
+									{this.state.edit ? <td><Button type="primary" onClick={() => { this.updateInstitutionInfo(this.state.institutionID) }}>Submit</Button></td> : <td><Button type="primary" onClick={() => this.toggleEdit()}>Edit</Button></td>}
 									{this.state.edit ? <td><Button type="danger" onClick={() => { this.resetInputs(); this.toggleEdit(); }} >Cancel</Button></td> : null}
 								</tr>
 							</tbody>
@@ -189,6 +194,43 @@ class AdminInstitutionView extends React.Component {
 		}).catch(error => {
 			this.setError(true, "An error occurred, please try again.");
 		});
+	}
+	
+	// validates and updates institution info
+	updateInstitutionInfo(institutionID) {
+		const valid = this.validate();
+		
+		if (valid) {
+			// make api call
+			updateInstitution(institutionID, this.createInstitution()).then(institution => {
+				
+				// update with new institution info
+				this.setState({
+					name: institution.name,
+					address: institution.address,
+					postalCode: institution.postalCode,
+					phoneNumber: institution.phoneNumber,
+					institutionInfo: institution,
+				}, this.toggleEdit);
+				
+			}).catch(error => {
+				console.log(error);
+				this.setError(true, "An error occurred, please try again.");
+			});
+		}
+		
+	}
+	
+	validate() {
+		
+		const valid = (
+			validateName('name', this.state.name, (name, val, msg) => this.setError(val, msg)) &&
+			validateAddress('address', this.state.address, (name, val, msg) => this.setError(val, msg)) &&
+			validatePostalCode('postalCode', this.state.postalCode, (name, val, msg) => this.setError(val, msg)) &&
+			validatePhoneNumber('phoneNumber', this.state.phoneNumber, (name, val, msg) => this.setError(val, msg))
+		);
+		
+		return valid;
 	}
 	
 	setError(value, message) {

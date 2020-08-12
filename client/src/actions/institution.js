@@ -142,7 +142,32 @@ export const getDoctorsByInstitution = (institutionID) => {
 /*
 	sends updated institution object to server
 */
-export const updateInstitution = (institution) => {
-	// code below requires server call
-	return true;
+export const updateInstitution = (institutionID, institution) => {
+	const url = ApiRoutes.institution + "/" + institutionID;
+	
+	// creating the request
+	const request = new Request(url, {
+		method: "put",
+		body: JSON.stringify(institution),
+		headers: {
+			"Accept": "application/json, text/plain, */*",
+			"Content-Type": "application/json"
+		},
+	});
+	
+	// making the request to the server
+	// returns a promise
+	return fetch(request)
+	.then(res => {
+		// parse json
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(institutionInfo => {
+		// returns new institution
+		return institutionInfo;
+	}).catch(error => {
+		// log error
+		console.log(error);
+	});
 }
