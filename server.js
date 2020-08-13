@@ -336,37 +336,26 @@ app.post("/api/profile/image", mongoChecker, authenticate, (req, res) => {
     }
 });
 
-// A route to get the general profile info (firstName, lastName, email) of another user
-app.get("/api/profile/:username", mongoChecker, authenticate, (req, res) => {
-    const username = req.params.username;
+// A route to get the general profile info (firstName, lastName, email) of another user (patient/doctor)
+app.get("/api/profile/:id", mongoChecker, authenticate, (req, res) => {
+    const id = req.params.id; // patient or doctor Id
 
-    User.findOne({username: username}).then( (user) => {
-        if(!user){
-            res.status(404).send('Resource not found')  // could not find this user
+    if(!ObjectID.isValid(id)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+
+    Patient.findById(id).then( (patient) => {
+        if(!patient){
+            Doctor.findById(id).then( (doctor) => {
+                if(!doctor){
+                    res.status(404).send('Resource not found')  // could not find this patient/doctor
+                } else {
+                    res.send(doctor.generalProfile)
+                }
+            })
         } else {
-            const userType = user.userType;
-            const userId = user._id;
-            return {userType: userType, userId: userId}
-        }
-    }).then( (userJson) => {
-        if(userJson) {
-            if(userJson.userType === "patient") {
-                Patient.findOne({user: userJson.userId}).then( (patient) => {
-                    if(!patient){
-                        res.status(404).send('Resource not found')  // could not find this patient
-                    } else {
-                        res.send(patient.generalProfile)
-                    }
-                })
-            } else if(userJson.userType === "doctor") {
-                Doctor.findOne({user: userJson.userId}).then( (doctor) => {
-                    if(!doctor){
-                        res.status(404).send('Resource not found')  // could not find this doctor
-                    } else {
-                        res.send(doctor.generalProfile)
-                    }
-                })
-            }
+            res.send(patient.generalProfile)
         }
     }).catch(error => {
         log(error);
@@ -646,6 +635,17 @@ app.get("/api/institutions/:id", mongoChecker, authenticate, (req, res) => {
 
 // A route to make a new request created by the current loggedInUser
 app.post("/api/requests",  mongoChecker, authenticate, (req, res) => {
+
+    if(!ObjectID.isValid(req.body.createdBy)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+
+    if(!ObjectID.isValid(req.body.receiver)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+
     // Create a new request
 	const request = new Request({
         createdBy: req.body.createdBy,
@@ -726,11 +726,17 @@ app.get("/api/requests", mongoChecker, authenticate, (req, res) => {
 // { "status": "confrimed" }
 app.patch("/api/requests/status/:id", mongoChecker, authenticate, (req, res) => {
     const requestId = req.params.id;
+
+    if(!ObjectID.isValid(requestId)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+
     // Find the fields to update and their values.
 	const fieldToUpdate = {};
     const imagePropertyLocation = "status"
     fieldToUpdate[imagePropertyLocation] = req.body.status;
-    
+
     Request.findByIdAndUpdate(requestId, {$set: fieldToUpdate}, {new: true, useFindAndModify: false, runValidators: true, context: 'query'}).then( (request) => {
         if(!request){
             res.status(404).send('Resource not found')  // could not find this request
