@@ -7,7 +7,6 @@ const validator = require('validator')
 const ProfileImageSchema = new mongoose.Schema({
     imageBase64: {
         type: String,
-        required: true
     }
 })
 
