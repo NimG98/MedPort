@@ -39,5 +39,13 @@ const InstitutionSchema = new mongoose.Schema({
     }
 })
 
+// middleware for deleting an institution document
+InstitutionSchema.pre("remove", async function(next) {
+	// update doctor's institutionID to nul
+	await this.model('Doctor').updateMany({ institutionID: this._id }, { institutionID: null });
+	// calls the next middleware
+	next();
+});
+
 const Institution = mongoose.model('Institution', InstitutionSchema)
 module.exports = { Institution }

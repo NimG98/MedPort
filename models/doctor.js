@@ -33,7 +33,7 @@ DoctorSchema.pre("remove", async function(next) {
 	// deleted the doctor's referral document
 	await this.model('Referral').remove({ doctorID: this._id});
 	// update patient's doctor to null
-	await this.model('Patient').updateMany({ doctor: this._id }, { doctor: null })
+	await this.model('Patient').updateMany({ doctor: this._id }, { doctor: null });
 	// calls the next middleware
 	next();
 });

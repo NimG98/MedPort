@@ -504,6 +504,7 @@ app.delete("/api/doctors/:id", mongoChecker, authenticate, isAdmin, (req, res) =
 			}).catch(error => {
 				log(error);
 				res.status(500).send("Internal Server Error");
+				return;
 			})
 		}
 	}).catch(error => {
@@ -633,16 +634,22 @@ app.delete("/api/institutions/:id", mongoChecker, authenticate, isAdmin, (req, r
 		return;
     }
 	
-	Institution.findByIdAndRemove(institutionID).then(institution => {
+	Institution.findById(institutionID).then(institution => {
 		if (!institution) {
 			res.status(404).send("Resource Not Found");
 			return;
 		} else {
-			res.send(institution);
+			institution.remove().then(institution => {
+				res.send(institution);
+			}).catch(error => {
+				log(error);
+				res.status(500).send("Internal Server Error");
+				return;
+			});
 		}
 	}).catch(error => {
 		log(error);
-		res.status(500).send('Internal server error');
+		res.status(500).send("Internal Server Error");
 	});
 });
 
