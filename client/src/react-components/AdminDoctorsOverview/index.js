@@ -125,19 +125,23 @@ class AdminDoctorsOverview extends React.Component {
 	// deletes doctor with a specific id
 	removeDoctor(doctorID) {
 		// api call
-		const success = deleteDoctor(doctorID);
-		
-		if (success) {
-			// delete Doctor
-			const filtered = this.state.doctors.filter(doctor => doctor._id !== doctorID);
-			
-			this.setState({
-				doctors: filtered
-			});
-		} else {
+		deleteDoctor(doctorID).then(doctorInfo => {
+			if (doctorInfo) {
+				// delete Doctor
+				const filtered = this.state.doctors.filter(doctor => doctor._id !== doctorID);
+				
+				this.setState({
+					doctors: filtered
+				});
+			} else {
+				// set error message
+				this.setError(true, "An error occurred, please try again.");
+			}
+		}).catch(error => {
+			console.log(error);
 			// set error message
 			this.setError(true, "An error occurred, please try again.");
-		}
+		});
 	}
 	
 	// sets error value in component state

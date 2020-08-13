@@ -79,6 +79,20 @@ export const getDoctors = () => {
 	Note: admin functionality
 */
 export const deleteDoctor = (doctorID) => {
-	// code below requires server call
-	return true;
+	const url = ApiRoutes.doctor + "/" + doctorID;
+	
+	// creating the request
+	const request = new Request(url, {
+		method: "delete",
+	});
+	
+	return fetch(request).then(res => {
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(doctor => {
+		return doctor;
+	}).catch(error => {
+		console.log(error);
+	});
 }
