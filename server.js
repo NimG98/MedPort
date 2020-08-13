@@ -36,6 +36,7 @@ function isMongoError(error) { // checks for first error returned by promise rej
 }
 
 const { generateReferralCode } = require('./helpers/referral');
+const { Request } = require("./models/request");
 
 /* // Our own express middleware to check for
 // an active user on the session cookie (indicating a logged in user.)
@@ -641,7 +642,110 @@ app.get("/api/institutions/:id", mongoChecker, authenticate, (req, res) => {
     })
 });
 
+/** Request routes below **/
 
+// A route to make a new request created by the current loggedInUser
+app.post("/api/requests",  mongoChecker, authenticate, (req, res) => {
+    // Create a new request
+	const request = new Request({
+        createdBy: req.body.createdBy,
+        receiver: req.body.receiver,
+        type: req.body.type,
+        status: "pending",
+        date: req.body.date,
+        time: req.body.time
+    });
+    // Set optional field "reason"
+    if(req.body.reason) {
+        request.set("reason", req.body.reason)
+    }
+    // Set the model schema type of objectId for "createdBy" and "reciever"
+    if(req.user.userType === "patient") {
+        request.populate({path: 'createdBy', model: 'Patient'})
+        request.populate({path: 'receiver', model: 'Doctor'})
+    } else if(req.user.userType === "doctor") {
+        request.populate({path: 'createdBy', model: 'Doctor'})
+        request.populate({path: 'receiver', model: 'Patient'})
+    }
+    
+	// save the request
+	request.save().then(request => {
+		res.send(request);
+	}).catch(error => {
+		// check for if mongo server suddenly disconnected before this request.
+		if (isMongoError(error)) { 
+			log(error);
+			res.status(500).send('Internal Server Error')
+		} else {
+            log(error);
+			res.status(400).send('Bad Request')
+		}
+	});
+});
+
+// A route to get all requests created by the current loggedInUser
+app.get("/api/requests", mongoChecker, authenticate, (req, res) => {
+    // Current loggedInUser is a patient; get their patient id, by checking user id
+    if(req.user.userType === "patient") {
+        Patient.findOne({user: req.user._id}).then( (patient) => {
+            if(!patient){
+                res.status(404).send('Resource not found')  // could not find this patient
+            } else {
+                return patient._id;
+            }
+        // Find all requests created by this patient, by checking if "createdBy" is the same as the patient's id
+        }).then( creatorId => {
+            Request.find({ createdBy: creatorId }).then( (requests) => {
+                res.send(requests); // array of requests
+            })
+        }).catch(error => {
+            log(error);
+            res.status(500).send("Internal Server Error");
+        })
+    // Current loggedInUser is a doctor; get their doctor id, by checking user id
+    } else if(req.user.userType === "doctor"){
+        Doctor.findOne({user: req.user._id}).then( (doctor) => {
+            if(!doctor){
+                res.status(404).send('Resource not found')  // could not find this doctor
+            } else {
+                return doctor._id;
+            }
+        // Find all requests created by this doctor, by checking if "createdBy" is the same as the doctor's id
+        }).then( creatorId => {
+            Request.find({ createdBy: creatorId }).then( (requests) => {
+                res.send(requests); // array of requests
+            })
+        }).catch(error => {
+            log(error);
+            res.status(500).send("Internal Server Error");
+        })
+    }
+})
+
+// A route to update the status of a request
+// { "status": "confrimed" }
+app.patch("/api/requests/status/:id", mongoChecker, authenticate, (req, res) => {
+    const requestId = req.params.id;
+    // Find the fields to update and their values.
+	const fieldToUpdate = {};
+    const imagePropertyLocation = "status"
+    fieldToUpdate[imagePropertyLocation] = req.body.status;
+    
+    Request.findByIdAndUpdate(requestId, {$set: fieldToUpdate}, {new: true, useFindAndModify: false, runValidators: true, context: 'query'}).then( (request) => {
+        if(!request){
+            res.status(404).send('Resource not found')  // could not find this request
+        } else {
+            res.send(request)
+        }
+    }).catch(error => {
+        if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+            res.status(500).send('Internal server error')
+        } else {
+            log(error)
+            res.status(400).send('Bad Request') // bad request for changing the request.
+        }
+    })
+});
 
 /*** Webpage routes below **********************************/
 // Serve the build
