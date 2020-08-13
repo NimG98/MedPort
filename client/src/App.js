@@ -71,6 +71,8 @@ class App extends React.Component {
 			<Route exact path='/admin/institutions/:id' render={() =>
 				(<AdminInstitutionView appComponent={this} />)}/>
 
+			<Route exact path='/admin/doctors' render={() =>
+                (<AdminDoctors appComponent={this} />)}/>
 
 
 

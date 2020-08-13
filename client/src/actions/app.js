@@ -133,14 +133,6 @@ export const getUserProfileImageUrl = (username) => {
 	return userProfileImageUrl;
 }
 
-/* 
-	Returns a list of doctors obtained from the server
-*/
-export const getDoctors = () => {
-	// code below requires server call
-	return MOCK_ADMIN_DOCTORS;
-}
-
 /*
 	sends server request to delete doctor
 	Note: admin functionality

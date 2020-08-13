@@ -56,3 +56,29 @@ export const addDoctor = (doctor) => {
 		console.log(error);
 	});
 };
+
+/* 
+	Returns a list of doctors obtained from the server
+*/
+export const getDoctors = () => {
+	const url = ApiRoutes.doctor;
+	
+	return fetch(url).then(res => {
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(doctors => {
+		return doctors;
+	}).catch(error => {
+		console.log(error);
+	});
+}
+
+/*
+	sends server request to delete doctor
+	Note: admin functionality
+*/
+export const deleteDoctor = (doctorID) => {
+	// code below requires server call
+	return true;
+}

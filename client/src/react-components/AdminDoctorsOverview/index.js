@@ -7,7 +7,7 @@ import "./styles.css";
 import 'antd/dist/antd.css';
 
 // importing actions/required methods
-import { getDoctors, deleteDoctor } from "../../actions/app";
+import { getDoctors, deleteDoctor } from "../../actions/doctor";
 import { redirect } from "../../actions/router"
 
 // importing components
@@ -17,11 +17,18 @@ class AdminDoctorsOverview extends React.Component {
 	headers = ["Medical ID", "First Name", "Last Name", "Email"];
 	
 	componentDidMount() {
-		const data = getDoctors();
-		
-		
-		this.setState({
-			doctors: data
+		getDoctors().then(doctors => {
+			if (doctors) {
+				this.setState({
+					doctors: doctors
+				});
+			} else {
+				this.setError(true, "An error occurred, please try again.");
+			}
+			
+		}).catch(error => {
+			console.log(error);
+			this.setError(true, "An error occurred, please try again.");
 		});
 	}
 	
@@ -94,18 +101,18 @@ class AdminDoctorsOverview extends React.Component {
 			tableRows.push(
 				<tr key={uid(doctor)}>
 					<td>{doctor.MID}</td>
-					<td>{doctor.firstName}</td>
-					<td>{doctor.lastName}</td>
-					<td>{doctor.email}</td>
+					<td>{doctor.generalProfile.firstName}</td>
+					<td>{doctor.generalProfile.lastName}</td>
+					<td>{doctor.generalProfile.email}</td>
 					<td><Button
 							type="primary"
-							onClick={() => {redirect(this, "/admin/doctors/" + doctor.id)}}
+							onClick={() => {redirect(this, "/admin/doctors/" + doctor._id)}}
 						>View</Button>
 					</td>
 					<td>
 						<Button 
 							type="danger"
-							onClick={() => {this.removeDoctor(doctor.id)}}
+							onClick={() => {this.removeDoctor(doctor._id)}}
 						>Delete</Button>
 					</td>
 				</tr>
@@ -122,7 +129,7 @@ class AdminDoctorsOverview extends React.Component {
 		
 		if (success) {
 			// delete Doctor
-			const filtered = this.state.doctors.filter(doctor => doctor.id !== doctorID);
+			const filtered = this.state.doctors.filter(doctor => doctor._id !== doctorID);
 			
 			this.setState({
 				doctors: filtered
