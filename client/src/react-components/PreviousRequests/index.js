@@ -5,8 +5,8 @@ import 'antd/dist/antd.css';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Tabs, Button, Modal }  from "antd";
 
-import { getUserRequestsByStatus} from "../../actions/app";
 import { getUserProfileInfo } from '../../actions/user';
+import { getUserRequests } from "../../actions/request";
 
 const { TabPane } = Tabs;
 
@@ -17,8 +17,8 @@ class PreviousRequests extends React.Component {
 
         this.state = {
             user: this.props.loggedInUser,
-            pendingRequests: getUserRequestsByStatus(this.props.loggedInUser, "pending"),
-            confirmedRequests: getUserRequestsByStatus(this.props.loggedInUser, "confirmed"),
+            pendingRequests: null,
+            confirmedRequests: null,
             modalVisible: false,
             pendingRequestsRowData: null,
             confirmedRequestsRowData: null
@@ -110,47 +110,49 @@ class PreviousRequests extends React.Component {
         var tableRows = [];
         var requestData = [];
 
-        if(status === "pending") {
-            requestData = this.state.pendingRequests;
-        } else if(status === "confirmed") {
-            requestData = this.state.confirmedRequests;
-        }
-        console.log(requestData)
-
-        for(var req in requestData) {
-            // var actionNeeded = this.displayActionNeeded(requestData[req]);
-            var createdByName = null;
-            var toName = null;
-            getUserProfileInfo(requestData[req].created_by, null, null).then( createdByUser => {
-                createdByName = createdByUser.firstName + " " + createdByUser.lastName
-                return getUserProfileInfo(requestData[req].to, null, null);
-            })
-            .then( toUser => {
-                toName = toUser.firstName + " " + toUser.lastName
-                return "hello"
-            })
-            .then( (whatever) => {
-                tableRows.push(
-                    <tr key={req}>
-                        <td>{createdByName}</td>
-                        <td>{toName}</td>
-                        <td>{requestData[req].request_type}</td>
-                        <td>{requestData[req].date}</td>
-                        <td>{requestData[req].time}</td>
-                        <td>{requestData[req].reason}</td>
-                        {status === "pending" && this.displayActionNeeded(requestData[req], createdByName)}
-                    </tr>
-                );
-                return tableRows
-            })
-            .then( tableRows => {
-                if(status === "pending") {
-                    this.setState({pendingRequestsRowData: tableRows})
-                } else if(status === "confirmed") {
-                    this.setState({confirmedRequestsRowData: tableRows})
-                }
-            })
-        }
+        getUserRequests(this).then( requests => {
+            if(status === "pending") {
+                requestData = this.state.pendingRequests;
+            } else if(status === "confirmed") {
+                requestData = this.state.confirmedRequests;
+            }
+            console.log(requestData)
+    
+            for(var req in requestData) {
+                // var actionNeeded = this.displayActionNeeded(requestData[req]);
+                var createdByName = null;
+                var toName = null;
+                getUserProfileInfo(requestData[req].created_by, null, null).then( createdByUser => {
+                    createdByName = createdByUser.generalProfile.firstName + " " + createdByUser.generalProfile.lastName
+                    return getUserProfileInfo(requestData[req].to, null, null);
+                })
+                .then( toUser => {
+                    toName = toUser.generalProfile.firstName + " " + toUser.generalProfile.lastName
+                    return "hello"
+                })
+                .then( (whatever) => {
+                    tableRows.push(
+                        <tr key={req}>
+                            <td>{createdByName}</td>
+                            <td>{toName}</td>
+                            <td>{requestData[req].request_type}</td>
+                            <td>{requestData[req].date}</td>
+                            <td>{requestData[req].time}</td>
+                            <td>{requestData[req].reason}</td>
+                            {status === "pending" && this.displayActionNeeded(requestData[req], createdByName)}
+                        </tr>
+                    );
+                    return tableRows
+                })
+                .then( tableRows => {
+                    if(status === "pending") {
+                        this.setState({pendingRequestsRowData: tableRows})
+                    } else if(status === "confirmed") {
+                        this.setState({confirmedRequestsRowData: tableRows})
+                    }
+                })
+            }
+        })
     }
 
     // Note: function only called for pending requests, since action is pending
