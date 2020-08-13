@@ -22,8 +22,8 @@ class PreviousRequests extends React.Component {
             pendingRequests: null,
             confirmedRequests: null,
             modalVisible: false,
-            pendingRequestsRowData: null,
-            confirmedRequestsRowData: null
+            pendingRequestsRowData: [],
+            confirmedRequestsRowData: []
         };
 
         this.displayTableHeaders = this.displayTableHeaders.bind(this);
@@ -109,7 +109,7 @@ class PreviousRequests extends React.Component {
     }
 
     displayTableElements = (status) => {
-        var tableRows = [];
+        // var tableRows = [];
         var requestData = [];
 
         getUserRequests(this).then( requests => {
@@ -133,7 +133,7 @@ class PreviousRequests extends React.Component {
                     return "hello"
                 })
                 .then( (whatever) => {
-                    tableRows.push(
+                    return(
                         <tr key={req}>
                             <td>{createdByName}</td>
                             <td>{toName}</td>
@@ -144,13 +144,12 @@ class PreviousRequests extends React.Component {
                             {status === "pending" && this.displayActionNeeded(requestData[req], createdByName)}
                         </tr>
                     );
-                    return tableRows
                 })
-                .then( tableRows => {
+                .then( tableRow => {
                     if(status === "pending") {
-                        this.setState({pendingRequestsRowData: tableRows})
+                        this.setState({pendingRequestsRowData: this.state.pendingRequestsRowData.concat([tableRow])})
                     } else if(status === "confirmed") {
-                        this.setState({confirmedRequestsRowData: tableRows})
+                        this.setState({confirmedRequestsRowData: this.state.confirmedRequestsRowData.concat([tableRow])})
                     }
                 })
             }
