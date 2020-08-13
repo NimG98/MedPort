@@ -8,6 +8,8 @@ import { Tabs, Button, Modal }  from "antd";
 import { getUserProfileInfo } from '../../actions/user';
 import { getUserRequests } from "../../actions/request";
 
+import moment from 'moment';
+
 const { TabPane } = Tabs;
 
 class PreviousRequests extends React.Component {
@@ -122,12 +124,12 @@ class PreviousRequests extends React.Component {
                 // var actionNeeded = this.displayActionNeeded(requestData[req]);
                 var createdByName = null;
                 var toName = null;
-                getUserProfileInfo(requestData[req].created_by, null, null).then( createdByUser => {
-                    createdByName = createdByUser.generalProfile.firstName + " " + createdByUser.generalProfile.lastName
-                    return getUserProfileInfo(requestData[req].to, null, null);
+                getUserProfileInfo(requestData[req].createdBy, null, null).then( createdByUser => {
+                    createdByName = createdByUser.firstName + " " + createdByUser.lastName;
+                    return getUserProfileInfo(requestData[req].receiver, null, null);
                 })
                 .then( toUser => {
-                    toName = toUser.generalProfile.firstName + " " + toUser.generalProfile.lastName
+                    toName = toUser.firstName + " " + toUser.lastName;
                     return "hello"
                 })
                 .then( (whatever) => {
@@ -135,8 +137,8 @@ class PreviousRequests extends React.Component {
                         <tr key={req}>
                             <td>{createdByName}</td>
                             <td>{toName}</td>
-                            <td>{requestData[req].request_type}</td>
-                            <td>{requestData[req].date}</td>
+                            <td>{requestData[req].type}</td>
+                            <td>{moment(requestData[req].date).format('MMMM Do YYYY')}</td>
                             <td>{requestData[req].time}</td>
                             <td>{requestData[req].reason}</td>
                             {status === "pending" && this.displayActionNeeded(requestData[req], createdByName)}
@@ -158,14 +160,14 @@ class PreviousRequests extends React.Component {
     // Note: function only called for pending requests, since action is pending
     displayActionNeeded = (req, createdByName) => {
         // Pending on other person
-        if(req.created_by === this.state.user) {
+        if(req.createdBy === this.state.user) {
             return (
                 <td>
                     Waiting for confirmation
                 </td>
             );
         } else {
-            const modalMessage = "Request by " + createdByName + " for a " + req.request_type + " on " + req.date + " at " + req.time + ".";
+            const modalMessage = "Request by " + createdByName + " for a " + req.type + " on " + moment(req.date).format('MMMM Do YYYY') + " at " + req.time + ".";
             return (
                 <td>
                     <Button onClick={this.showModal} className="confirm-request-button">

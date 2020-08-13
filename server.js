@@ -695,7 +695,7 @@ app.get("/api/requests", mongoChecker, authenticate, (req, res) => {
             }
         // Find all requests created by this patient, by checking if "createdBy" is the same as the patient's id
         }).then( creatorId => {
-            Request.find({ createdBy: creatorId }).then( (requests) => {
+            Request.find({ $or:[{createdBy: creatorId}, {receiver: creatorId}] }).then( (requests) => {
                 res.send(requests); // array of requests
             })
         }).catch(error => {
@@ -712,7 +712,7 @@ app.get("/api/requests", mongoChecker, authenticate, (req, res) => {
             }
         // Find all requests created by this doctor, by checking if "createdBy" is the same as the doctor's id
         }).then( creatorId => {
-            Request.find({ createdBy: creatorId }).then( (requests) => {
+            Request.find({ $or:[{createdBy: creatorId}, {receiver: creatorId}] }).then( (requests) => {
                 res.send(requests); // array of requests
             })
         }).catch(error => {
