@@ -30,7 +30,10 @@ const GeneralProfileSchema = new mongoose.Schema({
             message: 'Not valid email'
         }
     },
-    profileImage: ProfileImage.schema
+    profileImage: {
+        type: ProfileImage.schema,
+        required: false
+    }
 })
 
 const GeneralProfile = mongoose.model('GeneralProfile', GeneralProfileSchema)
