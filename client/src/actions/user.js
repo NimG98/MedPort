@@ -108,13 +108,13 @@ export const logout = (app) => {
 };
 
 /* Returns the profile info of the loggedInUser or a different user by username */
-export const getUserProfileInfo = (username, callback, profileComponent) => { 
+export const getUserProfileInfo = (id, callback, profileComponent) => { 
     // get all of the profile info for the loggedInUser
     var url = ApiRoutes.profile;
 
     // get general profile info for a different user (firstname, lastname, email)
-    if(username){
-        url += username;
+    if(id){
+        url += id;
     }
 
     return fetch(url)
