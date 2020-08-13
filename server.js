@@ -59,6 +59,17 @@ const mongoChecker = (req, res, next) => {
 	}
 }
 
+// middleware to check if request is made by admin user type
+// Note: user AFTER authenticate middleware
+const isAdmin = (req, res, next) => {
+	if (req.user.userType !== "admin") {
+		res.status(401).send("Unauthorized");
+		return;
+	} else {
+		next();
+	}
+}
+
 /*** Session handling **************************************/
 // Create a session cookie
 app.use(
@@ -499,14 +510,9 @@ app.get("/api/institutions", mongoChecker, (req, res) => {
 });
 
 // A route to update an institution with institutionID
-app.put("/api/institutions/:id", mongoChecker, authenticate, (req, res) => {
+// Note: admin route
+app.put("/api/institutions/:id", mongoChecker, authenticate, isAdmin, (req, res) => {
 	const institutionID = req.params.id;
-	
-	// checks if user making request is an admin
-	if (req.user.userType !== "admin") {
-		res.status(401).send("Unauthorized");
-		return;
-	}
 	
 	if (!ObjectID.isValid(institutionID)) {
 		res.status(404).send("Resource not found");
@@ -552,14 +558,9 @@ app.get("/api/institutions/:id", mongoChecker, authenticate, (req, res) => {
 });
 
 // A route to get the doctors associated with a given institution's id
-app.get("/api/institutions/doctors/:id", mongoChecker, authenticate, (req, res) => {
+// Note: admin route
+app.get("/api/institutions/doctors/:id", mongoChecker, authenticate, isAdmin, (req, res) => {
 	const institutionID = req.params.id;
-	
-	// checks if user making request is an admin
-	if (req.user.userType !== "admin") {
-		res.status(401).send("Unauthorized");
-		return;
-	}
 	
 	if (!ObjectID.isValid(institutionID)) {
 		res.status(404).send("Resource not found");
@@ -581,14 +582,9 @@ app.get("/api/institutions/doctors/:id", mongoChecker, authenticate, (req, res) 
 
 
 // A route to delete an institution document with a given id
-app.delete("/api/institutions/:id", mongoChecker, authenticate, (req, res) => {
+// Note: admin route
+app.delete("/api/institutions/:id", mongoChecker, authenticate, isAdmin, (req, res) => {
 	const institutionID = req.params.id;
-	
-	// checks if user making request is an admin
-	if (req.user.userType !== "admin") {
-		res.status(401).send("Unauthorized");
-		return;
-	}
 	
 	if (!ObjectID.isValid(institutionID)) {
 		res.status(404).send("Resource not found");
