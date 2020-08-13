@@ -449,6 +449,20 @@ app.post("/api/doctors", mongoChecker, (req, res) => {
 
 });
 
+// A route to get a list of all doctors
+// Note: admin route
+app.get("/api/doctors", mongoChecker, authenticate, isAdmin, (req, res) => {
+	
+	// query for all doctors
+	Doctor.find().then(doctors => {
+		res.send(doctors);
+	}).catch(error => {
+		log(error);
+		res.status(500).send("Internal Server Error");
+	});
+	
+});
+
 // A route to get the doctor document given the doctor's id
 app.get("/api/doctors/:id", mongoChecker, authenticate, (req, res) => {
     const doctorId = req.params.id;
