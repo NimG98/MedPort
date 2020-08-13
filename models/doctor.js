@@ -26,5 +26,15 @@ const DoctorSchema = new mongoose.Schema({
     }
 })
 
+// middleware for deleting a doctor document
+DoctorSchema.pre("remove", async function(next) {
+	// deletes the referenced user document
+	await this.model('User').remove({ _id: this.user });
+	// deleted the doctor's referral document
+	await this.model('Referral').remove({ doctorID: this._id});
+	// calls the next middleware
+	next();
+});
+
 const Doctor = mongoose.model('Doctor', DoctorSchema)
 module.exports = { Doctor }

@@ -484,6 +484,34 @@ app.get("/api/doctors/:id", mongoChecker, authenticate, (req, res) => {
     })
 });
 
+// A route to delete a doctor with a given doctor's id
+// Note: admin route
+app.delete("/api/doctors/:id", mongoChecker, authenticate, isAdmin, (req, res) => {
+	const doctorID = req.params.id;
+	
+	if(!ObjectID.isValid(doctorID)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+	
+	Doctor.findById(doctorID).then(doctor => {
+		if (!doctor) {
+			res.status(404).send("Resource Not Found");
+			return;
+		} else {
+			doctor.remove().then(doctor => {
+				res.send(doctor);
+			}).catch(error => {
+				log(error);
+				res.status(500).send("Internal Server Error");
+			})
+		}
+	}).catch(error => {
+		log(error);
+		res.status(500).send("Internal Server Error");
+	});
+})
+
 /** Institution routes below **/
 
 // A route to make a new institution (can be called when new user made)
