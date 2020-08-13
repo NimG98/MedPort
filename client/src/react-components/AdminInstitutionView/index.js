@@ -8,7 +8,7 @@ import "./styles.css";
 // importing components
 import Header from "../Header";
 import NavBar from "../NavBar";
-import { Alert, Button } from "antd";
+import { Alert, Button, Popconfirm } from "antd";
 
 // importing actions/required methods
 import { getInstitution, deleteInstitution, updateInstitution, getDoctorsByInstitution } from "../../actions/institution";
@@ -106,11 +106,18 @@ class AdminInstitutionView extends React.Component {
 							Institution Info
 						</h1>
 						
-						<Button
-							type="danger"
-							className="delete-institution-button"
-							onClick={() => this.removeInstitution(this.state.institutionID)}
-						>Delete Institution</Button>
+						<Popconfirm
+							title="Delete this institution?"
+							onConfirm={(e) => this.removeInstitution(this.state.institutionID)}
+							onCancel={(e) => {}}
+							okText="Yes"
+							cancelText="No"
+						>
+							<Button
+								type="danger"
+								className="delete-institution-button"
+							>Delete Institution</Button>
+						</Popconfirm>
 						
 						<table>
 							<thead>

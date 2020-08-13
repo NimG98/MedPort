@@ -11,7 +11,7 @@ import { getInstitutions, deleteInstitution } from "../../actions/institution";
 import { redirect } from "../../actions/router"
 
 // importing components
-import { Alert, Button } from "antd";
+import { Alert, Button, Popconfirm } from "antd";
 
 class AdminInstitutionsOverview extends React.Component {
 	
@@ -111,10 +111,17 @@ class AdminInstitutionsOverview extends React.Component {
 						>View</Button>
 					</td>
 					<td>
-						<Button 
-							type="danger"
-							onClick={() => {this.removeInstitution(institution._id)}}
-						>Delete</Button>
+						<Popconfirm
+							title="Delete this institution?"
+							onConfirm={(e) => {this.removeInstitution(institution._id)}}
+							onCancel={(e) => {}}
+							okText="Yes"
+							cancelText="No"
+						>
+							<Button 
+								type="danger"
+							>Delete</Button>
+						</Popconfirm>
 					</td>
 				</tr>
 			)

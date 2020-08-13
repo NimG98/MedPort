@@ -11,7 +11,7 @@ import { getDoctors, deleteDoctor } from "../../actions/doctor";
 import { redirect } from "../../actions/router"
 
 // importing components
-import { Alert, Button } from "antd";
+import { Alert, Button, Popconfirm } from "antd";
 
 class AdminDoctorsOverview extends React.Component {
 	headers = ["Medical ID", "First Name", "Last Name", "Email"];
@@ -110,10 +110,17 @@ class AdminDoctorsOverview extends React.Component {
 						>View</Button>
 					</td>
 					<td>
-						<Button 
-							type="danger"
-							onClick={() => {this.removeDoctor(doctor._id)}}
-						>Delete</Button>
+						<Popconfirm
+							title="Delete this doctor?"
+							onConfirm={(e) => {this.removeDoctor(doctor._id)}}
+							onCancel={(e) => {}}
+							okText="Yes"
+							cancelText="No"
+						>
+							<Button 
+								type="danger"
+							>Delete</Button>
+						</Popconfirm>
 					</td>
 				</tr>
 			)
