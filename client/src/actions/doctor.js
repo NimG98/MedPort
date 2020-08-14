@@ -25,6 +25,26 @@ export const getDoctorByID = (doctorID, callback) => {
         });
 }
 
+/* Returns a list of the patients under a specific doctor */
+export const getPatientsByDoctorID = (doctorID) => {
+    const url = ApiRoutes.patientsByDoctorId + doctorID;
+
+    return fetch(url)
+        .then(res => {
+            if (res.status === 200) {
+                return res.json();
+            }
+        })
+        .then(patientsArray => {
+            if(patientsArray){
+                return patientsArray;
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}
+
 /* 
 	submits new doctor information to server for account creation
 */

@@ -10,6 +10,7 @@ export const ApiRoutes = {
     doctorById: baseUrl + "/api/doctors/",
     institution: baseUrl + '/api/institutions',
     doctor: baseUrl + '/api/doctors',
+    patientsByDoctorId: baseUrl + "/api/doctors/patients/",
     referral: baseUrl + '/api/referrals',
     patient: baseUrl + '/api/patients',
     user: baseUrl + '/api/users',

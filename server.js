@@ -571,6 +571,23 @@ app.get("/api/doctors/:id", mongoChecker, authenticate, (req, res) => {
     })
 });
 
+// A route to get a list of the patients who has a doctor with the given doctor id
+app.get("/api/doctors/patients/:id", mongoChecker, authenticate, (req, res) => {
+    const doctorId = req.params.id;
+
+    if(!ObjectID.isValid(doctorId)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+    
+    Patient.find({doctor: doctorId}).then( patients => {
+        res.send(patients); // array of patient documents
+    }).catch(error => {
+        log(error);
+        res.status(500).send("Internal Server Error");
+    })
+});
+
 /** Institution routes below **/
 
 // A route to make a new institution (can be called when new user made)
