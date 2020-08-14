@@ -114,6 +114,20 @@ export const getDoctor = (doctorID) => {
 	});
 }
 
+export const getPatientsByDoctor = (doctorID) => {
+	const url = ApiRoutes.doctor + "/patients/" + doctorID;
+	
+	return fetch(url).then(res => {
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(patients => {
+		return patients;
+	}).catch(error => {
+		console.log(error);
+	}); 
+}
+
 /*
 	sends updated doctor object to server
 */

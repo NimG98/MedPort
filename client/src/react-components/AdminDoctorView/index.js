@@ -11,7 +11,8 @@ import NavBar from "../NavBar";
 import { Alert, Button, Popconfirm } from "antd";
 
 // importing actions/required methods
-import { getDoctor, deleteDoctor, updateDoctor } from "../../actions/doctor";
+import { getDoctor, deleteDoctor, updateDoctor, getPatientsByDoctor } from "../../actions/doctor";
+import { getInstitution, getInstitutions } from "../../actions/institution";
 import { redirect } from "../../actions/router"
 
 class AdminDoctorView extends React.Component {
@@ -21,6 +22,7 @@ class AdminDoctorView extends React.Component {
 	patientHeaders = ["Health Card", "First Name", "Last Name", "Address", "Email"];
 	
 	componentDidMount() {
+		// get doctor info
 		getDoctor(this.state.doctorID).then(doctor => {
 			if (doctor) {
 				this.setState({
@@ -28,11 +30,29 @@ class AdminDoctorView extends React.Component {
 					firstName: doctor.generalProfile.firstName,
 					lastName: doctor.generalProfile.lastName,
 					email: doctor.generalProfile.email,
-					institutionID: doctor.institutionID,
 					doctorInfo: doctor,
 				});
 				
 				this.setError(false, "");
+				
+				// needs institutionID
+				// gets doctor's institution
+				getInstitution(doctor.institutionID).then(institution => {
+					if (institution) {
+						const newDoctorInfo = {...this.state.doctorInfo};
+						newDoctorInfo.institution = institution.name;
+						
+						this.setState({
+							institution: institution.name,
+							doctorInfo: newDoctorInfo
+						});
+					} else {
+						this.setError(true, "An error occurred, please try again");
+					}
+				}).catch(error => {
+					console.log(error);
+					this.setError(true, "An error occurred, please try again");
+				});
 				
 			} else {
 				this.setError(true, "An error occurred, please try again");
@@ -41,6 +61,21 @@ class AdminDoctorView extends React.Component {
 			console.log(error);
 			this.setError(true, "An error occurred, please try again");
 		});
+		
+		// get list of patients that belong to doctor
+		getPatientsByDoctor(this.state.doctorID).then(patients => {
+			if (patients || patients === []) {
+				this.setState({
+					patients: patients
+				});
+			} else {
+				this.setError(true, "An error occurred, please try again");
+			}
+		}).catch(error => {
+			console.log(error);
+			this.setError(true, "An error occurred, please try again");
+		});
+		
 	}
 	
 	constructor(props) {
@@ -51,7 +86,7 @@ class AdminDoctorView extends React.Component {
 			firstName: '',
 			lastName: '',
 			email: '',
-			institutionID: '',
+			institution: '',
 			
 			error: false,
 			errorCode: '',
@@ -110,7 +145,7 @@ class AdminDoctorView extends React.Component {
 									{this.state.edit ? <td><input name="firstName" value={this.state.firstName} onChange={this.handleInputChange}></input></td> : <td>{this.state.doctorInfo.generalProfile.firstName}</td>}
 									{this.state.edit ? <td><input name="lastName" value={this.state.lastName} onChange={this.handleInputChange}></input></td> : <td>{this.state.doctorInfo.generalProfile.lastName}</td>}
 									{this.state.edit ? <td><input name="email" value={this.state.email} onChange={this.handleInputChange}></input></td> : <td>{this.state.doctorInfo.generalProfile.email}</td>}
-									{this.state.edit ? <td><input name="institutionID" value={this.state.institutionID} onChange={this.handleInputChange}></input></td> : <td>{this.state.doctorInfo.institutionID}</td>}
+									{this.state.edit ? <td><input name="institution" value={this.state.institution} onChange={this.handleInputChange}></input></td> : <td>{this.state.doctorInfo.institution}</td>}
 									{this.state.edit ? <td><Button type="primary" onClick={() => { updateDoctor(this.createDoctor()); this.toggleEdit(); }}>Submit</Button></td> : <td><Button type="primary" onClick={() => this.toggleEdit()}>Edit</Button></td>}
 									{this.state.edit ? <td><Button type="danger" onClick={() => { this.resetInputs(); this.toggleEdit(); }} >Cancel</Button></td> : null}
 								</tr>
