@@ -6,7 +6,7 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import { Tabs, Button, Modal }  from "antd";
 
 import { getUserProfileInfo } from '../../actions/user';
-import { getUserRequests } from "../../actions/request";
+import { getUserRequests, setRequestStatus } from "../../actions/request";
 
 import moment from 'moment';
 
@@ -39,34 +39,46 @@ class PreviousRequests extends React.Component {
     actionHeaderName = "Action Needed";
 
     async componentDidMount(){
-        await this.displayTableElements("pending");
-        await this.displayTableElements("confirmed");
+        const pendingTableRowsRequests = await this.displayTableElements("pending");
+        const confirmedTableRowsRequests = await this.displayTableElements("confirmed");
+        this.setState({
+            pendingRequestsRowData: pendingTableRowsRequests,
+            confirmedRequestsRowData: confirmedTableRowsRequests
+        });
     }
 
     updateRequestsOnPage = async () => {
-        await this.displayTableElements("pending");
-        await this.displayTableElements("confirmed");
+        const pendingTableRowsRequests = await this.displayTableElements("pending");
+        const confirmedTableRowsRequests = await this.displayTableElements("confirmed");
+        this.setState({
+            pendingRequestsRowData: pendingTableRowsRequests,
+            confirmedRequestsRowData: confirmedTableRowsRequests
+        });
     }
 
-    showModal = (modalMessage) => {
+    showModal = (modalMessage, openRequest) => {
         console.log("showmodal");
         console.log(this.state);
         this.setState({
             modalVisible: true,
-            modalMessage: modalMessage
+            modalMessage: modalMessage,
+            openRequest: openRequest
         });
     };
 
-    handleModalOk = async (requestID) => {
+    handleModalOk = async () => {
+        await setRequestStatus(this.state.openRequest._id, "confirmed")
         this.setState({
             modalVisible: false,
+            openRequest: null
         });
-        // await updateRequestsOnPage();
+        await this.updateRequestsOnPage();
     };
     
     handleModalCancel = () => {
         this.setState({
             modalVisible: false,
+            openRequest: null
         });
     };
 
@@ -141,6 +153,7 @@ class PreviousRequests extends React.Component {
         }
 
         // iterative over all requests
+        const tableRowsRequests = [];
         for(var req of requestData) {
             const createdByUser = await getUserProfileInfo(req.createdBy, null, null);
             const createdByName = createdByUser.firstName + " " + createdByUser.lastName;
@@ -161,11 +174,15 @@ class PreviousRequests extends React.Component {
                                 </tr>);
                 
             if(status === "pending") {
-                this.setState({pendingRequestsRowData: this.state.pendingRequestsRowData.concat([tableRow])})
+                // this.setState({pendingRequestsRowData: this.state.pendingRequestsRowData.concat([tableRow])})
+                tableRowsRequests.push(tableRow);
             } else if(status === "confirmed") {
-                this.setState({confirmedRequestsRowData: this.state.confirmedRequestsRowData.concat([tableRow])})
+                // this.setState({confirmedRequestsRowData: this.state.confirmedRequestsRowData.concat([tableRow])})
+                tableRowsRequests.push(tableRow);
             }
         }
+
+        return tableRowsRequests;
     }
 
     // Note: function only called for pending requests, since action is pending
@@ -184,7 +201,7 @@ class PreviousRequests extends React.Component {
             const modalMessage = "Request by " + createdByName + " for a " + req.type + " on " + moment(req.date).format('MMMM Do YYYY') + " at " + req.time + ".";
             return (
                 <td>
-                    <Button onClick={() => this.showModal(modalMessage)} className="confirm-request-button">
+                    <Button onClick={() => this.showModal(modalMessage, req)} className="confirm-request-button">
                         Confirm
                     </Button>
                 </td>
