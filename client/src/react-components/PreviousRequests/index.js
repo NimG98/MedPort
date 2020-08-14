@@ -57,8 +57,6 @@ class PreviousRequests extends React.Component {
     }
 
     showModal = (modalMessage, openRequest) => {
-        console.log("showmodal");
-        console.log(this.state);
         this.setState({
             modalVisible: true,
             modalMessage: modalMessage,
@@ -188,9 +186,6 @@ class PreviousRequests extends React.Component {
     // Note: function only called for pending requests, since action is pending
     displayActionNeeded = (req, createdByName, loggedInUserProfileId) => {
         // Pending on other person
-        console.log(this.state.user)
-        console.log(req.createdBy);
-
         if(req.createdBy === loggedInUserProfileId) {
             return (
                 <td>

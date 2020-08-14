@@ -38,11 +38,6 @@ class RequestForm extends React.Component {
     }
 
     onFinish = async (formValues) => {
-        console.log("Request submitted with the following values: ", formValues);
-        for(var key of Object.keys(formValues)) {
-            console.log(key, formValues[key]);
-        }
-
         const createdByUser = await getUserProfileInfo();
         const createdBy = createdByUser._id;
         if(formValues["patient"] && this.state.userType === UserType.doctor){
@@ -64,8 +59,6 @@ class RequestForm extends React.Component {
             requestInfo["reason"] = reason;
         }
         
-        console.log(requestInfo);
-
         await addRequest(requestInfo);
         this.props.backToPreviousRequestsPage();
     }

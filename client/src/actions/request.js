@@ -15,12 +15,10 @@ export const getUserRequests = (component) => {
         .then(requestsArray => {
             if (requestsArray) {
                 if(component){
-                    console.log("here fetch then component")
                     const pendingRequests = requestsArray.filter( request => request.status === "pending");
                     const confirmedRequests = requestsArray.filter( request => request.status === "confirmed");
                     component.setState({ pendingRequests: pendingRequests, confirmedRequests: confirmedRequests });
                 }
-                console.log("requestsArray", requestsArray)
                 return requestsArray;
             }
         })
