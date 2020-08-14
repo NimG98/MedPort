@@ -96,3 +96,28 @@ export const deleteDoctor = (doctorID) => {
 		console.log(error);
 	});
 }
+
+/*
+	sends server request to get doctor with id, doctorID
+*/
+export const getDoctor = (doctorID) => {
+	const url = ApiRoutes.doctor + "/" + doctorID;
+	
+	return fetch(url).then(res => {
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(doctor => {
+		return doctor;
+	}).catch(error => {
+		console.log(error);
+	});
+}
+
+/*
+	sends updated doctor object to server
+*/
+export const updateDoctor = (doctor) => {
+	// code below requires server call
+	return true;
+}
