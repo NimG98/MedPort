@@ -35,7 +35,7 @@ class Request extends React.Component {
 
     changeView() {
         if(this.state.newRequest) {
-            return (<RequestForm loggedInUser={this.state.user} backToPreviousRequestsPage={this.backToPreviousRequestsPage}/>);
+            return (<RequestForm appComponent={this.props.appComponent} backToPreviousRequestsPage={this.backToPreviousRequestsPage}/>);
         } else {
             return (
             <div className="previousRequestsPage">

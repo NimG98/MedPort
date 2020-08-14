@@ -59,3 +59,32 @@ export const setRequestStatus = (requestId, status) => {
             console.log(error);
         });
 }
+
+/* Add a new request */
+export const addRequest = (requestInfo) => {
+    const url = ApiRoutes.request
+
+    const request = new Request(url, {
+        method: "post",
+        body: JSON.stringify(requestInfo),
+        headers: {
+            "Accept": "application/json, text/plain, */*",
+            "Content-Type": "application/json"
+        }
+    });
+
+    return fetch(request)
+        .then(res => {
+            if (res.status === 200) {
+                return res.json();
+            }
+        })
+        .then(requestJson => {
+            if (requestJson) {
+                return requestJson;
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}
