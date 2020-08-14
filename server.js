@@ -513,6 +513,29 @@ app.delete("/api/doctors/:id", mongoChecker, authenticate, isAdmin, (req, res) =
 	});
 })
 
+// A route to get a list of patients for a doctor with a given doctor's id
+// Note: admin route
+app.get("/api/doctors/patients/:id", mongoChecker, authenticate, isAdmin, (req, res) => {
+	const doctorID = req.params.id;
+	
+	if(!ObjectID.isValid(doctorID)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+	
+	Patient.find({ doctor: doctorID }).then(patients => {
+		if (!patients) {
+			res.status(404).send("Resource Not Found");
+			return;
+		} else {
+			res.send(patients);
+		}
+	}).catch(error => {
+		log(error);
+		res.status(500).send("Internal Server Error");
+	});
+});
+
 /** Institution routes below **/
 
 // A route to make a new institution (can be called when new user made)
