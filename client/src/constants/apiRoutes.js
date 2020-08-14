@@ -15,5 +15,7 @@ export const ApiRoutes = {
     patient: baseUrl + '/api/patients',
     user: baseUrl + '/api/users',
     request: baseUrl + '/api/requests',
-    requestStatus: baseUrl + '/api/requests/status/'
+    requestStatus: baseUrl + '/api/requests/status/',
+    files: baseUrl + '/api/files/',
+    filesUploaded: baseUrl + '/api/files/uploaded'
 }
