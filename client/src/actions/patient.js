@@ -93,7 +93,30 @@ export const getPatient = (patientID) => {
 /*
 	sends updated patient object to server
 */
-export const updatePatient = (patient) => {
-	// code below requires server call
-	return true;
+export const updatePatient = (patientID, propertiesToChange) => {
+	const url = ApiRoutes.patient + "/" + patientID;
+	
+	// creating the request
+	const request = new Request(url, {
+		method: 'PATCH',
+		body: JSON.stringify(propertiesToChange),
+		headers: {
+			"Accept": "application/json, text/plain, */*",
+			"Content-Type": "application/json"
+		},
+	});
+	
+	// making the request to the server
+	return fetch(request).then(res => {
+		// parse json
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(patientInfo => {
+		// return newly created patient object
+		return patientInfo;
+	}).catch(error => {
+		// log error
+		console.log(error);
+	});
 }
