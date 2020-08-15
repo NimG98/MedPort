@@ -80,6 +80,8 @@ class App extends React.Component {
 			<Route exact path='/admin/patients' render={() =>
                 (<AdminPatients appComponent={this} />)}/>
 
+			<Route exact path='/admin/patients/:id' render={() =>
+                (<AdminPatientView appComponent={this} />)}/>
 
             {/* <Route exact path='/' render={() =>
                 (<Home appComponent={this}/>)}/>
@@ -89,10 +91,6 @@ class App extends React.Component {
                 (<Upload appComponent={this} />)}/>
             <Route exact path='/request' render={() =>
                 (<Request appComponent={this} />)}/>
-            <Route exact path='/admin/patients' render={() =>
-                (<AdminPatients appComponent={this} />)}/>
-            <Route exact path='/admin/patients/:id' render={() =>
-                (<AdminPatientView appComponent={this} />)}/>
             <Route exact path='/results' render={() =>
                 (<Result appComponent={this} />)}/>
             <Route exact path='/profile' render={() =>

@@ -72,3 +72,28 @@ export const deletePatient = (patientID) => {
 		console.log(error);
 	});
 }
+
+/*
+	sends server request to get patient with id, patientID
+*/
+export const getPatient = (patientID) => {
+	const url = ApiRoutes.patient + "/" + patientID;
+	
+	return fetch(url).then(res => {
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(patientInfo => {
+		return patientInfo;
+	}).catch(error => {
+		console.log(error);
+	});
+}
+
+/*
+	sends updated patient object to server
+*/
+export const updatePatient = (patient) => {
+	// code below requires server call
+	return true;
+}

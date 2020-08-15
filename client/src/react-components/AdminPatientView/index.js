@@ -11,7 +11,7 @@ import NavBar from "../NavBar";
 import { Alert, Button } from "antd";
 
 // importing actions/required methods
-import { getPatient, deletePatient, updatePatient } from "../../actions/app";
+import { getPatient, deletePatient, updatePatient } from "../../actions/patient";
 import { redirect } from "../../actions/router"
 
 class AdminPatientView extends React.Component {
@@ -19,25 +19,28 @@ class AdminPatientView extends React.Component {
 	infoHeaders = ["Health Card", "First Name", "Last Name", "Email", "Address", "Postal Code", "Doctor"];
 	
 	componentDidMount() {
-		const data = getPatient(this.state.patientID);
-		
-		if (data) {
-			this.setState({
-				HCN: data.HCN,
-				firstName: data.firstName,
-				lastName: data.lastName,
-				email: data.email,
-				address: data.address,
-				postalCode: data.postalCode,
-				doctorID: data.doctorID,
-				patientInfo: data,
-			});
-			
-			this.setError(false, "");
-			
-		} else {
+		getPatient(this.state.patientID).then(patient => {
+			if (patient) {
+				this.setState({
+					HCN: patient.HCN,
+					firstName: patient.generalProfile.firstName,
+					lastName: patient.generalProfile.lastName,
+					email: patient.generalProfile.email,
+					address: patient.address,
+					postalCode: patient.postalCode,
+					doctorID: patient.doctor,
+					patientInfo: patient,
+				});
+				
+				this.setError(false, "");
+				
+			} else {
+				this.setError(true, "An error occurred, please try again");
+			}
+		}).catch(error => {
+			console.log(error);
 			this.setError(true, "An error occurred, please try again");
-		}
+		});
 	}
 	
 	constructor(props) {
@@ -55,8 +58,8 @@ class AdminPatientView extends React.Component {
 			error: false,
 			errorCode: '',
 			edit: false,
-			patientID: parseInt(props.match.params.id),
-			patientInfo: {},
+			patientID: props.match.params.id,
+			patientInfo: {generalProfile: {}},
 		}
 		
 		// binding functions
@@ -97,12 +100,12 @@ class AdminPatientView extends React.Component {
 							<tbody>
 								<tr>	
 									{this.state.edit ? <td><input name="HCN" value={this.state.HCN} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.HCN}</td>}
-									{this.state.edit ? <td><input name="firstName" value={this.state.firstName} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.firstName}</td>}
-									{this.state.edit ? <td><input name="lastName" value={this.state.lastName} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.lastName}</td>}
-									{this.state.edit ? <td><input name="email" value={this.state.email} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.email}</td>}
+									{this.state.edit ? <td><input name="firstName" value={this.state.firstName} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.generalProfile.firstName}</td>}
+									{this.state.edit ? <td><input name="lastName" value={this.state.lastName} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.generalProfile.lastName}</td>}
+									{this.state.edit ? <td><input name="email" value={this.state.email} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.generalProfile.email}</td>}
 									{this.state.edit ? <td><input name="address" value={this.state.address} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.address}</td>}
 									{this.state.edit ? <td><input name="postalCode" value={this.state.postalCode} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.postalCode}</td>}
-									{this.state.edit ? <td><input name="doctorID" value={this.state.doctorID} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.doctorID}</td>}
+									{this.state.edit ? <td><input name="doctorID" value={this.state.doctorID} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.doctor}</td>}
 									{this.state.edit ? <td><Button type="primary" onClick={() => { updatePatient(this.createPatient()); this.toggleEdit(); }}>Submit</Button></td> : <td><Button type="primary" onClick={() => this.toggleEdit()}>Edit</Button></td>}
 									{this.state.edit ? <td><Button type="danger" onClick={() => { this.resetInputs(); this.toggleEdit(); }} >Cancel</Button></td> : null}
 								</tr>
@@ -184,12 +187,12 @@ class AdminPatientView extends React.Component {
 	
 	resetInputs() {
 		this.setState({
-			firstName: this.state.patientInfo.firstName,
-			lastName: this.state.patientInfo.lastName,
+			firstName: this.state.patientInfo.generalProfile.firstName,
+			lastName: this.state.patientInfo.generalProfile.lastName,
 			address: this.state.patientInfo.address,
 			postalCode: this.state.patientInfo.postalCode,
 			HCN: this.state.patientInfo.HCN,
-			email: this.state.patientInfo.email,
+			email: this.state.patientInfo.generalProfile.email,
 			doctorID: this.state.patientInfo.doctorID,
 		});
 	}
