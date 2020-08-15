@@ -18,6 +18,7 @@ const { Patient } = require("./models/patient");
 const { Doctor } = require("./models/doctor");
 const { Institution } = require("./models/institution");
 const { Referral } = require("./models/referral");
+const { Result } = require("./models/result");
 
 // to validate object IDs
 const { ObjectID } = require("mongodb");
@@ -781,7 +782,7 @@ app.post("/api/files", mongoChecker, authenticate, (req, res) => {
 		return;
     }
 
-    // Create a new request
+    // Create a new file
 	const file = new File({
         uploader: req.body.uploader,
         patient: req.body.patient,
@@ -790,6 +791,12 @@ app.post("/api/files", mongoChecker, authenticate, (req, res) => {
         fileName: req.body.fileName,
         base64: req.body.base64
     });
+	
+	// Create a new result
+	const result = new Result({
+		file: file._id,
+		notes: []
+	});
 
     // Set the model schema type of objectId for "createdBy" and "reciever"
     if(req.user.userType === "patient") {
@@ -798,9 +805,23 @@ app.post("/api/files", mongoChecker, authenticate, (req, res) => {
         file.populate({path: 'uploader', model: 'Doctor'})
     }
     
-	// save the request
+	// save the file
 	file.save().then(file => {
-		res.send(file);
+		// save the result
+		result.save().then(result => {
+			res.send(file);
+		}).catch(error => {
+			// check for if mongo server suddenly disconnected before this request.
+			if (isMongoError(error)) { 
+				log(error);
+				res.status(500).send('Internal Server Error')
+				return;
+			} else {
+				log(error);
+				res.status(400).send('Bad Request')
+				return;
+			}
+		});
 	}).catch(error => {
 		// check for if mongo server suddenly disconnected before this request.
 		if (isMongoError(error)) { 
