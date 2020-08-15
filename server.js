@@ -384,6 +384,18 @@ app.post("/api/patients", mongoChecker, (req, res) => {
 	});
 });
 
+// A route to get list of all patients
+// Note: admin route
+app.get("/api/patients", mongoChecker, authenticate, isAdmin, (req, res) => {
+	// query for all patients
+	Patient.find().then(patients => {
+		res.send(patients);
+	}).catch(error => {
+		log(error);
+		res.status(500).send('Internal Server Error');
+	});
+})
+
 /** Doctor routes below **/
 
 // A route to make a new doctor
