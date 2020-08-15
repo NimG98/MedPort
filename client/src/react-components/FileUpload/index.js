@@ -1,17 +1,22 @@
 import React from "react";
+import { withRouter } from "react-router";
 
 // import 'bootstrap/dist/css/bootstrap.min.css';
 // import { Container, Form, Card, Col, Row} from 'react-bootstrap'
 import 'antd/dist/antd.css';
 import "./styles.css";
-import { Form, Upload, Card, Select, message, Button }  from "antd";
+import { Form, Upload, Card, Select, message, Button, Input }  from "antd";
 import { UploadOutlined } from '@ant-design/icons';
 
 import Header from './../Header';
 import NavBar from './../NavBar';
 
 import { UserType } from "../../constants/userType";
+import { getUserUploadedFiles, addFile } from "../../actions/file";
+import { getUserProfileInfo } from "../../actions/user";
+import { getPatientsByDoctorID } from "../../actions/doctor";
 
+import moment from "moment";
 
 class FileUpload extends React.Component {
 
@@ -24,99 +29,228 @@ class FileUpload extends React.Component {
             userType: this.props.appComponent.state.userType,
             patientsListDropdown: [],
             fileList: [],
+            previousFileDownloadLinks: [],
             uploading: false,
         }
 
         this.displayPatients = this.displayPatients.bind(this);
+        this.updatePreviousFilesOnPage = this.updatePreviousFilesOnPage.bind(this);
+        this.displayLastUploadedFiles = this.displayLastUploadedFiles.bind(this);
+        this.onUploadChange = this.onUploadChange.bind(this);
+        this.onFinish = this.onFinish.bind(this);
+        this.beforeUpload = this.beforeUpload.bind(this);
+        this.getBase64 = this.getBase64.bind(this);
+
     }
 
     async componentDidMount() {
         if(this.state.userType === UserType.doctor) {
             await this.displayPatients();
         }
-        await this.getPreviouslyUploadedFiles();
+        // const previousFileDownloadLinks = await this.displayLastUploadedFiles(5);
+        // this.setState({
+        //     previousFileDownloadLinks: previousFileDownloadLinks
+        // });
+        await this.updatePreviousFilesOnPage();
     }
 
-    getPreviouslyUploadedFiles = async () => {
-
+    updatePreviousFilesOnPage = async () => {
+        const previousFileDownloadLinks = await this.displayLastUploadedFiles(5);
+        this.setState({
+            previousFileDownloadLinks: previousFileDownloadLinks.reverse()
+        });
     }
 
-    uploadFile() {
+    displayLastUploadedFiles = async (numOfFilesToDisplay) => {
+        const fileLinks = [];
+        const lastFilesList = (await getUserUploadedFiles(this)).slice(-numOfFilesToDisplay);
 
+        for(var fileInfo of lastFilesList) {
+            const fileLink = (<a className="previousFileDownloadLink" download={fileInfo.fileName} href={fileInfo.base64}>
+                                {fileInfo.fileName}
+                            </a>);
+            fileLinks.push(fileLink);
+        }
+        return fileLinks;
     }
 
-    handlePreview() {
+    onUploadChange = (data) => {
+        var uploadedFileList = [...data.fileList];
+        uploadedFileList = uploadedFileList.slice(-1);
 
+        const isPdf = data.file.type === 'application/pdf'
+        if (!isPdf) {
+            message.error('You can only upload PDF file!');
+        }
+        const isLt2M = data.file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+            message.error('PDF must smaller than 2MB!');
+        }
+        
+        // this.beforeUpload(data.file)
+        // console.log(this.state.listUploadFile)
+        console.log("isPdf: ", isPdf, " isLt2M: ", isLt2M)
+        if(isPdf && isLt2M){
+            this.setState({ listedUploadFile: uploadedFileList });
+            console.log(data)
+            console.log(data.file)
+            const fileName = data.file.name;
+
+            // this.setState({ currentUploadFileName: fileName })
+            // this.getBase64(data.file)
+
+            this.getBase64(data.file, fileBase64 => {
+                console.log(fileBase64)
+                this.setState({ currentUploadFileBase64: fileBase64, currentUploadFileName: fileName })
+                console.log("here");
+            });
+        }
     }
+
+    onFinish = async (formValues) => {
+        console.log(this.state.currentUploadFileName, this.state.currentUploadFileBase64)
+        if(!this.state.currentUploadFileName || !this.state.currentUploadFileBase64) {
+            message.error('Please submit a file!');
+            return;
+        }
+        const uploader = (await getUserProfileInfo())._id;
+        if(formValues["patient"] && this.state.userType === UserType.doctor) {
+            var patient = this.state.patients[formValues["patient"]]._id;
+        } else if (this.state.userType === UserType.patient) {
+            var patient = uploader;
+        }
+
+        const reportType = formValues["reportType"];
+        const dateUploaded = moment(); // current time
+        const fileName = this.state.currentUploadFileName;
+        const base64 = this.state.currentUploadFileBase64;
+
+        const fileInfo = {uploader, patient, reportType, dateUploaded, fileName, base64}
+        console.log(fileInfo)
+
+        await addFile(fileInfo);
+        this.setState({ currentUploadFileBase64: null, currentUploadFileName: null })
+        await this.updatePreviousFilesOnPage();
+    }
+
+    beforeUpload = (file) => {
+/*         const isPdf = file.type === 'application/pdf'
+        if (!isPdf) {
+            message.error('You can only upload PDF file!');
+            // this.setState({ listUploadFile: false })
+        }
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+            message.error('PDF must smaller than 2MB!');
+            // this.setState({ listUploadFile: false })
+        } */
+        // if(isPdf && isLt2M) {
+        //     this.setState({ listUploadFile: true })
+        // }
+        //return isPdf && isLt2M;
+        return false;
+    }
+    
+    getBase64 = (pdf, callback) => {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => callback(reader.result));
+        reader.readAsDataURL(pdf);
+    }
+
+    // getBase64 = (pdfFile) => {
+    //     const reader = new FileReader();
+    //     reader.onload = function(fileLoadedEvent) {
+    //         const base64 = fileLoadedEvent.target.result;
+    //         // Print data in console
+    //         console.log(base64);
+    //         this.setState({currentUploadFileBase64: base64})
+    //     };
+    //     reader.readAsDataURL(pdfFile);
+    // }
 
     render() {
         return(
-            <div className="uploadFileFormPage">
+            <div>
                 <Header appComponent={this.props.appComponent}/>
                 <NavBar appComponent={this.props.appComponent} />
-                
-                <h1 className="uploadFileTitle">
-                    Upload a Medical File
-                </h1>
-                <Card className="uploadCard">
-                    <Form 
-                        name="upload-form"
-                        className="uploadForm"
-                        onFinish={this.onFinish}
-                        layout="vertical"
-                    >
-                        {this.state.userType === UserType.doctor &&
+                <div className="uploadFileFormPage">
+                    <h1 className="uploadFileTitle">
+                        Upload a Medical File
+                    </h1>
+                    <Card className="uploadCard">
+                        <Form 
+                            name="upload-form"
+                            className="uploadForm"
+                            onFinish={this.onFinish}
+                            layout="vertical"
+                        >
+                            {this.state.userType === UserType.doctor &&
+                                <Form.Item
+                                    name="patient"
+                                    label="Patient:"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Please select a Patient.',
+                                        },
+                                    ]}
+                                >
+                                    {this.state.patientsListDropdown}
+                                </Form.Item>
+                            }
+                            <p className="uploadReportTypeDescription">
+                                    Please input the type of medical file that you are uploading. 
+                                    For example, if this file contains a blood test report, then please input "Blood Test".
+                            </p>
                             <Form.Item
-                                name="patient"
-                                label="Patient:"
+                                name="reportType"
+                                label="Medical Report Type:"
+                                className="reportTypeLabel"
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Please select a Patient.',
+                                        message: "Please input the type of medical report."
                                     },
                                 ]}
                             >
-                                {this.state.patientsListDropdown}
+                                <Input className="uploadReportTypeInput"/>
                             </Form.Item>
-                        }
-                        <Form.Item
-                            name="upload"
-                            label="Upload"
-                        >
-                            <Upload 
-                                showUploadList = {showDownloadIcon=true, showRemoveIcon=false}
-                                onPreview={this.handlePreview}
-                                onChange={this.uploadFile} beforeUpload={beforeUpload} listType="picture" action="/api/files"
-                                defaultFileList={this.state.fileList}
-                            
+                            <Form.Item
+                                name="upload"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Please upload a file."
+                                    },
+                                ]}
                             >
-                                <Button>
-                                    <UploadOutlined /> Click to upload
+                                <Upload 
+                                    fileList={this.state.listedUploadFile}
+                                    showUploadList={showUploadListProps}
+                                    onChange={this.onUploadChange} 
+                                    beforeUpload={() => false}// beforeUpload={this.beforeUpload} 
+                                    action="/api/files"                            
+                                >
+                                    <Button className="uploadButton">
+                                        <UploadOutlined /> Click to upload
+                                    </Button>
+                                </Upload>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="submit" className="uploadFormSubmitButton">
+                                    Submit
                                 </Button>
-                            </Upload>
-                        </Form.Item>
-                        {/* <div className="mb-3">
-                            <Form.File id="formcheck-api-custom" custom>
-                            <Form.File.Input isValid />
-                            <Form.File.Label data-browse="Upload">
-                                Please select a file to upload.
-                            </Form.File.Label>
-                            </Form.File>
-                        </div> */}
-                    </Form>
-                </Card>
-                <h3 className="previouslyUploadedFilesTitle">
-                    Upload a Medical File
-                </h3>
-                <Card className="card2">
-                    File1
-                </Card>
-                <Card className="card2">
-                    File2
-                </Card>
-                <Card className="card2">
-                    File3
-                </Card>
+                            </Form.Item>
+                        </Form>
+                    </Card>
+                    <h3 className="previouslyUploadedFilesTitle">
+                        Previously Uploaded Files
+                    </h3>
+                    <Card className="previouslyUploadedFilesCard">
+                        {this.state.previousFileDownloadLinks.length === 0 && <p>No files have been uploaded.</p>}
+                        {this.state.previousFileDownloadLinks}
+                    </Card>
+                </div>
             </div>
         );
     }
@@ -136,22 +270,8 @@ class FileUpload extends React.Component {
     }
 }
 
-function beforeUpload(file) {
-    const isPdf = file.type === 'image/pdf'
-    if (!isPdf) {
-        message.error('You can only upload PDF file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-        message.error('PDF must smaller than 2MB!');
-    }
-    return isPdf && isLt2M;
+const showUploadListProps = {
+    showRemoveIcon: false,
 }
 
-function getBase64(pdf, callback) {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(pdf);
-}
-
-export default Upload;
+export default withRouter(FileUpload);

@@ -1,7 +1,6 @@
 // Functions to help with file actions.
 
 import { ApiRoutes } from "../constants/apiRoutes";
-import { File } from "../../../models/file";
 
 /* Get all files uploaded by the loggedInUser */
 export const getUserUploadedFiles = (component) => {
@@ -16,7 +15,7 @@ export const getUserUploadedFiles = (component) => {
         .then(filesArray => {
             if (filesArray) {
                 if(component){
-                    ///////////////////////////////
+                    component.setState({ fileList: filesArray })
                 }
                 return filesArray;
             }
@@ -31,7 +30,7 @@ export const getUserUploadedFiles = (component) => {
 export const addFile = (fileInfo) => {
     const url = ApiRoutes.files;
 
-    const file = new File(url, {
+    const request = new Request(url, {
         method: "post",
         body: JSON.stringify(fileInfo),
         headers: {
@@ -40,7 +39,7 @@ export const addFile = (fileInfo) => {
         }
     });
 
-    return fetch(file)
+    return fetch(request)
         .then(res => {
             if (res.status === 200) {
                 return res.json();
@@ -57,7 +56,7 @@ export const addFile = (fileInfo) => {
 }
 
 /* Get all files that are associated with a specific patient */
-export const getPatientFiles = (patientId) => {
+export const getPatientFiles = (patientId, component) => {
     const url = ApiRoutes.files + patientId;
 
     return fetch(url)

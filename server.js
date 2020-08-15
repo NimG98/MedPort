@@ -784,6 +784,7 @@ app.post("/api/files", mongoChecker, authenticate, (req, res) => {
     // Create a new request
 	const file = new File({
         uploader: req.body.uploader,
+        patient: req.body.patient,
         dateUploaded: req.body.dateUploaded,
         reportType: req.body.reportType,
         fileName: req.body.fileName,

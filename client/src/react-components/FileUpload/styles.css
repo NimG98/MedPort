@@ -16,7 +16,37 @@ html, body {
 }
 
 .uploadFileFormPage {
+    margin-top: 10px;
+    margin-left: 280px;
+}
 
+.uploadFileFormPage .ant-card {
+    margin-top: 30px;
+    min-height: 50px;
+    display: -webkit-flex;
+	display: flex;
+	align-items: center;
+}
+
+.uploadFileFormPage .uploadCard {
+    margin-right: 20px;
+    max-width: 1100px;
+    box-shadow: 1px 3px 0px 0 rgba(0,0,0,0.24);
+}
+
+.uploadFileFormPage .uploadCard .ant-card-body {
+    padding-bottom: 0px;
+    width: 100%
+}
+
+.uploadFileFormPage .previouslyUploadedFilesCard {
+    margin-right: 20px;
+    max-width: 1100px;
+    box-shadow: 1px 3px 0px 0 rgba(0,0,0,0.24);
+}
+
+.uploadFileFormPage .previouslyUploadedFilesCard .ant-card-body {
+    padding-bottom: 0px;
 }
 
 .uploadFileTitle {
@@ -24,5 +54,33 @@ html, body {
 }
 
 .previouslyUploadedFilesTitle {
-    
+    margin-top: 40px;
+    color: cadetblue;
+}
+
+.previousFileDownloadLink {
+    display: block;
+    margin-bottom: 15px;
+}
+
+.uploadReportTypeDescription{
+
+}
+
+.uploadButton {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.uploadReportTypeInput {
+
+}
+
+.uploadFormSubmitButton {
+
+}
+
+.reportTypeLabel .ant-form-item-label {
+    font-weight: bold;
 }
