@@ -7,22 +7,29 @@ import "./styles.css";
 import 'antd/dist/antd.css';
 
 // importing actions/required methods
-import { getInstitutions, deleteInstitution } from "../../actions/app";
+import { getInstitutions, deleteInstitution } from "../../actions/institution";
 import { redirect } from "../../actions/router"
 
 // importing components
-import { Alert, Button } from "antd";
+import { Alert, Button, Popconfirm } from "antd";
 
 class AdminInstitutionsOverview extends React.Component {
 	
 	headers = ["Name", "Address", "Postal Code", "Phone Number"];
 	
 	componentDidMount() {
-		const data = getInstitutions();
-		
-		
-		this.setState({
-			institutions: data
+		getInstitutions().then(data => {
+			if (data) {
+				this.setState({
+					institutions: data
+				});
+			} else {
+				// set error message
+				this.setError(true, "An error occurred while getting institutions.");
+			}
+			
+		}).catch(error => {
+			console.log(error);
 		});
 	}
 	
@@ -100,14 +107,21 @@ class AdminInstitutionsOverview extends React.Component {
 					<td>{institution.phoneNumber}</td>
 					<td><Button
 							type="primary"
-							onClick={() => {redirect(this, "/admin/institutions/" + institution.id)}}
+							onClick={() => {redirect(this, "/admin/institutions/" + institution._id)}}
 						>View</Button>
 					</td>
 					<td>
-						<Button 
-							type="danger"
-							onClick={() => {this.removeInstitution(institution.id)}}
-						>Delete</Button>
+						<Popconfirm
+							title="Delete this institution?"
+							onConfirm={(e) => {this.removeInstitution(institution._id)}}
+							onCancel={(e) => {}}
+							okText="Yes"
+							cancelText="No"
+						>
+							<Button 
+								type="danger"
+							>Delete</Button>
+						</Popconfirm>
 					</td>
 				</tr>
 			)
@@ -119,19 +133,28 @@ class AdminInstitutionsOverview extends React.Component {
 	// deletes institution with a specific id
 	removeInstitution(institutionID) {
 		// api call
-		const success = deleteInstitution(institutionID);
-		
-		if (success) {
-			// delete Institution
-			const filtered = this.state.institutions.filter(institution => institution.id !== institutionID);
+		deleteInstitution(institutionID).then(institutionInfo => {
+			if (institutionInfo) {
+				// institution deleted
+				
+				// delete institution from institutions list
+				const filtered = this.state.institutions.filter(institution => institution._id !== institutionID);
+				
+				this.setState({
+					institutions: filtered
+				});
+			} else {
+				// institution not deleted
+				
+				// set error message
+				this.setError(true, "An error occurred, please try again.");
+			}
 			
-			this.setState({
-				institutions: filtered
-			});
-		} else {
+		}).catch(error => {
+			console.log(error);
 			// set error message
 			this.setError(true, "An error occurred, please try again.");
-		}
+		});
 	}
 	
 	// sets error value in component state

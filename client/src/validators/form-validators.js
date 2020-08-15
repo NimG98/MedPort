@@ -125,6 +125,17 @@ export const validateInstitutionID = (fieldName, institutionID, setError) => {
 	}
 }
 
+// validates the institutionID field
+export const validateDoctorID = (fieldName, doctorID, setError) => {
+	if (!isRequired(doctorID)) {
+		setError(fieldName, true, 'Please fill out this field');
+		return false;
+	} else {
+		setError(fieldName, false, '');
+		return true;
+	}
+}
+
 // validates the referral code field
 // Note specific to referral sign up form
 export const validateReferralCode = (referralCode, setError) => {

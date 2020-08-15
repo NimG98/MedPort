@@ -61,6 +61,17 @@ const mongoChecker = (req, res, next) => {
 	}
 }
 
+// middleware to check if request is made by admin user type
+// Note: user AFTER authenticate middleware
+const isAdmin = (req, res, next) => {
+	if (req.user.userType !== "admin") {
+		res.status(401).send("Unauthorized");
+		return;
+	} else {
+		next();
+	}
+}
+
 /*** Session handling **************************************/
 // Create a session cookie
 app.use(
@@ -486,6 +497,105 @@ app.post("/api/patients", mongoChecker, (req, res) => {
 	});
 });
 
+// A route to get list of all patients
+// Note: admin route
+app.get("/api/patients", mongoChecker, authenticate, isAdmin, (req, res) => {
+	// query for all patients
+	Patient.find().then(patients => {
+		res.send(patients);
+	}).catch(error => {
+		log(error);
+		res.status(500).send('Internal Server Error');
+	});
+})
+
+// A route to delete a patient document
+// Note: admin route
+app.delete("/api/patients/:id", mongoChecker, authenticate, isAdmin, (req, res) => {
+	const patientID = req.params.id;
+	
+	if(!ObjectID.isValid(patientID)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+	
+	Patient.findById(patientID).then(patient => {
+		if (!patient) {
+			res.status(404).send("Resource Not Found");
+			return;
+		} else {
+			patient.remove().then(patient => {
+				res.send(patient);
+			}).catch(error => {
+				log(error);
+				res.status(500).send("Internal Server Error");
+				return;
+			})
+		}
+	}).catch(error => {
+		log(error);
+		res.status(500).send("Internal Server Error");
+	});
+});
+
+// A route to get the patient document given the patient's id
+app.get("/api/patients/:id", mongoChecker, authenticate, isAdmin, (req, res) => {
+	const patientID = req.params.id;
+	
+	if(!ObjectID.isValid(patientID)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+	
+	Patient.findById(patientID).then(patient => {
+		if (!patient) {
+			res.status(404).send("Resource Not Found");
+			return;
+		} else {
+			res.send(patient);
+		}
+	}).catch(error => {
+		log(error);
+		res.status(500).send("Internal Server Error");
+	});
+})
+
+// A route to update a doctor with doctorID
+// Note: admin route
+app.patch("/api/patients/:id", mongoChecker, authenticate, isAdmin, (req, res) => {
+	const patientID = req.params.id;
+	
+	if(!ObjectID.isValid(patientID)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+	
+	// getting the proerties to change and thier values
+	const fieldsToUpdate = {};
+	req.body.map((change) => {
+		// getting the property name
+		const path = change.path.substr(1)
+		const propertyToChange = path.split("/").join(".");
+		fieldsToUpdate[propertyToChange] = change.value
+	})
+	
+	Patient.findByIdAndUpdate(patientID, {$set: fieldsToUpdate}, {new: true, useFindAndModify: false, runValidators: true, context: 'query'}).then(patient => {
+		if (!patient) {
+			res.status(404).send("Resource Not Found");
+			return;
+		} else {
+			res.send(patient);
+		}
+	}).catch(error => {
+		if (isMongoError(error)) {
+			res.status(500).send('Internal server error')
+		} else {
+            console.log(error);
+			res.status(400).send('Bad Request')
+		}
+	});
+});
+
 /** Doctor routes below **/
 
 // A route to make a new doctor
@@ -551,6 +661,20 @@ app.post("/api/doctors", mongoChecker, (req, res) => {
 
 });
 
+// A route to get a list of all doctors
+// Note: admin route
+app.get("/api/doctors", mongoChecker, authenticate, isAdmin, (req, res) => {
+	
+	// query for all doctors
+	Doctor.find().then(doctors => {
+		res.send(doctors);
+	}).catch(error => {
+		log(error);
+		res.status(500).send("Internal Server Error");
+	});
+	
+});
+
 // A route to get the doctor document given the doctor's id
 app.get("/api/doctors/:id", mongoChecker, authenticate, (req, res) => {
     const doctorId = req.params.id;
@@ -572,6 +696,72 @@ app.get("/api/doctors/:id", mongoChecker, authenticate, (req, res) => {
     })
 });
 
+
+// A route to delete a doctor with a given doctor's id
+// Note: admin route
+app.delete("/api/doctors/:id", mongoChecker, authenticate, isAdmin, (req, res) => {
+	const doctorID = req.params.id;
+	
+	if(!ObjectID.isValid(doctorID)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+	
+	Doctor.findById(doctorID).then(doctor => {
+		if (!doctor) {
+			res.status(404).send("Resource Not Found");
+			return;
+		} else {
+			doctor.remove().then(doctor => {
+				res.send(doctor);
+			}).catch(error => {
+				log(error);
+				res.status(500).send("Internal Server Error");
+				return;
+			})
+		}
+	}).catch(error => {
+		log(error);
+		res.status(500).send("Internal Server Error");
+	});
+})
+
+// A route to update a doctor with doctorID
+// Note: admin route
+app.patch("/api/doctors/:id", mongoChecker, authenticate, isAdmin, (req, res) => {
+	const doctorID = req.params.id;
+	
+	if(!ObjectID.isValid(doctorID)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+	
+	// getting the proerties to change and thier values
+	const fieldsToUpdate = {};
+	req.body.map((change) => {
+		// getting the property name
+		const path = change.path.substr(1)
+		const propertyToChange = path.split("/").join(".");
+		fieldsToUpdate[propertyToChange] = change.value
+	})
+	
+	Doctor.findByIdAndUpdate(doctorID, {$set: fieldsToUpdate}, {new: true, useFindAndModify: false, runValidators: true, context: 'query'}).then(doctor => {
+		if (!doctor) {
+			res.status(404).send("Resource Not Found");
+			return;
+		} else {
+			res.send(doctor);
+		}
+	}).catch(error => {
+		if (isMongoError(error)) {
+			res.status(500).send('Internal server error')
+		} else {
+            console.log(error);
+			res.status(400).send('Bad Request')
+		}
+	});
+});
+
 // A route to get a list of the patients who has a doctor with the given doctor id
 app.get("/api/doctors/patients/:id", mongoChecker, authenticate, (req, res) => {
     const doctorId = req.params.id;
@@ -582,7 +772,12 @@ app.get("/api/doctors/patients/:id", mongoChecker, authenticate, (req, res) => {
     }
     
     Patient.find({doctor: doctorId}).then( patients => {
-        res.send(patients); // array of patient documents
+        if (!patients) {
+          res.status(404).send("Resource Not Found");
+          return;
+        } else {
+          res.send(patients);
+        }
     }).catch(error => {
         log(error);
         res.status(500).send("Internal Server Error");
@@ -628,6 +823,33 @@ app.get("/api/institutions", mongoChecker, (req, res) => {
 	
 });
 
+// A route to update an institution with institutionID
+// Note: admin route
+app.put("/api/institutions/:id", mongoChecker, authenticate, isAdmin, (req, res) => {
+	const institutionID = req.params.id;
+	
+	if (!ObjectID.isValid(institutionID)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+	
+	Institution.findOneAndReplace({ _id: institutionID }, req.body, {new: true, useFindAndModify: false}).then(institution => {
+		if (!institution) {
+			res.status(404).send("Resource Not Found");
+			return;
+		} else {
+			res.send(institution);
+		}
+	}).catch(error => {
+		if (isMongoError(error)) {
+			res.status(500).send('Internal server error')
+		} else {
+            console.log(error);
+			res.status(400).send('Bad Request')
+		}
+	});
+});
+
 // A route to get the institution document given the institution's id
 app.get("/api/institutions/:id", mongoChecker, authenticate, (req, res) => {
     const institutionId = req.params.id;
@@ -647,6 +869,59 @@ app.get("/api/institutions/:id", mongoChecker, authenticate, (req, res) => {
         log(error);
         res.status(500).send("Internal Server Error");
     })
+});
+
+// A route to get the doctors associated with a given institution's id
+// Note: admin route
+app.get("/api/institutions/doctors/:id", mongoChecker, authenticate, isAdmin, (req, res) => {
+	const institutionID = req.params.id;
+	
+	if (!ObjectID.isValid(institutionID)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+	
+	Doctor.find({ institutionID: institutionID }).then(doctors => {
+		if (!doctors) {
+			res.status(404).send("Resource Not Found");
+			return;
+		} else {
+			res.send(doctors);
+		}
+	}).catch(error => {
+		log(error);
+		res.status(500).send("Internal Server Error");
+	});
+})
+
+
+// A route to delete an institution document with a given id
+// Note: admin route
+app.delete("/api/institutions/:id", mongoChecker, authenticate, isAdmin, (req, res) => {
+	const institutionID = req.params.id;
+	
+	if (!ObjectID.isValid(institutionID)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+	
+	Institution.findById(institutionID).then(institution => {
+		if (!institution) {
+			res.status(404).send("Resource Not Found");
+			return;
+		} else {
+			institution.remove().then(institution => {
+				res.send(institution);
+			}).catch(error => {
+				log(error);
+				res.status(500).send("Internal Server Error");
+				return;
+			});
+		}
+	}).catch(error => {
+		log(error);
+		res.status(500).send("Internal Server Error");
+	});
 });
 
 /** Request routes below **/

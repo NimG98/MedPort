@@ -99,6 +99,7 @@ export const logout = (app) => {
         .then(res => {
             app.setState({
                 loggedInUser: null,
+                userType: null,
                 message: { type: "", body: "" }
             });
         })

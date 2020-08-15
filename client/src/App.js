@@ -21,7 +21,6 @@ import { UserType } from './constants/userType';
 
 
 class App extends React.Component {
-
     constructor(props) {
         super(props);
         readCookie(this); // sees if a user is logged in.
@@ -50,7 +49,7 @@ class App extends React.Component {
             <BrowserRouter>
                 <Switch>
                     <Route
-                        exact path={["/", "/dashboard"] /* any of these URLs are accepted. */ }
+                        exact path={["/", "/dashboard", "/admin/institutions"] /* any of these URLs are accepted. */ }
                         render={({ history }) => {
                             this.history = history;
                             return(
@@ -61,7 +60,7 @@ class App extends React.Component {
                         }}
                     />
                     <Route exact path='/signup' render={() =>
-                        (<SignUp appComponent={this} />)}/>
+                        (<SignUp history={this.history} appComponent={this} />)}/>
 
                     {(this.state.userType === "patient" || this.state.userType === "doctor") &&
                         <Route exact path='/profile' render={({ history }) =>
@@ -74,6 +73,37 @@ class App extends React.Component {
                         <Route exact path='/upload' render={({ history }) =>
                             (<FileUpload history={this.history} appComponent={this} />)}/>
                     }
+                    
+                    {/* {this.state.userType === "admin" &&
+                        <Route exact path='/admin/institutions' render={({ history }) =>
+                        (<AdminInstitutions history={this.history} appComponent={this} />)}/>
+                    } */}
+
+                    {this.state.userType === "admin" &&
+                    <Route exact path='/admin/institutions/:id' render={({ history }) =>
+                      (<AdminInstitutionView history={this.history} appComponent={this} />)}/>
+                    }
+
+                    {this.state.userType === "admin" &&
+                    <Route exact path='/admin/doctors' render={({ history }) =>
+                              (<AdminDoctors history={this.history} appComponent={this} />)}/>
+                    }
+
+                    {this.state.userType === "admin" &&
+                    <Route exact path='/admin/doctors/:id' render={({ history }) =>
+                              (<AdminDoctorView history={this.history} appComponent={this} />)}/>
+                    }
+
+                    {this.state.userType === "admin" &&
+                    <Route exact path='/admin/patients' render={({ history }) =>
+                              (<AdminPatients history={this.history} appComponent={this} />)}/>
+                    }
+
+                    {this.state.userType === "admin" &&
+                    <Route exact path='/admin/patients/:id' render={({ history }) =>
+                              (<AdminPatientView history={this.history} appComponent={this} />)}/>
+                    }
+                    
                     {/* <Route exact path='/' render={() =>
                         (<Home appComponent={this}/>)}/>
                     <Route exact path='/dashboard' render={() =>

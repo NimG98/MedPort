@@ -9,7 +9,7 @@ import "./styles.css";
 import Header from "../Header";
 import NavBar from "../NavBar";
 import AdminPatientsOverview from "../AdminPatientsOverview";
-import PatientSignUpForm from "../PatientSignUpForm";
+import AdminPatientSignUp from "../AdminPatientSignUp";
 
 class AdminPatients extends React.Component {
 	
@@ -17,6 +17,7 @@ class AdminPatients extends React.Component {
 	
 	constructor(props) {
 		super(props);
+		this.props.history.push("/admin/patients");
 		
 		this.state = {
 			statusIndex: 0,
@@ -51,9 +52,7 @@ class AdminPatients extends React.Component {
 					createPatient={() => this.setStatus(1)}
 				/>,
 			// Patient Creation
-			1: <PatientSignUpForm 
-					code=""
-					referrerID={null}
+			1: <AdminPatientSignUp
 					back={() => this.setStatus(0)}
 					submit={() => this.setStatus(0)}
 				/>,
