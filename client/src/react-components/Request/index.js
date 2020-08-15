@@ -15,6 +15,7 @@ class Request extends React.Component {
 
     constructor(props) {
         super(props);
+        this.props.history.push("/request");
 
         this.state = {
             newRequest: false,
@@ -34,7 +35,7 @@ class Request extends React.Component {
 
     changeView() {
         if(this.state.newRequest) {
-            return (<RequestForm loggedInUser={this.state.user} backToPreviousRequestsPage={this.backToPreviousRequestsPage}/>);
+            return (<RequestForm appComponent={this.props.appComponent} backToPreviousRequestsPage={this.backToPreviousRequestsPage}/>);
         } else {
             return (
             <div className="previousRequestsPage">
@@ -51,13 +52,6 @@ class Request extends React.Component {
     }
 
     render() {
-
-        // To make sure no one just visits http://localhost:3000/request
-        // without logging in first
-        if (document.cookie.indexOf("LoggedInSession=Valid") === -1) {
-            window.location.href = "/";
-        }
-
         return (
             <div className="request-page">
                 <Header appComponent={this.props.appComponent}/>

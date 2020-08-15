@@ -8,9 +8,12 @@ export const ApiRoutes = {
     createUser: baseUrl + "/api/users",
     profile: baseUrl + "/api/profile/",
     doctorById: baseUrl + "/api/doctors/",
-	institution: baseUrl + '/api/institutions',
-	doctor: baseUrl + '/api/doctors',
-	referral: baseUrl + '/api/referrals',
-	patient: baseUrl + '/api/patients',
-	user: baseUrl + '/api/users',
+    institution: baseUrl + '/api/institutions',
+    doctor: baseUrl + '/api/doctors',
+    patientsByDoctorId: baseUrl + "/api/doctors/patients/",
+    referral: baseUrl + '/api/referrals',
+    patient: baseUrl + '/api/patients',
+    user: baseUrl + '/api/users',
+    request: baseUrl + '/api/requests',
+    requestStatus: baseUrl + '/api/requests/status/'
 }
