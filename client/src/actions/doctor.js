@@ -76,3 +76,105 @@ export const addDoctor = (doctor) => {
 		console.log(error);
 	});
 };
+
+/* 
+	Returns a list of doctors obtained from the server
+*/
+export const getDoctors = () => {
+	const url = ApiRoutes.doctor;
+	
+	return fetch(url).then(res => {
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(doctors => {
+		return doctors;
+	}).catch(error => {
+		console.log(error);
+	});
+}
+
+/*
+	sends server request to delete doctor
+	Note: admin functionality
+*/
+export const deleteDoctor = (doctorID) => {
+	const url = ApiRoutes.doctor + "/" + doctorID;
+	
+	// creating the request
+	const request = new Request(url, {
+		method: "delete",
+	});
+	
+	return fetch(request).then(res => {
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(doctor => {
+		return doctor;
+	}).catch(error => {
+		console.log(error);
+	});
+}
+
+/*
+	sends server request to get doctor with id, doctorID
+*/
+export const getDoctor = (doctorID) => {
+	const url = ApiRoutes.doctor + "/" + doctorID;
+	
+	return fetch(url).then(res => {
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(doctor => {
+		return doctor;
+	}).catch(error => {
+		console.log(error);
+	});
+}
+
+export const getPatientsByDoctor = (doctorID) => {
+	const url = ApiRoutes.doctor + "/patients/" + doctorID;
+	
+	return fetch(url).then(res => {
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(patients => {
+		return patients;
+	}).catch(error => {
+		console.log(error);
+	}); 
+}
+
+/*
+	sends updated doctor object to server
+*/
+export const updateDoctor = (doctorID, propertiesToChange) => {
+	const url = ApiRoutes.doctor + "/" + doctorID;
+	
+	// creating the request
+	const request = new Request(url, {
+		method: 'PATCH',
+		body: JSON.stringify(propertiesToChange),
+		headers: {
+			"Accept": "application/json, text/plain, */*",
+			"Content-Type": "application/json"
+		},
+	});
+	
+	// making the request to the server
+	return fetch(request).then(res => {
+		// parse json
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(doctorInfo => {
+		// return newly created doctor object
+		return doctorInfo;
+	}).catch(error => {
+		// log error
+		console.log(error);
+	});
+}

@@ -8,40 +8,64 @@ import "./styles.css";
 // importing components
 import Header from "../Header";
 import NavBar from "../NavBar";
-import { Alert, Button } from "antd";
+import { Alert, Button, Popconfirm } from "antd";
 
 // importing actions/required methods
-import { getPatient, deletePatient, updatePatient } from "../../actions/app";
-import { redirect } from "../../actions/router"
+import { getPatient, deletePatient, updatePatient } from "../../actions/patient";
+import { getDoctor, getDoctors } from "../../actions/doctor";
+import { redirect } from "../../actions/router";
+
+// importing validators
+import { validateName, validateAddress, validatePostalCode, validateHCN, validateEmail, validateDoctorID} from "../../validators/form-validators";
 
 class AdminPatientView extends React.Component {
 	// constants
 	infoHeaders = ["Health Card", "First Name", "Last Name", "Email", "Address", "Postal Code", "Doctor"];
 	
 	componentDidMount() {
-		const data = getPatient(this.state.patientID);
-		
-		if (data) {
-			this.setState({
-				HCN: data.HCN,
-				firstName: data.firstName,
-				lastName: data.lastName,
-				email: data.email,
-				address: data.address,
-				postalCode: data.postalCode,
-				doctorID: data.doctorID,
-				patientInfo: data,
-			});
-			
-			this.setError(false, "");
-			
-		} else {
+		getPatient(this.state.patientID).then(async (patient) => {
+			if (patient) {
+				this.setState({
+					HCN: patient.HCN,
+					firstName: patient.generalProfile.firstName,
+					lastName: patient.generalProfile.lastName,
+					email: patient.generalProfile.email,
+					address: patient.address,
+					postalCode: patient.postalCode,
+					patientInfo: patient,
+				});
+				
+				this.setError(false, "");
+				
+				// gets doctor info for patient's doctor
+				await this.getDoctorInfo(patient.doctor);
+				
+			} else {
+				this.setError(true, "An error occurred, please try again");
+			}
+		}).catch(error => {
+			console.log(error);
 			this.setError(true, "An error occurred, please try again");
-		}
+		});
+		
+		// get list of all doctors (for editing)
+		getDoctors().then(doctors => {
+			if (doctors || doctors === []) {
+				this.setState({
+					doctors: doctors
+				});
+			} else {
+				this.setError(true, "An error occurred, please try again");
+			}
+		}).catch(error => {
+			console.log(error);
+			this.setError(true, "An error occurred, please try again");
+		})
 	}
 	
 	constructor(props) {
 		super(props);
+		this.props.history.push("/admin/patients/" + props.match.params.id);
 		
 		this.state = {
 			HCN: '',
@@ -55,18 +79,23 @@ class AdminPatientView extends React.Component {
 			error: false,
 			errorCode: '',
 			edit: false,
-			patientID: parseInt(props.match.params.id),
-			patientInfo: {},
+			patientID: props.match.params.id,
+			patientInfo: {generalProfile: {}},
+			doctors: [],
 		}
 		
 		// binding functions
 		this.getTableHeaders = this.getTableHeaders.bind(this);
+		this.getDoctorInfo = this.getDoctorInfo.bind(this);
+		this.getDoctorOptions = this.getDoctorOptions.bind(this);
 		this.removePatient = this.removePatient.bind(this);
 		this.setError = this.setError.bind(this);
 		this.toggleEdit = this.toggleEdit.bind(this);
 		this.handleClose = this.handleClose.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
-		this.createPatient = this.createPatient.bind(this);
+		this.updatePatientInfo = this.updatePatientInfo.bind(this);
+		this.getPropertiesToChange = this.getPropertiesToChange.bind(this);
+		this.validate = this.validate.bind(this);
 		this.resetInputs = this.resetInputs.bind(this);
 		
 	}
@@ -84,11 +113,18 @@ class AdminPatientView extends React.Component {
 							Patient Info
 						</h1>
 						
-						<Button
-							type="danger"
-							className="delete-patient-button"
-							onClick={() => this.removePatient(this.state.patientID)}
-						>Delete Patient</Button>
+						<Popconfirm
+							title="Delete this patient?"
+							onConfirm={(e) => this.removePatient(this.state.patientID)}
+							onCancel={(e) => {}}
+							okText="Yes"
+							cancelText="No"
+						>
+							<Button
+								type="danger"
+								className="delete-patient-button"
+							>Delete Patient</Button>
+						</Popconfirm>
 						
 						<table>
 							<thead>
@@ -97,13 +133,13 @@ class AdminPatientView extends React.Component {
 							<tbody>
 								<tr>	
 									{this.state.edit ? <td><input name="HCN" value={this.state.HCN} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.HCN}</td>}
-									{this.state.edit ? <td><input name="firstName" value={this.state.firstName} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.firstName}</td>}
-									{this.state.edit ? <td><input name="lastName" value={this.state.lastName} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.lastName}</td>}
-									{this.state.edit ? <td><input name="email" value={this.state.email} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.email}</td>}
+									{this.state.edit ? <td><input name="firstName" value={this.state.firstName} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.generalProfile.firstName}</td>}
+									{this.state.edit ? <td><input name="lastName" value={this.state.lastName} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.generalProfile.lastName}</td>}
+									{this.state.edit ? <td><input name="email" value={this.state.email} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.generalProfile.email}</td>}
 									{this.state.edit ? <td><input name="address" value={this.state.address} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.address}</td>}
 									{this.state.edit ? <td><input name="postalCode" value={this.state.postalCode} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.postalCode}</td>}
-									{this.state.edit ? <td><input name="doctorID" value={this.state.doctorID} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.doctorID}</td>}
-									{this.state.edit ? <td><Button type="primary" onClick={() => { updatePatient(this.createPatient()); this.toggleEdit(); }}>Submit</Button></td> : <td><Button type="primary" onClick={() => this.toggleEdit()}>Edit</Button></td>}
+									{this.state.edit ? <td><select name="doctorID" value={this.state.doctorID} onChange={this.handleInputChange}>{this.getDoctorOptions()}</select></td> : <td>{this.state.patientInfo.doctorName}</td>}
+									{this.state.edit ? <td><Button type="primary" onClick={() => {this.updatePatientInfo(this.state.patientID)}}>Submit</Button></td> : <td><Button type="primary" onClick={() => this.toggleEdit()}>Edit</Button></td>}
 									{this.state.edit ? <td><Button type="danger" onClick={() => { this.resetInputs(); this.toggleEdit(); }} >Cancel</Button></td> : null}
 								</tr>
 							</tbody>
@@ -122,6 +158,41 @@ class AdminPatientView extends React.Component {
 		));
 		
 		return tableHeaders;
+	}
+	
+	getDoctorOptions() {
+		const options = [];
+		
+		options.push(<option value="" disabled>Choose Here</option>);
+		
+		this.state.doctors.map(doctor => {
+			options.push(<option key={uid(doctor)} value={doctor._id}>{doctor.generalProfile.firstName + " " + doctor.generalProfile.lastName}</option>);
+		});
+		
+		return options;
+	}
+	
+	getDoctorInfo(doctorID) {
+		if (doctorID) {
+			return getDoctor(doctorID).then(doctor => {
+				if (doctor) {
+					const newPatientInfo = {...this.state.patientInfo};
+					newPatientInfo.doctorName = doctor.generalProfile.firstName + " " + doctor.generalProfile.lastName;
+					
+					this.setState({
+						doctorID: doctor._id,
+						patientInfo: newPatientInfo
+					});
+				} else {
+					this.setError(true, "An error occurred, please try again");
+				}
+			}).catch(error => {
+				console.log(error);
+				this.setError(true, "An error occurred, please try again");
+			});
+		} else {
+			this.setError(true, "This patient does not have a doctor. Set one by editing the patient info.");
+		}
 	}
 	
 	// deletes patient with a specific id
@@ -169,28 +240,75 @@ class AdminPatientView extends React.Component {
 		});
 	}
 	
-	createPatient = () => {
-		return({
-			patientID: this.state.patientID,
-			firstName: this.state.firstName,
-			lastName: this.state.lastName,
-			address: this.state.address,
-			postalCode: this.state.postalCode,
-			HCN: this.state.HCN,
-			email: this.state.email,
-			doctorID: this.state.doctorID,
-		});
+	updatePatientInfo(patientID) {
+		const valid = this.validate();
+		
+		if (valid) {
+			updatePatient(patientID, this.getPropertiesToChange()).then(async (patient) => {
+				if (patient) {
+					// set patient info
+					this.setState({
+						HCN: patient.HCN,
+						firstName: patient.generalProfile.firstName,
+						lastName: patient.generalProfile.lastName,
+						email: patient.generalProfile.email,
+						address: patient.address,
+						postalCode: patient.postalCode,
+						patientInfo: patient,
+					});
+					
+					// gets doctor info for patient's doctor
+					await this.getDoctorInfo(patient.doctor);
+					
+					// toggle edit
+					this.toggleEdit();
+				} else {
+					this.setError(true, "An error occurred, please try again.");
+				}
+			}).catch(error => {
+				console.log(error);
+				this.setError(true, "An error occurred, please try again.");
+			});
+		}
+	}
+	
+	getPropertiesToChange = () => {
+		return [
+			{"op": "replace", "path": "/generalProfile/firstName", "value": this.state.firstName},
+			{"op": "replace", "path": "/generalProfile/lastName", "value": this.state.lastName},
+			{"op": "replace", "path": "/generalProfile/email", "value": this.state.email},
+			{"op": "replace", "path": "/HCN", "value": this.state.HCN},
+			{"op": "replace", "path": "/address", "value": this.state.address},
+			{"op": "replace", "path": "/postalCode", "value": this.state.postalCode},
+			{"op": "replace", "path": "/doctor", "value": this.state.doctorID}
+		];
+	}
+	
+	// validates inputs on submission
+	validate() {
+		
+		const valid = (
+			validateName('firstName', this.state.firstName, (name, val, msg) => this.setError(val, msg)) &&
+			validateName('lastName',this.state.lastName, (name, val, msg) => this.setError(val, msg)) &&
+			validateHCN('HCN', this.state.HCN, (name, val, msg) => this.setError(val, msg)) &&
+			validateEmail('email', this.state.email, (name, val, msg) => this.setError(val, msg)) &&
+			validateAddress('address', this.state.address, (name, val, msg) => this.setError(val, msg)) &&
+			validatePostalCode('postalCode', this.state.postalCode, (name, val, msg) => this.setError(val, msg)) &&
+			validateDoctorID('doctorID', this.state.doctorID, (name, val, msg) => this.setError(val, msg)) 
+		);
+		
+		return valid;
 	}
 	
 	resetInputs() {
 		this.setState({
-			firstName: this.state.patientInfo.firstName,
-			lastName: this.state.patientInfo.lastName,
+			firstName: this.state.patientInfo.generalProfile.firstName,
+			lastName: this.state.patientInfo.generalProfile.lastName,
 			address: this.state.patientInfo.address,
 			postalCode: this.state.patientInfo.postalCode,
 			HCN: this.state.patientInfo.HCN,
-			email: this.state.patientInfo.email,
-			doctorID: this.state.patientInfo.doctorID,
+			email: this.state.patientInfo.generalProfile.email,
+			doctorID: this.state.patientInfo.doctor,
 		});
 	}
 }

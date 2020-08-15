@@ -7,21 +7,28 @@ import "./styles.css";
 import 'antd/dist/antd.css';
 
 // importing actions/required methods
-import { getDoctors, deleteDoctor } from "../../actions/app";
+import { getDoctors, deleteDoctor } from "../../actions/doctor";
 import { redirect } from "../../actions/router"
 
 // importing components
-import { Alert, Button } from "antd";
+import { Alert, Button, Popconfirm } from "antd";
 
 class AdminDoctorsOverview extends React.Component {
 	headers = ["Medical ID", "First Name", "Last Name", "Email"];
 	
 	componentDidMount() {
-		const data = getDoctors();
-		
-		
-		this.setState({
-			doctors: data
+		getDoctors().then(doctors => {
+			if (doctors) {
+				this.setState({
+					doctors: doctors
+				});
+			} else {
+				this.setError(true, "An error occurred, please try again.");
+			}
+			
+		}).catch(error => {
+			console.log(error);
+			this.setError(true, "An error occurred, please try again.");
 		});
 	}
 	
@@ -94,19 +101,26 @@ class AdminDoctorsOverview extends React.Component {
 			tableRows.push(
 				<tr key={uid(doctor)}>
 					<td>{doctor.MID}</td>
-					<td>{doctor.firstName}</td>
-					<td>{doctor.lastName}</td>
-					<td>{doctor.email}</td>
+					<td>{doctor.generalProfile.firstName}</td>
+					<td>{doctor.generalProfile.lastName}</td>
+					<td>{doctor.generalProfile.email}</td>
 					<td><Button
 							type="primary"
-							onClick={() => {redirect(this, "/admin/doctors/" + doctor.id)}}
+							onClick={() => {redirect(this, "/admin/doctors/" + doctor._id)}}
 						>View</Button>
 					</td>
 					<td>
-						<Button 
-							type="danger"
-							onClick={() => {this.removeDoctor(doctor.id)}}
-						>Delete</Button>
+						<Popconfirm
+							title="Delete this doctor?"
+							onConfirm={(e) => {this.removeDoctor(doctor._id)}}
+							onCancel={(e) => {}}
+							okText="Yes"
+							cancelText="No"
+						>
+							<Button 
+								type="danger"
+							>Delete</Button>
+						</Popconfirm>
 					</td>
 				</tr>
 			)
@@ -118,19 +132,23 @@ class AdminDoctorsOverview extends React.Component {
 	// deletes doctor with a specific id
 	removeDoctor(doctorID) {
 		// api call
-		const success = deleteDoctor(doctorID);
-		
-		if (success) {
-			// delete Doctor
-			const filtered = this.state.doctors.filter(doctor => doctor.id !== doctorID);
-			
-			this.setState({
-				doctors: filtered
-			});
-		} else {
+		deleteDoctor(doctorID).then(doctorInfo => {
+			if (doctorInfo) {
+				// delete Doctor
+				const filtered = this.state.doctors.filter(doctor => doctor._id !== doctorID);
+				
+				this.setState({
+					doctors: filtered
+				});
+			} else {
+				// set error message
+				this.setError(true, "An error occurred, please try again.");
+			}
+		}).catch(error => {
+			console.log(error);
 			// set error message
 			this.setError(true, "An error occurred, please try again.");
-		}
+		});
 	}
 	
 	// sets error value in component state

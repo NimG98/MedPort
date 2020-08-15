@@ -17,6 +17,7 @@ class AdminDoctors extends React.Component {
 	
 	constructor(props) {
 		super(props);
+		this.props.history.push("/admin/doctors");
 		
 		this.state = {
 			statusIndex: 0,

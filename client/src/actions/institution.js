@@ -79,3 +79,95 @@ export const getInstitutions = async () => {
 		console.log(error);
 	});
 };
+
+/*
+	sends server request to delete institution
+	Note: admin functionality
+*/
+export const deleteInstitution = (institutionID) => {
+	const url = ApiRoutes.institution + "/" + institutionID;
+	
+	// creating the request
+	const request = new Request(url, {
+		method: "delete",
+	});
+	
+	return fetch(request).then(res => {
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(institutionInfo => {
+		// returns deleted institution info
+		return institutionInfo;
+	}).catch(error => {
+		console.log(error);
+	});
+}
+
+/*
+	sends server request to get institution with id, insitutionID
+*/
+export const getInstitution = (institutionID) => {
+	const url = ApiRoutes.institution + "/" + institutionID;
+	
+	return fetch(url).then(res => {
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(institutionInfo => {
+		return institutionInfo;
+	}).catch(error => {
+		console.log(error);
+	});
+}
+
+
+/*
+	sends server request to get list of doctors who belong to the institution with institutionID
+*/
+export const getDoctorsByInstitution = (institutionID) => {
+	const url = ApiRoutes.institution + "/doctors/" + institutionID;
+	
+	return fetch(url).then(res => {
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(doctors => {
+		return doctors;
+	}).catch(error => {
+		console.log(error);
+	});
+}
+
+/*
+	sends updated institution object to server
+*/
+export const updateInstitution = (institutionID, institution) => {
+	const url = ApiRoutes.institution + "/" + institutionID;
+	
+	// creating the request
+	const request = new Request(url, {
+		method: "put",
+		body: JSON.stringify(institution),
+		headers: {
+			"Accept": "application/json, text/plain, */*",
+			"Content-Type": "application/json"
+		},
+	});
+	
+	// making the request to the server
+	// returns a promise
+	return fetch(request)
+	.then(res => {
+		// parse json
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(institutionInfo => {
+		// returns new institution
+		return institutionInfo;
+	}).catch(error => {
+		// log error
+		console.log(error);
+	});
+}

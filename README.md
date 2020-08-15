@@ -20,7 +20,10 @@ URL: https://stark-headland-93903.herokuapp.com/
     - A patient signs-up with a referral code given by their doctor who wants them to sign up to the app. The referral code is associated with the doctor's ID.
     - A doctor can sign-up and choose an existing medical institution registered with our app; or, they register the medical institution that they are from into our app.
 - Admin
-    - !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    - Can create new institutions, doctors, patients
+    - view all institutions and its doctors and their patients
+    - modify any info for a institution, doctor, patient
+    - delete an institution, doctor, patient
 
 # Overview of routes in the Express server
 

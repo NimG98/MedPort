@@ -7,22 +7,31 @@ import "./styles.css";
 import 'antd/dist/antd.css';
 
 // importing actions/required methods
-import { getPatients, deletePatient } from "../../actions/app";
+import { getPatients, deletePatient } from "../../actions/patient";
 import { redirect } from "../../actions/router"
 
 // importing components
-import { Alert, Button } from "antd";
+import { Alert, Button, Popconfirm } from "antd";
 
 class AdminPatientsOverview extends React.Component {
-	headers = ["Health Card", "First Name", "Last Name", "Email", "Address", "Postal Code", "Doctor"];
+	headers = ["Health Card", "First Name", "Last Name", "Email", "Address", "Postal Code"];
 	
-	componentDidMount() {
-		const data = getPatients();
-		
-		
-		this.setState({
-			patients: data
-		});
+	async componentDidMount() {
+		await getPatients().then((patients) => {
+			if (patients || patients === []) {
+				
+				// set patients in state
+				this.setState({
+					patients: patients
+				});
+				
+			} else {
+				this.setError(true, "An error occurred, please try again.");
+			}
+		}).catch(error => {
+			console.log(error);
+			this.setError(true, "An error occurred, please try again.");
+		});		
 	}
 	
 	constructor(props) {
@@ -90,30 +99,37 @@ class AdminPatientsOverview extends React.Component {
 	getTableRows() {
 		let tableRows = [];
 		
-		this.state.patients.map(patient => (
+		this.state.patients.map((patient) => {
+			
 			tableRows.push(
 				<tr key={uid(patient)}>
 					<td>{patient.HCN}</td>
-					<td>{patient.firstName}</td>
-					<td>{patient.lastName}</td>
-					<td>{patient.email}</td>
+					<td>{patient.generalProfile.firstName}</td>
+					<td>{patient.generalProfile.lastName}</td>
+					<td>{patient.generalProfile.email}</td>
 					<td>{patient.address}</td>
 					<td>{patient.postalCode}</td>
-					<td>{patient.doctorID}</td>
 					<td><Button
 							type="primary"
-							onClick={() => {redirect(this, "/admin/patients/" + patient.id)}}
+							onClick={() => {redirect(this, "/admin/patients/" + patient._id)}}
 						>View</Button>
 					</td>
 					<td>
-						<Button 
-							type="danger"
-							onClick={() => {this.removePatient(patient.id)}}
-						>Delete</Button>
+						<Popconfirm
+							title="Delete this patient?"
+							onConfirm={(e) => {this.removePatient(patient._id)}}
+							onCancel={(e) => {}}
+							okText="Yes"
+							cancelText="No"
+						>
+							<Button 
+								type="danger"
+							>Delete</Button>
+						</Popconfirm>
 					</td>
 				</tr>
 			)
-		));
+		});
 		
 		return tableRows;
 	}
@@ -121,19 +137,22 @@ class AdminPatientsOverview extends React.Component {
 	// deletes doctor with a specific id
 	removePatient(patientID) {
 		// api call
-		const success = deletePatient(patientID);
-		
-		if (success) {
-			// delete Patient
-			const filtered = this.state.patients.filter(patient => patient.id !== patientID);
-			
-			this.setState({
-				patients: filtered
-			});
-		} else {
-			// set error message
+		deletePatient(patientID).then(patientInfo => {
+			if (patientInfo) {
+				// delete Patient
+				const filtered = this.state.patients.filter(patient => patient._id !== patientID);
+				
+				this.setState({
+					patients: filtered
+				});
+			} else {
+				// set error message
+				this.setError(true, "An error occurred, please try again.");
+			}
+		}).catch(error => {
+			console.log(error);
 			this.setError(true, "An error occurred, please try again.");
-		}
+		});		
 	}
 	
 	// sets error value in component state

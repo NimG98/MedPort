@@ -48,5 +48,13 @@ const PatientSchema = new mongoose.Schema({
     }
 })
 
+// middleware for deleting a doctor document
+PatientSchema.pre("remove", async function(next) {
+	// deletes the referenced user document
+	await this.model('User').remove({ _id: this.user });
+	// calls the next middleware
+	next();
+});
+
 const Patient = mongoose.model('Patient', PatientSchema)
 module.exports = { Patient }

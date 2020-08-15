@@ -31,7 +31,7 @@ class ProfileDropdown extends React.Component {
     render() {
         return(
             <div className="profileDropdown">
-                <ProfileImage altName="profileImageforLoggedInUser" imgClassName="userProfileImage"/>
+                <ProfileImage altName="profileImageforLoggedInUser" imgClassName="userProfileImage" appComponent={this.props.appComponent}/>
                 {/* <img alt="profileImageforLoggedInUser" className="userProfileImage" src={this.getUserProfileImage()}/> */}
                 <div className="dropdownContent">
                     {this.props.appComponent.state.userType !== UserType.admin &&

@@ -8,11 +8,14 @@ import "./styles.css";
 // importing components
 import Header from "../Header";
 import NavBar from "../NavBar";
-import { Alert, Button } from "antd";
+import { Alert, Button, Popconfirm } from "antd";
 
 // importing actions/required methods
-import { getInstitution, deleteInstitution, updateInstitution } from "../../actions/app.js";
+import { getInstitution, deleteInstitution, updateInstitution, getDoctorsByInstitution } from "../../actions/institution";
 import { redirect } from "../../actions/router"
+
+// import form validators
+import { validateName, validateAddress, validatePostalCode, validatePhoneNumber } from "../../validators/form-validators";
 
 class AdminInstitutionView extends React.Component {
 	
@@ -21,26 +24,46 @@ class AdminInstitutionView extends React.Component {
 	doctorHeaders = ["Medical ID", "First Name", "Last Name", "Email"];
 	
 	componentDidMount() {
-		const data = getInstitution(this.state.institutionID);
-		
-		if (data) {
-			this.setState({
-				name: data.name,
-				address: data.address,
-				postalCode: data.postalCode,
-				phoneNumber: data.phoneNumber,
-				institutionInfo: data,
-			});
-			
-			this.setError(false, "");
+		getInstitution(this.state.institutionID).then(data => {
+			if (data) {
+				// institution data was received
+				this.setState({
+					name: data.name,
+					address: data.address,
+					postalCode: data.postalCode,
+					phoneNumber: data.phoneNumber,
+					institutionInfo: data,
+				});
+				
+				this.setError(false, "");
 
-		} else {
+			} else {
+				// no institution data was received
+				this.setError(true, "An error occurred, please try again");
+			}
+		}).catch(error => {
+			console.log(error);
 			this.setError(true, "An error occurred, please try again");
-		}
+		});
+		
+		getDoctorsByInstitution(this.state.institutionID).then(doctors => {
+			if (doctors || doctors === []) {
+				// doctors list was received
+				this.setState({
+					doctors: doctors
+				});
+			} else {
+				// no doctors list was received
+				this.setError(true, "An error occurred, please try again");
+			}
+		}).catch(error => {
+			this.setError(true, "An error occurred, please try again");
+		});
 	}
 	
 	constructor(props) {
 		super(props);
+		this.props.history.push("/admin/institutions/" + props.match.params.id);
 		
 		this.state = {
 			name: '',
@@ -51,14 +74,17 @@ class AdminInstitutionView extends React.Component {
 			error: false,
 			errorCode: '',
 			edit: false,
-			institutionID: parseInt(props.match.params.id),
-			institutionInfo: {doctors: []},
+			institutionID: props.match.params.id,
+			institutionInfo: {},
+			doctors: [],
 		}
 		
 		// binding functions
 		this.getTableHeaders = this.getTableHeaders.bind(this);
 		this.getDoctorTableRows = this.getDoctorTableRows.bind(this);
 		this.removeInstitution = this.removeInstitution.bind(this);
+		this.updateInstitutionInfo = this.updateInstitutionInfo.bind(this);
+		this.validate = this.validate.bind(this);
 		this.setError = this.setError.bind(this);
 		this.toggleEdit = this.toggleEdit.bind(this);
 		this.handleClose = this.handleClose.bind(this);
@@ -81,11 +107,18 @@ class AdminInstitutionView extends React.Component {
 							Institution Info
 						</h1>
 						
-						<Button
-							type="danger"
-							className="delete-institution-button"
-							onClick={() => this.removeInstitution(this.state.institutionID)}
-						>Delete Institution</Button>
+						<Popconfirm
+							title="Delete this institution?"
+							onConfirm={(e) => this.removeInstitution(this.state.institutionID)}
+							onCancel={(e) => {}}
+							okText="Yes"
+							cancelText="No"
+						>
+							<Button
+								type="danger"
+								className="delete-institution-button"
+							>Delete Institution</Button>
+						</Popconfirm>
 						
 						<table>
 							<thead>
@@ -97,7 +130,7 @@ class AdminInstitutionView extends React.Component {
 									{this.state.edit ? <td><input name="address" value={this.state.address} onChange={this.handleInputChange}></input></td> : <td>{this.state.institutionInfo.address}</td>}
 									{this.state.edit ? <td><input name="postalCode" value={this.state.postalCode} onChange={this.handleInputChange}></input></td> : <td>{this.state.institutionInfo.postalCode}</td>}
 									{this.state.edit ? <td><input name="phoneNumber" value={this.state.phoneNumber} onChange={this.handleInputChange}></input></td> : <td>{this.state.institutionInfo.phoneNumber}</td>}
-									{this.state.edit ? <td><Button type="primary" onClick={() => { updateInstitution(this.createInstitution()); this.toggleEdit(); }}>Submit</Button></td> : <td><Button type="primary" onClick={() => this.toggleEdit()}>Edit</Button></td>}
+									{this.state.edit ? <td><Button type="primary" onClick={() => { this.updateInstitutionInfo(this.state.institutionID) }}>Submit</Button></td> : <td><Button type="primary" onClick={() => this.toggleEdit()}>Edit</Button></td>}
 									{this.state.edit ? <td><Button type="danger" onClick={() => { this.resetInputs(); this.toggleEdit(); }} >Cancel</Button></td> : null}
 								</tr>
 							</tbody>
@@ -136,16 +169,16 @@ class AdminInstitutionView extends React.Component {
 	getDoctorTableRows() {
 		let tableRows = [];
 		
-		this.state.institutionInfo.doctors.map(doctor => (
+		this.state.doctors.map(doctor => (
 			tableRows.push(
 				<tr key={uid(doctor)}>
 					<td>{doctor.MID}</td>
-					<td>{doctor.firstName}</td>
-					<td>{doctor.lastName}</td>
-					<td>{doctor.email}</td>
+					<td>{doctor.generalProfile.firstName}</td>
+					<td>{doctor.generalProfile.lastName}</td>
+					<td>{doctor.generalProfile.email}</td>
 					<td><Button
 							type="primary"
-							onClick={() => {redirect(this, "/admin/doctors/" + doctor.doctorID)}}
+							onClick={() => {redirect(this, "/admin/doctors/" + doctor._id)}}
 						>View</Button>
 					</td>
 				</tr>
@@ -158,14 +191,54 @@ class AdminInstitutionView extends React.Component {
 	// deletes institution with a specific id
 	removeInstitution(institutionID) {
 		// api call
-		const success = deleteInstitution(institutionID);
-		
-		if (success) {
-			redirect(this, "/admin/institutions");
-		} else {
-			// set error message
+		deleteInstitution(institutionID).then(institutionInfo => {
+			if (institutionInfo) {
+				// redirect on success
+				redirect(this, "/admin/institutions");
+			} else {
+				// set error message
+				this.setError(true, "An error occurred, please try again.");
+			}
+		}).catch(error => {
 			this.setError(true, "An error occurred, please try again.");
+		});
+	}
+	
+	// validates and updates institution info
+	updateInstitutionInfo(institutionID) {
+		const valid = this.validate();
+		
+		if (valid) {
+			// make api call
+			updateInstitution(institutionID, this.createInstitution()).then(institution => {
+				
+				// update with new institution info
+				this.setState({
+					name: institution.name,
+					address: institution.address,
+					postalCode: institution.postalCode,
+					phoneNumber: institution.phoneNumber,
+					institutionInfo: institution,
+				}, this.toggleEdit);
+				
+			}).catch(error => {
+				console.log(error);
+				this.setError(true, "An error occurred, please try again.");
+			});
 		}
+		
+	}
+	
+	validate() {
+		
+		const valid = (
+			validateName('name', this.state.name, (name, val, msg) => this.setError(val, msg)) &&
+			validateAddress('address', this.state.address, (name, val, msg) => this.setError(val, msg)) &&
+			validatePostalCode('postalCode', this.state.postalCode, (name, val, msg) => this.setError(val, msg)) &&
+			validatePhoneNumber('phoneNumber', this.state.phoneNumber, (name, val, msg) => this.setError(val, msg))
+		);
+		
+		return valid;
 	}
 	
 	setError(value, message) {
