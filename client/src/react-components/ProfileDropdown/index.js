@@ -6,6 +6,9 @@ import "./styles.css";
 
 import { getUserProfileImageUrl } from '../../actions/app';
 import { redirect } from '../../actions/router';
+import { logout } from '../../actions/user';
+import { UserType } from '../../constants/userType';
+import ProfileImage from '../ProfileImage';
 
 class ProfileDropdown extends React.Component {
 
@@ -13,22 +16,12 @@ class ProfileDropdown extends React.Component {
         super(props);
 
         this.logout = this.logout.bind(this);
-        this.getUserProfileImage = this.getUserProfileImage.bind(this);
         this.goToProfile = this.goToProfile.bind(this);
     }
-
-    getUserProfileImage() {
-        const images = require.context('../../mock-data/user_profile_images', true);
-        const profileImageUrl = getUserProfileImageUrl(this.props.appComponent.state.loggedInUser);
-        const profileImage = images(profileImageUrl);
-
-        return profileImage;
-    }
     
-
     logout() {
-        this.props.appComponent.setState( {loggedInUser: null} );
-        redirect(this, '/');
+        this.props.history.push("/");
+        logout(this.props.appComponent);
     }
 
     goToProfile() {
@@ -38,9 +31,12 @@ class ProfileDropdown extends React.Component {
     render() {
         return(
             <div className="profileDropdown">
-                <img alt="profileImageforLoggedInUser" className="userProfileImage" src={this.getUserProfileImage()}/>
+                <ProfileImage altName="profileImageforLoggedInUser" imgClassName="userProfileImage"/>
+                {/* <img alt="profileImageforLoggedInUser" className="userProfileImage" src={this.getUserProfileImage()}/> */}
                 <div className="dropdownContent">
-                    <Link className="profileLink" onClick={this.goToProfile} to="/profile">Profile</Link>
+                    {this.props.appComponent.state.userType !== UserType.admin &&
+                        <Link className="profileLink" onClick={this.goToProfile} to="/profile">Profile</Link>
+                    }
                     <Link className="logout" onClick={this.logout} to="/">Log out</Link>
                 </div>
             </div>

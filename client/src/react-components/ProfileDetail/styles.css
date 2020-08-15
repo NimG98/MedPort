@@ -1,6 +1,6 @@
 .editProfileDetailButton {
     padding: 5px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     height: 27px;
@@ -33,4 +33,11 @@
 
 .profilePageContent .profileDetailValue {
     font-size: larger;
+}
+
+.invalidInputMessage {
+    color: red;
+    margin-bottom: 0px;
+    display: inline-block;
+    padding-left: 20px;
 }

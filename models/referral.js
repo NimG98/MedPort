@@ -10,7 +10,8 @@ const ReferralSchema = new mongoose.Schema({
 	},
 	doctorID: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: "Doctor"
+		ref: "Doctor",
+		required: true
 	}
 });
 

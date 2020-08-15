@@ -6,7 +6,7 @@ import { ApiRoutes } from "../constants/apiRoutes";
 export const getDoctorByID = (doctorID, callback) => {
     const url = ApiRoutes.doctorById + doctorID;
 
-    fetch(url)
+    return fetch(url)
         .then(res => {
             if (res.status === 200) {
                 return res.json();
@@ -18,6 +18,26 @@ export const getDoctorByID = (doctorID, callback) => {
                     callback(doctorJson);
                 }
                 return doctorJson;
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}
+
+/* Returns a list of the patients under a specific doctor */
+export const getPatientsByDoctorID = (doctorID) => {
+    const url = ApiRoutes.patientsByDoctorId + doctorID;
+
+    return fetch(url)
+        .then(res => {
+            if (res.status === 200) {
+                return res.json();
+            }
+        })
+        .then(patientsArray => {
+            if(patientsArray){
+                return patientsArray;
             }
         })
         .catch(error => {

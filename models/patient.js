@@ -8,9 +8,13 @@ const validator = require('validator')
 const PatientSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     },
-    generalProfile: GeneralProfile.schema,
+    generalProfile: {
+        type: GeneralProfile.schema,
+        required: true
+    },
     address: {
         type: String,
         required: true,
@@ -39,7 +43,8 @@ const PatientSchema = new mongoose.Schema({
     },
     doctor: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Doctor'
+        ref: 'Doctor',
+        required: true
     }
 })
 

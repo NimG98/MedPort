@@ -5,10 +5,14 @@ import "./styles.css";
 import 'antd/dist/antd.css';
 import { Row, Card, Form, Input, Button, Select, DatePicker, TimePicker} from "antd";
 
-import { getPatientsByDoctor, getDoctorID } from "../../actions/app";
-import { getUserType } from '../../actions/user';
+import { getUserProfileInfo } from '../../actions/user';
+import { getPatientsByDoctorID } from "../../actions/doctor";
+
 import { UserType } from "../../constants/userType";
 import { LeftOutlined } from "@ant-design/icons";
+import { addRequest } from "../../actions/request";
+
+import moment from 'moment';
 
 const { TextArea } = Input;
 
@@ -18,30 +22,48 @@ class RequestForm extends React.Component {
         super(props);
 
         this.state = {
-            user: this.props.loggedInUser,
-            userType: null,
-            
+            user: this.props.appComponent.state.loggedInUser,
+            userType: this.props.appComponent.state.userType,
+            patientsListDropdown: []
         }
-        // sets this.state.userType to the appropriate userType
-        getUserType(this.state.user, null, this);
-
         this.onClick = this.onClick.bind(this);
         this.onFinish = this.onFinish.bind(this);
         this.displayPatients = this.displayPatients.bind(this);
     }
 
-    onFinish = (formValues) => {
-        console.log("Request submitted with the following values: ", formValues);
-    }
-
-    getPatients () {
+    async componentDidMount() {
         if(this.state.userType === UserType.doctor) {
-            const patients = getPatientsByDoctor(getDoctorID(this.state.user))
-            return patients;
+            await this.displayPatients();
         }
     }
 
-    onClick() {
+    onFinish = async (formValues) => {
+        const createdByUser = await getUserProfileInfo();
+        const createdBy = createdByUser._id;
+        if(formValues["patient"] && this.state.userType === UserType.doctor){
+            var receiver = this.state.patients[formValues["patient"]]._id;
+        } else if (this.state.userType === UserType.patient) {
+            var receiver = createdByUser.doctor;
+        }
+        
+        const requestTypes = ["Phone call", "Appointment", "Test"];
+        const type = requestTypes[formValues["requestType"]];
+
+        const date = moment(formValues["date"]).format('YYYY-MM-DD');
+        const time = moment(formValues["time"]).format('h:mm A');
+
+        var requestInfo = {createdBy, receiver, type, date, time};
+
+        if(formValues["reason"]){
+            const reason = formValues["reason"];
+            requestInfo["reason"] = reason;
+        }
+        
+        await addRequest(requestInfo);
+        this.props.backToPreviousRequestsPage();
+    }
+
+    onClick = () => {
         this.props.backToPreviousRequestsPage();
     }
 
@@ -74,7 +96,7 @@ class RequestForm extends React.Component {
                                     },
                                 ]}
                             >
-                                {this.displayPatients(this.getPatients())}
+                                {this.state.patientsListDropdown}
                             </Form.Item>
                         }
                         <Form.Item
@@ -138,14 +160,18 @@ class RequestForm extends React.Component {
         );
     }
 
-    displayPatients = (patients) => {
+    displayPatients = async () => {
         var patientNameElements = [];
+        const doctorID = (await getUserProfileInfo())._id;
+        const patients = await getPatientsByDoctorID(doctorID);
+        this.setState({patients: patients})
 
-        for (var patientInfo in patients) {
-            patientNameElements.push(<Select.Option key={patientInfo}>{patients[patientInfo].firstName + " " + patients[patientInfo].lastName}</Select.Option>)
+        for (var patientInfo of patients) {
+            patientNameElements.push(<Select.Option key={patients.indexOf(patientInfo)}>{patientInfo.generalProfile.firstName + " " + patientInfo.generalProfile.lastName}</Select.Option>)
         }
 
-        return (<Select>{patientNameElements}</Select>)
+        const patientsListDropdown = <Select>{patientNameElements}</Select>;
+        this.setState({patientsListDropdown: patientsListDropdown})
     }
 
 }

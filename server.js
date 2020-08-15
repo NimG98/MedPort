@@ -24,11 +24,11 @@ const { ObjectID } = require("mongodb");
 
 // body-parser: middleware for parsing HTTP JSON body into a usable object
 const bodyParser = require("body-parser");
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
 
 // express-session for managing user sessions
 const session = require("express-session");
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 /*** Helper functions below **********************************/
 function isMongoError(error) { // checks for first error returned by promise rejection if Mongo database suddently disconnects
@@ -36,6 +36,8 @@ function isMongoError(error) { // checks for first error returned by promise rej
 }
 
 const { generateReferralCode } = require('./helpers/referral');
+const { Request } = require("./models/request");
+const { File } = require("./models/file");
 
 /* // Our own express middleware to check for
 // an active user on the session cookie (indicating a logged in user.)
@@ -78,7 +80,7 @@ app.use(
         resave: false,
         saveUninitialized: false,
         cookie: {
-            expires: 300000, // 5 mins
+            expires: 900000, // 15 mins
             httpOnly: true
         }
     })
@@ -224,37 +226,148 @@ app.get("/api/profile/", mongoChecker, authenticate, (req, res) => {
     }
 });
 
-// A route to get the general profile info (firstName, lastName, email) of another user
-app.get("/api/profile/:username", mongoChecker, authenticate, (req, res) => {
-    const username = req.params.username;
+// A route to update a field in the profile info of the loggedInUser
+// The body will be a json that consists of a change to make to the
+//  resource:
+/*
+  { "op": "replace", "path": "/generalProfile.email", "value": "zsfrf@msf.com" }
+*/
+app.patch("/api/profile/", mongoChecker, authenticate, (req, res) => {
+    // Find the fields to update and their values.
 
-    User.findOne({username: username}).then( (user) => {
-        if(!user){
-            res.status(404).send('Resource not found')  // could not find this user
-        } else {
-            const userType = user.userType;
-            const userId = user._id;
-            return {userType: userType, userId: userId}
-        }
-    }).then( (userJson) => {
-        if(userJson) {
-            if(userJson.userType === "patient") {
-                Patient.findOne({user: userJson.userId}).then( (patient) => {
-                    if(!patient){
-                        res.status(404).send('Resource not found')  // could not find this patient
-                    } else {
-                        res.send(patient.generalProfile)
-                    }
-                })
-            } else if(userJson.userType === "doctor") {
-                Doctor.findOne({user: userJson.userId}).then( (doctor) => {
-                    if(!doctor){
-                        res.status(404).send('Resource not found')  // could not find this doctor
-                    } else {
-                        res.send(doctor.generalProfile)
-                    }
-                })
+	const fieldsToUpdate = {};
+    const propertyToChange = req.body.path.substr(1) // getting rid of the '/' character
+    fieldsToUpdate[propertyToChange] = req.body.value;
+    
+    if(req.user.userType === "patient") {
+        Patient.findOneAndUpdate({user: req.user._id}, {$set: fieldsToUpdate}, {new: true, useFindAndModify: false, runValidators: true, context: 'query'}).then( (patient) => {
+            if(!patient){
+                res.status(404).send('Resource not found')  // could not find this patient
+            } else {
+                res.send(patient)
             }
+        }).catch(error => {
+            if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+                res.status(500).send('Internal server error')
+            } else {
+                log(error)
+                res.status(400).send('Bad Request') // bad request for changing the patient.
+            }
+        })
+    } else if(req.user.userType === "doctor"){
+        Doctor.findOneAndUpdate({user: req.user._id}, {$set: fieldsToUpdate}, {new: true, useFindAndModify: false, runValidators: true, context: 'query'}).then( (doctor) => {
+            if(!doctor){
+                res.status(404).send('Resource not found')  // could not find this doctor
+            } else {
+                res.send(doctor)
+            }
+        }).catch(error => {
+            if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+                res.status(500).send('Internal server error')
+            } else {
+                log(error)
+                res.status(400).send('Bad Request') // bad request for changing the doctor.
+            }
+        })
+    }
+});
+
+// A route to get the profile image of the loggedInUser
+app.get("/api/profile/image", mongoChecker, authenticate, (req, res) => {
+    if(req.user.userType === "patient") {
+        Patient.findOne({user: req.user._id}).then( (patient) => {
+            if(!patient){
+                res.status(404).send('Resource not found')  // could not find this patient
+            } else {
+                if(!patient.generalProfile.profileImage) {
+                    res.send({ imageBase64: null }) // no custom set profile picture
+                } else {
+                    res.send({ imageBase64: patient.generalProfile.profileImage.imageBase64 })
+                }
+            }
+        }).catch(error => {
+            log(error);
+            res.status(500).send("Internal Server Error");
+        })
+    } else if(req.user.userType === "doctor"){
+        Doctor.findOne({user: req.user._id}).then( (doctor) => {
+            if(!doctor){
+                res.status(404).send('Resource not found')  // could not find this doctor
+            } else {
+                if(!doctor.generalProfile.profileImage) {
+                    res.send({ imageBase64: null }) // no custom set profile picture
+                } else {
+                    res.send({ imageBase64: doctor.generalProfile.profileImage.imageBase64 })
+                }
+            }
+        }).catch(error => {
+            log(error);
+            res.status(500).send("Internal Server Error");
+        })
+    }
+});
+
+// A route to update the profile image of the loggedInUser
+// { "imageBase64": "..." }
+app.post("/api/profile/image", mongoChecker, authenticate, (req, res) => {
+    // Find the fields to update and their values.
+	const fieldToUpdate = {};
+    const imagePropertyLocation = "generalProfile.profileImage.imageBase64"
+    fieldToUpdate[imagePropertyLocation] = req.body.imageBase64;
+    
+    if(req.user.userType === "patient") {
+        Patient.findOneAndUpdate({user: req.user._id}, {$set: fieldToUpdate}, {new: true, useFindAndModify: false, runValidators: true, context: 'query'}).then( (patient) => {
+            if(!patient){
+                res.status(404).send('Resource not found')  // could not find this patient
+            } else {
+                res.send({ imageBase64: patient.generalProfile.profileImage.imageBase64 })
+            }
+        }).catch(error => {
+            if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+                res.status(500).send('Internal server error')
+            } else {
+                log(error)
+                res.status(400).send('Bad Request') // bad request for changing the patient.
+            }
+        })
+    } else if(req.user.userType === "doctor"){
+        Doctor.findOneAndUpdate({user: req.user._id}, {$set: fieldToUpdate}, {new: true, useFindAndModify: false, runValidators: true, context: 'query'}).then( (doctor) => {
+            if(!doctor){
+                res.status(404).send('Resource not found')  // could not find this doctor
+            } else {
+                res.send({ imageBase64: doctor.generalProfile.profileImage.imageBase64 })
+            }
+        }).catch(error => {
+            if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+                res.status(500).send('Internal server error')
+            } else {
+                log(error)
+                res.status(400).send('Bad Request') // bad request for changing the doctor.
+            }
+        })
+    }
+});
+
+// A route to get the general profile info (firstName, lastName, email) of another user (patient/doctor)
+app.get("/api/profile/:id", mongoChecker, authenticate, (req, res) => {
+    const id = req.params.id; // patient or doctor Id
+
+    if(!ObjectID.isValid(id)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+
+    Patient.findById(id).then( (patient) => {
+        if(!patient){
+            Doctor.findById(id).then( (doctor) => {
+                if(!doctor){
+                    res.status(404).send('Resource not found')  // could not find this patient/doctor
+                } else {
+                    res.send(doctor.generalProfile)
+                }
+            })
+        } else {
+            res.send(patient.generalProfile)
         }
     }).catch(error => {
         log(error);
@@ -583,6 +696,7 @@ app.get("/api/doctors/:id", mongoChecker, authenticate, (req, res) => {
     })
 });
 
+
 // A route to delete a doctor with a given doctor's id
 // Note: admin route
 app.delete("/api/doctors/:id", mongoChecker, authenticate, isAdmin, (req, res) => {
@@ -648,27 +762,26 @@ app.patch("/api/doctors/:id", mongoChecker, authenticate, isAdmin, (req, res) =>
 	});
 });
 
-// A route to get a list of patients for a doctor with a given doctor's id
-// Note: admin route
-app.get("/api/doctors/patients/:id", mongoChecker, authenticate, isAdmin, (req, res) => {
-	const doctorID = req.params.id;
-	
-	if(!ObjectID.isValid(doctorID)) {
+// A route to get a list of the patients who has a doctor with the given doctor id
+app.get("/api/doctors/patients/:id", mongoChecker, authenticate, (req, res) => {
+    const doctorId = req.params.id;
+
+    if(!ObjectID.isValid(doctorId)) {
 		res.status(404).send("Resource not found");
 		return;
     }
-	
-	Patient.find({ doctor: doctorID }).then(patients => {
-		if (!patients) {
-			res.status(404).send("Resource Not Found");
-			return;
-		} else {
-			res.send(patients);
-		}
-	}).catch(error => {
-		log(error);
-		res.status(500).send("Internal Server Error");
-	});
+    
+    Patient.find({doctor: doctorId}).then( patients => {
+        if (!patients) {
+          res.status(404).send("Resource Not Found");
+          return;
+        } else {
+          res.send(patients);
+        }
+    }).catch(error => {
+        log(error);
+        res.status(500).send("Internal Server Error");
+    })
 });
 
 /** Institution routes below **/
@@ -691,7 +804,7 @@ app.post("/api/institutions", mongoChecker, (req, res) => {
 		if (isMongoError(error)) { // check for if mongo server suddenly disconnected before this request.
 			res.status(500).send('Internal server error')
 		} else {
-            console.log(error);
+            log(error);
 			res.status(400).send('Bad Request')
 		}
 	})
@@ -810,6 +923,227 @@ app.delete("/api/institutions/:id", mongoChecker, authenticate, isAdmin, (req, r
 		res.status(500).send("Internal Server Error");
 	});
 });
+
+/** Request routes below **/
+
+// A route to make a new request created by the current loggedInUser
+app.post("/api/requests", mongoChecker, authenticate, (req, res) => {
+
+    if(!ObjectID.isValid(req.body.createdBy)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+
+    if(!ObjectID.isValid(req.body.receiver)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+
+    // Create a new request
+	const request = new Request({
+        createdBy: req.body.createdBy,
+        receiver: req.body.receiver,
+        type: req.body.type,
+        status: "pending",
+        date: req.body.date,
+        time: req.body.time
+    });
+    // Set optional field "reason"
+    if(req.body.reason) {
+        request.set("reason", req.body.reason)
+    }
+    // Set the model schema type of objectId for "createdBy" and "reciever"
+    if(req.user.userType === "patient") {
+        request.populate({path: 'createdBy', model: 'Patient'})
+        request.populate({path: 'receiver', model: 'Doctor'})
+    } else if(req.user.userType === "doctor") {
+        request.populate({path: 'createdBy', model: 'Doctor'})
+        request.populate({path: 'receiver', model: 'Patient'})
+    }
+    
+	// save the request
+	request.save().then(request => {
+		res.send(request);
+	}).catch(error => {
+		// check for if mongo server suddenly disconnected before this request.
+		if (isMongoError(error)) { 
+			log(error);
+			res.status(500).send('Internal Server Error')
+		} else {
+            log(error);
+			res.status(400).send('Bad Request')
+		}
+	});
+});
+
+// A route to get all requests created by the current loggedInUser
+app.get("/api/requests", mongoChecker, authenticate, (req, res) => {
+    // Current loggedInUser is a patient; get their patient id, by checking user id
+    if(req.user.userType === "patient") {
+        Patient.findOne({user: req.user._id}).then( (patient) => {
+            if(!patient){
+                res.status(404).send('Resource not found')  // could not find this patient
+            } else {
+                return patient._id;
+            }
+        // Find all requests created by this patient, by checking if "createdBy" is the same as the patient's id
+        }).then( creatorId => {
+            Request.find({ $or:[{createdBy: creatorId}, {receiver: creatorId}] }).then( (requests) => {
+                res.send(requests); // array of requests
+            })
+        }).catch(error => {
+            log(error);
+            res.status(500).send("Internal Server Error");
+        })
+    // Current loggedInUser is a doctor; get their doctor id, by checking user id
+    } else if(req.user.userType === "doctor"){
+        Doctor.findOne({user: req.user._id}).then( (doctor) => {
+            if(!doctor){
+                res.status(404).send('Resource not found')  // could not find this doctor
+            } else {
+                return doctor._id;
+            }
+        // Find all requests created by this doctor, by checking if "createdBy" is the same as the doctor's id
+        }).then( creatorId => {
+            Request.find({ $or:[{createdBy: creatorId}, {receiver: creatorId}] }).then( (requests) => {
+                res.send(requests); // array of requests
+            })
+        }).catch(error => {
+            log(error);
+            res.status(500).send("Internal Server Error");
+        })
+    }
+})
+
+// A route to update the status of a request
+// { "status": "confirmed" }
+app.patch("/api/requests/status/:id", mongoChecker, authenticate, (req, res) => {
+    const requestId = req.params.id;
+
+    if(!ObjectID.isValid(requestId)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+
+    // Find the fields to update and their values.
+	const fieldToUpdate = {};
+    const imagePropertyLocation = "status"
+    fieldToUpdate[imagePropertyLocation] = req.body.status;
+
+    Request.findByIdAndUpdate(requestId, {$set: fieldToUpdate}, {new: true, useFindAndModify: false, runValidators: true, context: 'query'}).then( (request) => {
+        if(!request){
+            res.status(404).send('Resource not found')  // could not find this request
+        } else {
+            res.send(request)
+        }
+    }).catch(error => {
+        if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+            res.status(500).send('Internal server error')
+        } else {
+            log(error)
+            res.status(400).send('Bad Request') // bad request for changing the request.
+        }
+    })
+});
+
+/** File routes below **/
+
+// A route to make a new file created by the current loggedInUser
+app.post("/api/files", mongoChecker, authenticate, (req, res) => {
+
+    if(!ObjectID.isValid(req.body.uploader)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+
+    // Create a new request
+	const file = new File({
+        uploader: req.body.uploader,
+        patient: req.body.patient,
+        dateUploaded: req.body.dateUploaded,
+        reportType: req.body.reportType,
+        fileName: req.body.fileName,
+        base64: req.body.base64
+    });
+
+    // Set the model schema type of objectId for "createdBy" and "reciever"
+    if(req.user.userType === "patient") {
+        file.populate({path: 'uploader', model: 'Patient'})
+    } else if(req.user.userType === "doctor") {
+        file.populate({path: 'uploader', model: 'Doctor'})
+    }
+    
+	// save the request
+	file.save().then(file => {
+		res.send(file);
+	}).catch(error => {
+		// check for if mongo server suddenly disconnected before this request.
+		if (isMongoError(error)) { 
+			log(error);
+			res.status(500).send('Internal Server Error')
+		} else {
+            log(error);
+			res.status(400).send('Bad Request')
+		}
+	});
+});
+
+// A route to get all files uploaded by the current loggedInUser
+app.get("/api/files/uploaded", mongoChecker, authenticate, (req, res) => {
+    // Current loggedInUser is a patient; get their patient id, by checking user id
+    if(req.user.userType === "patient") {
+        Patient.findOne({user: req.user._id}).then( (patient) => {
+            if(!patient){
+                res.status(404).send('Resource not found')  // could not find this patient
+            } else {
+                return patient._id;
+            }
+        // Find all files uploaded by this patient, by checking if "uploader" is the same as the patient's id
+        }).then( uploaderId => {
+            File.find({ uploader: uploaderId }).then( (files) => {
+                res.send(files); // array of files
+            })
+        }).catch(error => {
+            log(error);
+            res.status(500).send("Internal Server Error");
+        })
+    // Current loggedInUser is a doctor; get their doctor id, by checking user id
+    } else if(req.user.userType === "doctor"){
+        Doctor.findOne({user: req.user._id}).then( (doctor) => {
+            if(!doctor){
+                res.status(404).send('Resource not found')  // could not find this doctor
+            } else {
+                return doctor._id;
+            }
+        // Find all files created by this doctor, by checking if "uploader" is the same as the doctor's id
+        }).then( uploaderId => {
+            File.find({ uploader: uploaderId }).then( (files) => {
+                res.send(files); // array of files
+            })
+        }).catch(error => {
+            log(error);
+            res.status(500).send("Internal Server Error");
+        })
+    }
+})
+
+// A route to get all files that are about a specific patient
+app.get("/api/files/patients/:patientId", mongoChecker, authenticate, (req, res) => {
+    const patientId = req.params.patientId;
+
+    if(!ObjectID.isValid(patientId)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+
+    // Find all files that are associated to this patient, by checking if "patient" is the same as the patient's id
+    File.find({ patient: patientId }).then( (files) => {
+        res.send(files); // array of files
+    }).catch(error => {
+        log(error);
+        res.status(500).send("Internal Server Error");
+    })
+})
 
 
 /*** Webpage routes below **********************************/

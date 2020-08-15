@@ -2,7 +2,8 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const validator = require('validator')
+const validator = require('validator');
+const { ProfileImage } = require('./profileImage');
 
 
 // Both patients and doctors share these common profile details
@@ -28,6 +29,10 @@ const GeneralProfileSchema = new mongoose.Schema({
             validator: validator.isEmail,   // custom validator
             message: 'Not valid email'
         }
+    },
+    profileImage: {
+        type: ProfileImage.schema,
+        required: false
     }
 })
 
