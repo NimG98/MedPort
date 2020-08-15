@@ -166,6 +166,8 @@ Starting at the home page, read the website description features on the bottom o
     - You can click on the profile image (or pencil beside the profile image) to replace the user's profile image
         - will display message if file does not fit requirements (must be png/jpg and less than 2mb).
         - users who never set their profile image will have the default profile image
+        - NOTE: on localhost images up to 2mb uploaded fine, but on heroku it's not consistent. The same file on heroku sometimes uploads succesfully and other time heroku gives a 503 service unavailable error.
+            - To avoid the error, either wait a while and then upload your profile image. Or try to use a very small image size (50 kb)
 
 ### Request
 
@@ -242,6 +244,8 @@ Hover over the user profile icon on the top right of the site, and click `Log ou
     - You can click on the profile image (or pencil beside the profile image) to replace the user's profile image
         - will display message if file does not fit requirements (must be png/jpg and less than 2mb).
         - users who never set their profile image will have the default profile image
+        - NOTE: on localhost images up to 2mb uploaded fine, but on heroku it's not consistent. The same file on heroku sometimes uploads succesfully and other time heroku gives a 503 service unavailable error.
+            - To avoid the error, either wait a while and then upload your profile image. Or try to use a very small image size (50 kb)
 
 ### Request
 
