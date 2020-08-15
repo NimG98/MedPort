@@ -102,6 +102,7 @@ class AdminDoctorView extends React.Component {
 		// binding functions
 		this.getTableHeaders = this.getTableHeaders.bind(this);
 		this.getPatientTableRows = this.getPatientTableRows.bind(this);
+		this.getInstitutionOptions = this.getInstitutionOptions.bind(this);
 		this.getInstitutionInfo = this.getInstitutionInfo.bind(this);
 		this.removeDoctor = this.removeDoctor.bind(this);
 		this.updateDoctorInfo = this.updateDoctorInfo.bind(this);
@@ -151,7 +152,7 @@ class AdminDoctorView extends React.Component {
 									{this.state.edit ? <td><input name="firstName" value={this.state.firstName} onChange={this.handleInputChange}></input></td> : <td>{this.state.doctorInfo.generalProfile.firstName}</td>}
 									{this.state.edit ? <td><input name="lastName" value={this.state.lastName} onChange={this.handleInputChange}></input></td> : <td>{this.state.doctorInfo.generalProfile.lastName}</td>}
 									{this.state.edit ? <td><input name="email" value={this.state.email} onChange={this.handleInputChange}></input></td> : <td>{this.state.doctorInfo.generalProfile.email}</td>}
-									{this.state.edit ? <td><select name="institution" value={this.state.institution} onChange={this.handleInputChange}>{this.state.institutions.map(institution => (<option key={uid(institution)} value={institution._id}>{institution.name}</option>))}</select></td> : <td>{this.state.doctorInfo.institution}</td>}
+									{this.state.edit ? <td><select name="institution" value={this.state.institution} onChange={this.handleInputChange}>{this.getInstitutionOptions()}</select></td> : <td>{this.state.doctorInfo.institution}</td>}
 									{this.state.edit ? <td><Button type="primary" onClick={() => {this.updateDoctorInfo(this.state.doctorID)}}>Submit</Button></td> : <td><Button type="primary" onClick={() => this.toggleEdit()}>Edit</Button></td>}
 									{this.state.edit ? <td><Button type="danger" onClick={() => { this.resetInputs(); this.toggleEdit(); }} >Cancel</Button></td> : null}
 								</tr>
@@ -211,24 +212,40 @@ class AdminDoctorView extends React.Component {
 		return tableRows;
 	}
 	
+	getInstitutionOptions() {
+		const options = [];
+		
+		options.push(<option value="" disabled>Choose Here</option>);
+		
+		this.state.institutions.map(institution => {
+			options.push(<option key={uid(institution)} value={institution._id}>{institution.name}</option>);
+		});
+		
+		return options;
+	}
+	
 	// gets insitution info from institutionID
 	getInstitutionInfo(institutionID) {
-		return getInstitution(institutionID).then(institution => {
-			if (institution) {
-				const newDoctorInfo = {...this.state.doctorInfo};
-				newDoctorInfo.institution = institution.name;
-				
-				this.setState({
-					institution: institution._id,
-					doctorInfo: newDoctorInfo
-				});
-			} else {
+		if (institutionID) {
+			return getInstitution(institutionID).then(institution => {
+				if (institution) {
+					const newDoctorInfo = {...this.state.doctorInfo};
+					newDoctorInfo.institution = institution.name;
+					
+					this.setState({
+						institution: institution._id,
+						doctorInfo: newDoctorInfo
+					});
+				} else {
+					this.setError(true, "An error occurred, please try again");
+				}
+			}).catch(error => {
+				console.log(error);
 				this.setError(true, "An error occurred, please try again");
-			}
-		}).catch(error => {
-			console.log(error);
-			this.setError(true, "An error occurred, please try again");
-		});
+			});
+		} else {
+			this.setError(true, "This doctor does not have an institution. Set one by editing the doctor info.");
+		}
 	}
 	
 	// deletes doctor with a specific id
