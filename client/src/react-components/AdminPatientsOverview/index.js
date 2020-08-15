@@ -14,21 +14,24 @@ import { redirect } from "../../actions/router"
 import { Alert, Button } from "antd";
 
 class AdminPatientsOverview extends React.Component {
-	headers = ["Health Card", "First Name", "Last Name", "Email", "Address", "Postal Code", "Doctor"];
+	headers = ["Health Card", "First Name", "Last Name", "Email", "Address", "Postal Code"];
 	
-	componentDidMount() {
-		getPatients().then(patients => {
+	async componentDidMount() {
+		await getPatients().then((patients) => {
 			if (patients || patients === []) {
+				
+				// set patients in state
 				this.setState({
 					patients: patients
 				});
+				
 			} else {
 				this.setError(true, "An error occurred, please try again.");
 			}
 		}).catch(error => {
 			console.log(error);
 			this.setError(true, "An error occurred, please try again.");
-		});
+		});		
 	}
 	
 	constructor(props) {
@@ -96,7 +99,8 @@ class AdminPatientsOverview extends React.Component {
 	getTableRows() {
 		let tableRows = [];
 		
-		this.state.patients.map(patient => (
+		this.state.patients.map((patient) => {
+			
 			tableRows.push(
 				<tr key={uid(patient)}>
 					<td>{patient.HCN}</td>
@@ -105,21 +109,20 @@ class AdminPatientsOverview extends React.Component {
 					<td>{patient.generalProfile.email}</td>
 					<td>{patient.address}</td>
 					<td>{patient.postalCode}</td>
-					<td>{patient.doctor}</td>
 					<td><Button
 							type="primary"
-							onClick={() => {redirect(this, "/admin/patients/" + patient.id)}}
+							onClick={() => {redirect(this, "/admin/patients/" + patient._id)}}
 						>View</Button>
 					</td>
 					<td>
 						<Button 
 							type="danger"
-							onClick={() => {this.removePatient(patient.id)}}
+							onClick={() => {this.removePatient(patient._id)}}
 						>Delete</Button>
 					</td>
 				</tr>
 			)
-		));
+		});
 		
 		return tableRows;
 	}
@@ -131,7 +134,7 @@ class AdminPatientsOverview extends React.Component {
 		
 		if (success) {
 			// delete Patient
-			const filtered = this.state.patients.filter(patient => patient.id !== patientID);
+			const filtered = this.state.patients.filter(patient => patient._id !== patientID);
 			
 			this.setState({
 				patients: filtered
