@@ -396,6 +396,35 @@ app.get("/api/patients", mongoChecker, authenticate, isAdmin, (req, res) => {
 	});
 })
 
+// A route to delete a patient document
+// Note: admin route
+app.delete("/api/patients/:id", mongoChecker, authenticate, isAdmin, (req, res) => {
+	const patientID = req.params.id;
+	
+	if(!ObjectID.isValid(patientID)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+	
+	Patient.findById(patientID).then(patient => {
+		if (!patient) {
+			res.status(404).send("Resource Not Found");
+			return;
+		} else {
+			patient.remove().then(patient => {
+				res.send(patient);
+			}).catch(error => {
+				log(error);
+				res.status(500).send("Internal Server Error");
+				return;
+			})
+		}
+	}).catch(error => {
+		log(error);
+		res.status(500).send("Internal Server Error");
+	});
+});
+
 /** Doctor routes below **/
 
 // A route to make a new doctor
