@@ -513,6 +513,42 @@ app.delete("/api/doctors/:id", mongoChecker, authenticate, isAdmin, (req, res) =
 	});
 })
 
+// A route to update a doctor with doctorID
+// Note: admin route
+app.patch("/api/doctors/:id", mongoChecker, authenticate, isAdmin, (req, res) => {
+	const doctorID = req.params.id;
+	
+	if(!ObjectID.isValid(doctorID)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+	
+	// getting the proerties to change and thier values
+	const fieldsToUpdate = {};
+	req.body.map((change) => {
+		// getting the property name
+		const path = change.path.substr(1)
+		const propertyToChange = path.split("/").join(".");
+		fieldsToUpdate[propertyToChange] = change.value
+	})
+	
+	Doctor.findByIdAndUpdate(doctorID, {$set: fieldsToUpdate}, {new: true, useFindAndModify: false, runValidators: true, context: 'query'}).then(doctor => {
+		if (!doctor) {
+			res.status(404).send("Resource Not Found");
+			return;
+		} else {
+			res.send(doctor);
+		}
+	}).catch(error => {
+		if (isMongoError(error)) {
+			res.status(500).send('Internal server error')
+		} else {
+            console.log(error);
+			res.status(400).send('Bad Request')
+		}
+	});
+});
+
 // A route to get a list of patients for a doctor with a given doctor's id
 // Note: admin route
 app.get("/api/doctors/patients/:id", mongoChecker, authenticate, isAdmin, (req, res) => {
