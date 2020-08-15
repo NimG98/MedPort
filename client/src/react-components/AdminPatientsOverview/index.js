@@ -11,7 +11,7 @@ import { getPatients, deletePatient } from "../../actions/patient";
 import { redirect } from "../../actions/router"
 
 // importing components
-import { Alert, Button } from "antd";
+import { Alert, Button, Popconfirm } from "antd";
 
 class AdminPatientsOverview extends React.Component {
 	headers = ["Health Card", "First Name", "Last Name", "Email", "Address", "Postal Code"];
@@ -115,10 +115,17 @@ class AdminPatientsOverview extends React.Component {
 						>View</Button>
 					</td>
 					<td>
-						<Button 
-							type="danger"
-							onClick={() => {this.removePatient(patient._id)}}
-						>Delete</Button>
+						<Popconfirm
+							title="Delete this patient?"
+							onConfirm={(e) => {this.removePatient(patient._id)}}
+							onCancel={(e) => {}}
+							okText="Yes"
+							cancelText="No"
+						>
+							<Button 
+								type="danger"
+							>Delete</Button>
+						</Popconfirm>
 					</td>
 				</tr>
 			)
@@ -130,19 +137,22 @@ class AdminPatientsOverview extends React.Component {
 	// deletes doctor with a specific id
 	removePatient(patientID) {
 		// api call
-		const success = deletePatient(patientID);
-		
-		if (success) {
-			// delete Patient
-			const filtered = this.state.patients.filter(patient => patient._id !== patientID);
-			
-			this.setState({
-				patients: filtered
-			});
-		} else {
-			// set error message
+		deletePatient(patientID).then(patientInfo => {
+			if (patientInfo) {
+				// delete Patient
+				const filtered = this.state.patients.filter(patient => patient._id !== patientID);
+				
+				this.setState({
+					patients: filtered
+				});
+			} else {
+				// set error message
+				this.setError(true, "An error occurred, please try again.");
+			}
+		}).catch(error => {
+			console.log(error);
 			this.setError(true, "An error occurred, please try again.");
-		}
+		});		
 	}
 	
 	// sets error value in component state
