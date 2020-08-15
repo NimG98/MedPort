@@ -3,7 +3,7 @@ import { withRouter } from "react-router";
 
 import "./styles.css";
 import 'antd/dist/antd.css';
-import { Row, Card, Form, Input, Button, Select, DatePicker, TimePicker} from "antd";
+import { Row, Card, Form, Input, Button, Select, DatePicker, TimePicker, message} from "antd";
 
 import { getUserProfileInfo } from '../../actions/user';
 import { getPatientsByDoctorID } from "../../actions/doctor";
@@ -43,7 +43,12 @@ class RequestForm extends React.Component {
         if(formValues["patient"] && this.state.userType === UserType.doctor){
             var receiver = this.state.patients[formValues["patient"]]._id;
         } else if (this.state.userType === UserType.patient) {
-            var receiver = createdByUser.doctor;
+            if(createdByUser.doctor){
+                var receiver = createdByUser.doctor;
+            } else {
+                message.error("You cannot make a request when you do not have an assigned doctor.")
+                return;
+            }
         }
         
         const requestTypes = ["Phone call", "Appointment", "Test"];
