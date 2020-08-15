@@ -1,8 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router";
 
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import { Container, Form, Card, Col, Row} from 'react-bootstrap'
 import 'antd/dist/antd.css';
 import "./styles.css";
 import { Form, Upload, Card, Select, message, Button, Input }  from "antd";
@@ -38,19 +36,13 @@ class FileUpload extends React.Component {
         this.displayLastUploadedFiles = this.displayLastUploadedFiles.bind(this);
         this.onUploadChange = this.onUploadChange.bind(this);
         this.onFinish = this.onFinish.bind(this);
-        this.beforeUpload = this.beforeUpload.bind(this);
         this.getBase64 = this.getBase64.bind(this);
-
     }
 
     async componentDidMount() {
         if(this.state.userType === UserType.doctor) {
             await this.displayPatients();
         }
-        // const previousFileDownloadLinks = await this.displayLastUploadedFiles(5);
-        // this.setState({
-        //     previousFileDownloadLinks: previousFileDownloadLinks
-        // });
         await this.updatePreviousFilesOnPage();
     }
 
@@ -87,28 +79,17 @@ class FileUpload extends React.Component {
             message.error('PDF must smaller than 2MB!');
         }
         
-        // this.beforeUpload(data.file)
-        // console.log(this.state.listUploadFile)
-        console.log("isPdf: ", isPdf, " isLt2M: ", isLt2M)
         if(isPdf && isLt2M){
             this.setState({ listedUploadFile: uploadedFileList });
-            console.log(data)
-            console.log(data.file)
             const fileName = data.file.name;
 
-            // this.setState({ currentUploadFileName: fileName })
-            // this.getBase64(data.file)
-
             this.getBase64(data.file, fileBase64 => {
-                console.log(fileBase64)
                 this.setState({ currentUploadFileBase64: fileBase64, currentUploadFileName: fileName })
-                console.log("here");
             });
         }
     }
 
     onFinish = async (formValues) => {
-        console.log(this.state.currentUploadFileName, this.state.currentUploadFileBase64)
         if(!this.state.currentUploadFileName || !this.state.currentUploadFileBase64) {
             message.error('Please submit a file!');
             return;
@@ -126,29 +107,10 @@ class FileUpload extends React.Component {
         const base64 = this.state.currentUploadFileBase64;
 
         const fileInfo = {uploader, patient, reportType, dateUploaded, fileName, base64}
-        console.log(fileInfo)
 
         await addFile(fileInfo);
         this.setState({ currentUploadFileBase64: null, currentUploadFileName: null })
         await this.updatePreviousFilesOnPage();
-    }
-
-    beforeUpload = (file) => {
-/*         const isPdf = file.type === 'application/pdf'
-        if (!isPdf) {
-            message.error('You can only upload PDF file!');
-            // this.setState({ listUploadFile: false })
-        }
-        const isLt2M = file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-            message.error('PDF must smaller than 2MB!');
-            // this.setState({ listUploadFile: false })
-        } */
-        // if(isPdf && isLt2M) {
-        //     this.setState({ listUploadFile: true })
-        // }
-        //return isPdf && isLt2M;
-        return false;
     }
     
     getBase64 = (pdf, callback) => {
@@ -156,17 +118,6 @@ class FileUpload extends React.Component {
         reader.addEventListener('load', () => callback(reader.result));
         reader.readAsDataURL(pdf);
     }
-
-    // getBase64 = (pdfFile) => {
-    //     const reader = new FileReader();
-    //     reader.onload = function(fileLoadedEvent) {
-    //         const base64 = fileLoadedEvent.target.result;
-    //         // Print data in console
-    //         console.log(base64);
-    //         this.setState({currentUploadFileBase64: base64})
-    //     };
-    //     reader.readAsDataURL(pdfFile);
-    // }
 
     render() {
         return(
