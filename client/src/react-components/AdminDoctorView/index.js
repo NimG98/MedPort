@@ -15,6 +15,9 @@ import { getDoctor, deleteDoctor, updateDoctor, getPatientsByDoctor } from "../.
 import { getInstitution, getInstitutions } from "../../actions/institution";
 import { redirect } from "../../actions/router"
 
+// importing form validators
+import { validateInstitutionID, validateName, validateMID, validateEmail } from "../../validators/form-validators";
+
 class AdminDoctorView extends React.Component {
 	
 	// constants
@@ -23,7 +26,7 @@ class AdminDoctorView extends React.Component {
 	
 	componentDidMount() {
 		// get doctor info
-		getDoctor(this.state.doctorID).then(doctor => {
+		getDoctor(this.state.doctorID).then(async (doctor) => {
 			if (doctor) {
 				this.setState({
 					MID: doctor.MID,
@@ -35,24 +38,8 @@ class AdminDoctorView extends React.Component {
 				
 				this.setError(false, "");
 				
-				// needs institutionID
-				// gets doctor's institution
-				getInstitution(doctor.institutionID).then(institution => {
-					if (institution) {
-						const newDoctorInfo = {...this.state.doctorInfo};
-						newDoctorInfo.institution = institution.name;
-						
-						this.setState({
-							institution: institution.name,
-							doctorInfo: newDoctorInfo
-						});
-					} else {
-						this.setError(true, "An error occurred, please try again");
-					}
-				}).catch(error => {
-					console.log(error);
-					this.setError(true, "An error occurred, please try again");
-				});
+				// gets institution info for doctor's insitution
+				await this.getInstitutionInfo(doctor.institutionID);
 				
 			} else {
 				this.setError(true, "An error occurred, please try again");
@@ -76,6 +63,20 @@ class AdminDoctorView extends React.Component {
 			this.setError(true, "An error occurred, please try again");
 		});
 		
+		// get list of all institutions (for editing)
+		getInstitutions().then(institutions => {
+			if (institutions || institutions === []) {
+				this.setState({
+					institutions: institutions
+				});
+			} else {
+				this.setError(true, "An error occurred, please try again")
+			}
+		}).catch(error => {
+			console.log(error);
+			this.setError(true, "An error occurred, please try again")
+		});
+		
 	}
 	
 	constructor(props) {
@@ -94,17 +95,21 @@ class AdminDoctorView extends React.Component {
 			doctorID: props.match.params.id,
 			doctorInfo: {generalProfile: {}},
 			patients: [],
+			institutions: [],
 		}
 		
 		// binding functions
 		this.getTableHeaders = this.getTableHeaders.bind(this);
 		this.getPatientTableRows = this.getPatientTableRows.bind(this);
+		this.getInstitutionInfo = this.getInstitutionInfo.bind(this);
 		this.removeDoctor = this.removeDoctor.bind(this);
+		this.updateDoctorInfo = this.updateDoctorInfo.bind(this);
+		this.validate = this.validate.bind(this);
 		this.setError = this.setError.bind(this);
 		this.toggleEdit = this.toggleEdit.bind(this);
 		this.handleClose = this.handleClose.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
-		this.createDoctor = this.createDoctor.bind(this);
+		this.getPropertiesToChange = this.getPropertiesToChange.bind(this);
 		this.resetInputs = this.resetInputs.bind(this);
 		
 	}
@@ -145,8 +150,8 @@ class AdminDoctorView extends React.Component {
 									{this.state.edit ? <td><input name="firstName" value={this.state.firstName} onChange={this.handleInputChange}></input></td> : <td>{this.state.doctorInfo.generalProfile.firstName}</td>}
 									{this.state.edit ? <td><input name="lastName" value={this.state.lastName} onChange={this.handleInputChange}></input></td> : <td>{this.state.doctorInfo.generalProfile.lastName}</td>}
 									{this.state.edit ? <td><input name="email" value={this.state.email} onChange={this.handleInputChange}></input></td> : <td>{this.state.doctorInfo.generalProfile.email}</td>}
-									{this.state.edit ? <td><input name="institution" value={this.state.institution} onChange={this.handleInputChange}></input></td> : <td>{this.state.doctorInfo.institution}</td>}
-									{this.state.edit ? <td><Button type="primary" onClick={() => { updateDoctor(this.createDoctor()); this.toggleEdit(); }}>Submit</Button></td> : <td><Button type="primary" onClick={() => this.toggleEdit()}>Edit</Button></td>}
+									{this.state.edit ? <td><select name="institution" value={this.state.institution} onChange={this.handleInputChange}>{this.state.institutions.map(institution => (<option key={uid(institution)} value={institution._id}>{institution.name}</option>))}</select></td> : <td>{this.state.doctorInfo.institution}</td>}
+									{this.state.edit ? <td><Button type="primary" onClick={() => {this.updateDoctorInfo(this.state.doctorID)}}>Submit</Button></td> : <td><Button type="primary" onClick={() => this.toggleEdit()}>Edit</Button></td>}
 									{this.state.edit ? <td><Button type="danger" onClick={() => { this.resetInputs(); this.toggleEdit(); }} >Cancel</Button></td> : null}
 								</tr>
 							</tbody>
@@ -205,6 +210,26 @@ class AdminDoctorView extends React.Component {
 		return tableRows;
 	}
 	
+	// gets insitution info from institutionID
+	getInstitutionInfo(institutionID) {
+		return getInstitution(institutionID).then(institution => {
+			if (institution) {
+				const newDoctorInfo = {...this.state.doctorInfo};
+				newDoctorInfo.institution = institution.name;
+				
+				this.setState({
+					institution: institution._id,
+					doctorInfo: newDoctorInfo
+				});
+			} else {
+				this.setError(true, "An error occurred, please try again");
+			}
+		}).catch(error => {
+			console.log(error);
+			this.setError(true, "An error occurred, please try again");
+		});
+	}
+	
 	// deletes doctor with a specific id
 	removeDoctor(doctorID) {
 		// api call
@@ -219,6 +244,50 @@ class AdminDoctorView extends React.Component {
 			console.log(error);
 			this.setError(true, "An error occurred, please try again.");
 		});		
+	}
+	
+	updateDoctorInfo(doctorID) {
+		const valid = this.validate();
+		
+		if (valid) {
+			updateDoctor(doctorID, this.getPropertiesToChange()).then(async (doctor) => {
+				if (doctor) {
+					// set doctor info
+					this.setState({
+						MID: doctor.MID,
+						firstName: doctor.generalProfile.firstName,
+						lastName: doctor.generalProfile.lastName,
+						email: doctor.generalProfile.email,
+						doctorInfo: doctor
+					});
+					
+					// get doctor's institution info
+					await this.getInstitutionInfo(doctor.institutionID);
+					
+					// toggle edit
+					this.toggleEdit();
+				} else {
+					this.setError(true, "An error occurred, please try again.");
+				}
+			}).catch(error => {
+				console.log(error);
+				this.setError(true, "An error occurred, please try again.");
+			});
+		}
+	}
+	
+	// validates inputs on submission
+	validate() {
+		
+		const valid = (
+			validateName('firstName', this.state.firstName, (name, val, msg) => this.setError(val, msg)) &&
+			validateName('lastName',this.state.lastName, (name, val, msg) => this.setError(val, msg)) &&
+			validateMID('MID', this.state.MID, (name, val, msg) => this.setError(val, msg)) &&
+			validateEmail('email', this.state.email, (name, val, msg) => this.setError(val, msg)) &&
+			validateInstitutionID('institution', this.state.institution, (name, val, msg) => this.setError(val, msg))
+		);
+		
+		return valid;
 	}
 	
 	setError(value, message) {
@@ -253,14 +322,14 @@ class AdminDoctorView extends React.Component {
 		});
 	}
 	
-	createDoctor = () => {
-		return({
-			firstName: this.state.firstName,
-			lastName: this.state.lastName,
-			email: this.state.email,
-			MID: this.state.MID,
-			institutionID: this.state.institutionID,
-		});
+	getPropertiesToChange = () => {
+		return [
+			{"op": "replace", "path": "/generalProfile/firstName", "value": this.state.firstName},
+			{"op": "replace", "path": "/generalProfile/lastName", "value": this.state.lastName},
+			{"op": "replace", "path": "/generalProfile/email", "value": this.state.email},
+			{"op": "replace", "path": "/MID", "value": this.state.MID},
+			{"op": "replace", "path": "/institutionID", "value": this.state.institution}
+		];
 	}
 	
 	resetInputs() {
@@ -269,7 +338,7 @@ class AdminDoctorView extends React.Component {
 			lastName: this.state.doctorInfo.generalProfile.lastName,
 			email: this.state.doctorInfo.generalProfile.email,
 			MID: this.state.doctorInfo.MID,
-			institutionID: this.state.doctorInfo.institutionID,
+			institution: this.state.doctorInfo.institution,
 		});
 	}
 }
