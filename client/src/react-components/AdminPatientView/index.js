@@ -12,6 +12,7 @@ import { Alert, Button } from "antd";
 
 // importing actions/required methods
 import { getPatient, deletePatient, updatePatient } from "../../actions/patient";
+import { getDoctor } from "../../actions/doctor";
 import { redirect } from "../../actions/router"
 
 class AdminPatientView extends React.Component {
@@ -19,7 +20,7 @@ class AdminPatientView extends React.Component {
 	infoHeaders = ["Health Card", "First Name", "Last Name", "Email", "Address", "Postal Code", "Doctor"];
 	
 	componentDidMount() {
-		getPatient(this.state.patientID).then(patient => {
+		getPatient(this.state.patientID).then(async (patient) => {
 			if (patient) {
 				this.setState({
 					HCN: patient.HCN,
@@ -28,11 +29,13 @@ class AdminPatientView extends React.Component {
 					email: patient.generalProfile.email,
 					address: patient.address,
 					postalCode: patient.postalCode,
-					doctorID: patient.doctor,
 					patientInfo: patient,
 				});
 				
 				this.setError(false, "");
+				
+				// gets doctor info for patient's doctor
+				await this.getDoctorInfo(patient.doctor);
 				
 			} else {
 				this.setError(true, "An error occurred, please try again");
@@ -64,6 +67,7 @@ class AdminPatientView extends React.Component {
 		
 		// binding functions
 		this.getTableHeaders = this.getTableHeaders.bind(this);
+		this.getDoctorInfo = this.getDoctorInfo.bind(this);
 		this.removePatient = this.removePatient.bind(this);
 		this.setError = this.setError.bind(this);
 		this.toggleEdit = this.toggleEdit.bind(this);
@@ -105,7 +109,7 @@ class AdminPatientView extends React.Component {
 									{this.state.edit ? <td><input name="email" value={this.state.email} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.generalProfile.email}</td>}
 									{this.state.edit ? <td><input name="address" value={this.state.address} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.address}</td>}
 									{this.state.edit ? <td><input name="postalCode" value={this.state.postalCode} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.postalCode}</td>}
-									{this.state.edit ? <td><input name="doctorID" value={this.state.doctorID} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.doctor}</td>}
+									{this.state.edit ? <td><input name="doctorID" value={this.state.doctorID} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.doctorName}</td>}
 									{this.state.edit ? <td><Button type="primary" onClick={() => { updatePatient(this.createPatient()); this.toggleEdit(); }}>Submit</Button></td> : <td><Button type="primary" onClick={() => this.toggleEdit()}>Edit</Button></td>}
 									{this.state.edit ? <td><Button type="danger" onClick={() => { this.resetInputs(); this.toggleEdit(); }} >Cancel</Button></td> : null}
 								</tr>
@@ -125,6 +129,25 @@ class AdminPatientView extends React.Component {
 		));
 		
 		return tableHeaders;
+	}
+	
+	getDoctorInfo(doctorID) {
+		return getDoctor(doctorID).then(doctor => {
+			if (doctor) {
+				const newPatientInfo = {...this.state.patientInfo};
+				newPatientInfo.doctorName = doctor.generalProfile.firstName + " " + doctor.generalProfile.lastName;
+				
+				this.setState({
+					doctorID: doctor._id,
+					patientInfo: newPatientInfo
+				});
+			} else {
+				this.setError(true, "An error occurred, please try again");
+			}
+		}).catch(error => {
+			console.log(error);
+			this.setError(true, "An error occurred, please try again");
+		});
 	}
 	
 	// deletes patient with a specific id
@@ -193,7 +216,7 @@ class AdminPatientView extends React.Component {
 			postalCode: this.state.patientInfo.postalCode,
 			HCN: this.state.patientInfo.HCN,
 			email: this.state.patientInfo.generalProfile.email,
-			doctorID: this.state.patientInfo.doctorID,
+			doctorID: this.state.patientInfo.doctor,
 		});
 	}
 }
