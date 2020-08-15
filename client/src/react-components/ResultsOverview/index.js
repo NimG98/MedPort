@@ -127,8 +127,10 @@ class ResultsOverview extends React.Component {
 					<td>{file.reportType}</td>
 					<td><Button
 							type="primary"
-							onClick={() => {redirect(this, "/results/" + file._id)}}
-						>View</Button>
+							// onClick={() => {redirect(this, "/results/" + file._id)}}
+							href={file.base64}
+							download={file.fileName}
+						>Download</Button>
 					</td>
 				</tr>
 			)
