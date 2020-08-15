@@ -33,7 +33,7 @@ class Header extends React.Component {
         return (
             <div className="header">
                 <img alt={"logo"} src={logo} className="logo" onClick={this.redirectHome}/>
-                <h1>Medical Site Name</h1>
+                <h1>MedPort</h1>
                 {this.state.user &&
                 <ProfileDropdown appComponent={this.props.appComponent}/>
                 }

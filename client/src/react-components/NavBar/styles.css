@@ -8,16 +8,6 @@
     width: 200px;
     background-color: #1F90CC;    
 }
-.nav3 {
-    z-index: 10; 
-    padding: 1px;
-    position: fixed;
-    border: 10px;
-    left: 0;
-    height: 100%;
-    width: 100px;
-    background-color: #1F90CC;    
-}
 
 .nav li{
     padding: 5px;
