@@ -447,6 +447,42 @@ app.get("/api/patients/:id", mongoChecker, authenticate, isAdmin, (req, res) => 
 	});
 })
 
+// A route to update a doctor with doctorID
+// Note: admin route
+app.patch("/api/patients/:id", mongoChecker, authenticate, isAdmin, (req, res) => {
+	const patientID = req.params.id;
+	
+	if(!ObjectID.isValid(patientID)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+	
+	// getting the proerties to change and thier values
+	const fieldsToUpdate = {};
+	req.body.map((change) => {
+		// getting the property name
+		const path = change.path.substr(1)
+		const propertyToChange = path.split("/").join(".");
+		fieldsToUpdate[propertyToChange] = change.value
+	})
+	
+	Patient.findByIdAndUpdate(patientID, {$set: fieldsToUpdate}, {new: true, useFindAndModify: false, runValidators: true, context: 'query'}).then(patient => {
+		if (!patient) {
+			res.status(404).send("Resource Not Found");
+			return;
+		} else {
+			res.send(patient);
+		}
+	}).catch(error => {
+		if (isMongoError(error)) {
+			res.status(500).send('Internal server error')
+		} else {
+            console.log(error);
+			res.status(400).send('Bad Request')
+		}
+	});
+});
+
 /** Doctor routes below **/
 
 // A route to make a new doctor
