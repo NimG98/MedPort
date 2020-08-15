@@ -3,10 +3,10 @@
 const log = console.log;
 
 const express = require("express");
-const cors = require('cors');
+// const cors = require('cors');
 // starting the express server
 const app = express();
-app.use(cors());
+// app.use(cors());
 
 // mongoose and mongo connection
 const { mongoose } = require("./db/mongoose");
