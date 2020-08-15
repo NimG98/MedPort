@@ -77,8 +77,8 @@ export const validatePassword = (fieldName, password, setError) => {
 	if (!isRequired(password)) {
 		setError(fieldName, true, 'Please fill out this field');
 		return false;
-	} else if (!isMinLength(password, 6)) {
-		setError(fieldName, true, 'Minimum 6 characters');
+	} else if (!isMinLength(password, 3)) {
+		setError(fieldName, true, 'Minimum 3 characters');
 		return false;
 	} else {
 		setError(fieldName, false, '');
