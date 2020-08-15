@@ -81,6 +81,7 @@ class AdminDoctorView extends React.Component {
 	
 	constructor(props) {
 		super(props);
+		this.props.history.push("/admin/doctors/" + props.match.params.id);
 		
 		this.state = {
 			MID: '',

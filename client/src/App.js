@@ -60,7 +60,7 @@ class App extends React.Component {
                         }}
                     />
                     <Route exact path='/signup' render={() =>
-                        (<SignUp appComponent={this} />)}/>
+                        (<SignUp history={this.history} appComponent={this} />)}/>
 
                     {(this.state.userType === "patient" || this.state.userType === "doctor") &&
                         <Route exact path='/profile' render={({ history }) =>
@@ -75,22 +75,22 @@ class App extends React.Component {
                     }
                     
                     <Route exact path='/admin/institutions' render={() =>
-                      (<AdminInstitutions appComponent={this} />)}/>
+                      (<AdminInstitutions history={this.history} appComponent={this} />)}/>
 
                     <Route exact path='/admin/institutions/:id' render={() =>
-                      (<AdminInstitutionView appComponent={this} />)}/>
+                      (<AdminInstitutionView history={this.history} appComponent={this} />)}/>
 
                     <Route exact path='/admin/doctors' render={() =>
-                              (<AdminDoctors appComponent={this} />)}/>
+                              (<AdminDoctors history={this.history} appComponent={this} />)}/>
 
                     <Route exact path='/admin/doctors/:id' render={() =>
-                              (<AdminDoctorView appComponent={this} />)}/>
+                              (<AdminDoctorView history={this.history} appComponent={this} />)}/>
 
                     <Route exact path='/admin/patients' render={() =>
-                              (<AdminPatients appComponent={this} />)}/>
+                              (<AdminPatients history={this.history} appComponent={this} />)}/>
 
                     <Route exact path='/admin/patients/:id' render={() =>
-                              (<AdminPatientView appComponent={this} />)}/>
+                              (<AdminPatientView history={this.history} appComponent={this} />)}/>
                     
                     {/* <Route exact path='/' render={() =>
                         (<Home appComponent={this}/>)}/>

@@ -65,6 +65,7 @@ class AdminPatientView extends React.Component {
 	
 	constructor(props) {
 		super(props);
+		this.props.history.push("/admin/patients/" + props.match.params.id);
 		
 		this.state = {
 			HCN: '',

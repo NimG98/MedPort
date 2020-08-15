@@ -63,6 +63,7 @@ class AdminInstitutionView extends React.Component {
 	
 	constructor(props) {
 		super(props);
+		this.props.history.push("/admin/institutions/" + props.match.params.id);
 		
 		this.state = {
 			name: '',
