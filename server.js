@@ -37,6 +37,7 @@ function isMongoError(error) { // checks for first error returned by promise rej
 
 const { generateReferralCode } = require('./helpers/referral');
 const { Request } = require("./models/request");
+const { File } = require("./models/file");
 
 /* // Our own express middleware to check for
 // an active user on the session cookie (indicating a logged in user.)
@@ -651,7 +652,7 @@ app.get("/api/institutions/:id", mongoChecker, authenticate, (req, res) => {
 /** Request routes below **/
 
 // A route to make a new request created by the current loggedInUser
-app.post("/api/requests",  mongoChecker, authenticate, (req, res) => {
+app.post("/api/requests", mongoChecker, authenticate, (req, res) => {
 
     if(!ObjectID.isValid(req.body.createdBy)) {
 		res.status(404).send("Resource not found");
@@ -740,7 +741,7 @@ app.get("/api/requests", mongoChecker, authenticate, (req, res) => {
 })
 
 // A route to update the status of a request
-// { "status": "confrimed" }
+// { "status": "confirmed" }
 app.patch("/api/requests/status/:id", mongoChecker, authenticate, (req, res) => {
     const requestId = req.params.id;
 
@@ -769,6 +770,106 @@ app.patch("/api/requests/status/:id", mongoChecker, authenticate, (req, res) => 
         }
     })
 });
+
+/** File routes below **/
+
+// A route to make a new file created by the current loggedInUser
+app.post("/api/files", mongoChecker, authenticate, (req, res) => {
+
+    if(!ObjectID.isValid(req.body.uploader)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+
+    // Create a new request
+	const file = new File({
+        uploader: req.body.uploader,
+        patient: req.body.patient,
+        dateUploaded: req.body.dateUploaded,
+        reportType: req.body.reportType,
+        fileName: req.body.fileName,
+        base64: req.body.base64
+    });
+
+    // Set the model schema type of objectId for "createdBy" and "reciever"
+    if(req.user.userType === "patient") {
+        file.populate({path: 'uploader', model: 'Patient'})
+    } else if(req.user.userType === "doctor") {
+        file.populate({path: 'uploader', model: 'Doctor'})
+    }
+    
+	// save the request
+	file.save().then(file => {
+		res.send(file);
+	}).catch(error => {
+		// check for if mongo server suddenly disconnected before this request.
+		if (isMongoError(error)) { 
+			log(error);
+			res.status(500).send('Internal Server Error')
+		} else {
+            log(error);
+			res.status(400).send('Bad Request')
+		}
+	});
+});
+
+// A route to get all files uploaded by the current loggedInUser
+app.get("/api/files/uploaded", mongoChecker, authenticate, (req, res) => {
+    // Current loggedInUser is a patient; get their patient id, by checking user id
+    if(req.user.userType === "patient") {
+        Patient.findOne({user: req.user._id}).then( (patient) => {
+            if(!patient){
+                res.status(404).send('Resource not found')  // could not find this patient
+            } else {
+                return patient._id;
+            }
+        // Find all files uploaded by this patient, by checking if "uploader" is the same as the patient's id
+        }).then( uploaderId => {
+            File.find({ uploader: uploaderId }).then( (files) => {
+                res.send(files); // array of files
+            })
+        }).catch(error => {
+            log(error);
+            res.status(500).send("Internal Server Error");
+        })
+    // Current loggedInUser is a doctor; get their doctor id, by checking user id
+    } else if(req.user.userType === "doctor"){
+        Doctor.findOne({user: req.user._id}).then( (doctor) => {
+            if(!doctor){
+                res.status(404).send('Resource not found')  // could not find this doctor
+            } else {
+                return doctor._id;
+            }
+        // Find all files created by this doctor, by checking if "uploader" is the same as the doctor's id
+        }).then( uploaderId => {
+            File.find({ uploader: uploaderId }).then( (files) => {
+                res.send(files); // array of files
+            })
+        }).catch(error => {
+            log(error);
+            res.status(500).send("Internal Server Error");
+        })
+    }
+})
+
+// A route to get all files that are about a specific patient
+app.get("/api/files/patients/:patientId", mongoChecker, authenticate, (req, res) => {
+    const patientId = req.params.patientId;
+
+    if(!ObjectID.isValid(patientId)) {
+		res.status(404).send("Resource not found");
+		return;
+    }
+
+    // Find all files that are associated to this patient, by checking if "patient" is the same as the patient's id
+    File.find({ patient: patientId }).then( (files) => {
+        res.send(files); // array of files
+    }).catch(error => {
+        log(error);
+        res.status(500).send("Internal Server Error");
+    })
+})
+
 
 /*** Webpage routes below **********************************/
 // Serve the build

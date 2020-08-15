@@ -5,7 +5,7 @@ import './App.css';
 import Home from './react-components/Home';
 import SignUp from './react-components/SignUp';
 import Dashboard from './react-components/Dashboard';
-import Upload from './react-components/Upload';
+import FileUpload from './react-components/FileUpload';
 import Request from './react-components/Request';
 
 import AdminInstitutions from './react-components/AdminInstitutions';
@@ -70,12 +70,16 @@ class App extends React.Component {
                         <Route exact path='/request' render={({ history }) =>
                             (<Request history={this.history} appComponent={this} />)}/>
                     }
+                    {(this.state.userType === "patient" || this.state.userType === "doctor") &&
+                        <Route exact path='/upload' render={({ history }) =>
+                            (<FileUpload history={this.history} appComponent={this} />)}/>
+                    }
                     {/* <Route exact path='/' render={() =>
                         (<Home appComponent={this}/>)}/>
                     <Route exact path='/dashboard' render={() =>
                         (<Dashboard appComponent={this} />)}/>
                     <Route exact path='/upload' render={() =>
-                        (<Upload appComponent={this} />)}/>
+                        (<FileUpload appComponent={this} />)}/>
                     <Route exact path='/request' render={() =>
                         (<Request appComponent={this} />)}/>
                     <Route exact path='/admin/institutions' render={() =>
