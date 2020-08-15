@@ -3,12 +3,8 @@ import { withRouter } from "react-router";
 
 import "./styles.css";
 import 'antd/dist/antd.css';
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import { Container, Row, Col} from 'react-bootstrap'
 import { Card, Row }  from "antd";
 import backgroundPic from "./static/dashboard-picture.png"
-
-// import '@trendmicro/react-sidenav/dist/react-sidenav.css';
 
 import Header from './../Header';
 import NavBar from './../NavBar';
@@ -56,7 +52,6 @@ class Dashboard extends React.Component {
         }
         var newsArticleRows = [];
         newsArticleRows.push(<Row className="newsArticleRow"> {newsArticleCards.slice(0,3)} </Row>)
-        // newsArticleRows.push(<Row className="newsArticleRow"> {newsArticleCards.slice(3,6)} </Row>)
         console.log(newsArticleRows);
         this.setState({ newsArticleRowData: newsArticleRows})
     }
