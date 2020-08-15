@@ -49,7 +49,7 @@ class App extends React.Component {
             <BrowserRouter>
                 <Switch>
                     <Route
-                        exact path={["/", "/dashboard"] /* any of these URLs are accepted. */ }
+                        exact path={["/", "/dashboard", "/admin/institutions"] /* any of these URLs are accepted. */ }
                         render={({ history }) => {
                             this.history = history;
                             return(
@@ -74,10 +74,10 @@ class App extends React.Component {
                             (<FileUpload history={this.history} appComponent={this} />)}/>
                     }
                     
-                    {this.state.userType === "admin" &&
+                    {/* {this.state.userType === "admin" &&
                         <Route exact path='/admin/institutions' render={({ history }) =>
                         (<AdminInstitutions history={this.history} appComponent={this} />)}/>
-                    }
+                    } */}
 
                     {this.state.userType === "admin" &&
                     <Route exact path='/admin/institutions/:id' render={({ history }) =>
