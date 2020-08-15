@@ -8,7 +8,7 @@ import "./styles.css";
 // importing components
 import Header from "../Header";
 import NavBar from "../NavBar";
-import { Alert, Button } from "antd";
+import { Alert, Button, Popconfirm } from "antd";
 
 // importing actions/required methods
 import { getPatient, deletePatient, updatePatient } from "../../actions/patient";
@@ -111,11 +111,18 @@ class AdminPatientView extends React.Component {
 							Patient Info
 						</h1>
 						
-						<Button
-							type="danger"
-							className="delete-patient-button"
-							onClick={() => this.removePatient(this.state.patientID)}
-						>Delete Patient</Button>
+						<Popconfirm
+							title="Delete this patient?"
+							onConfirm={(e) => this.removePatient(this.state.patientID)}
+							onCancel={(e) => {}}
+							okText="Yes"
+							cancelText="No"
+						>
+							<Button
+								type="danger"
+								className="delete-patient-button"
+							>Delete Patient</Button>
+						</Popconfirm>
 						
 						<table>
 							<thead>
