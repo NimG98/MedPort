@@ -12,7 +12,7 @@ import { Alert, Button } from "antd";
 
 // importing actions/required methods
 import { getPatient, deletePatient, updatePatient } from "../../actions/patient";
-import { getDoctor } from "../../actions/doctor";
+import { getDoctor, getDoctors } from "../../actions/doctor";
 import { redirect } from "../../actions/router"
 
 class AdminPatientView extends React.Component {
@@ -44,6 +44,20 @@ class AdminPatientView extends React.Component {
 			console.log(error);
 			this.setError(true, "An error occurred, please try again");
 		});
+		
+		// get list of all doctors (for editing)
+		getDoctors().then(doctors => {
+			if (doctors || doctors === []) {
+				this.setState({
+					doctors: doctors
+				});
+			} else {
+				this.setError(true, "An error occurred, please try again");
+			}
+		}).catch(error => {
+			console.log(error);
+			this.setError(true, "An error occurred, please try again");
+		})
 	}
 	
 	constructor(props) {
@@ -63,6 +77,7 @@ class AdminPatientView extends React.Component {
 			edit: false,
 			patientID: props.match.params.id,
 			patientInfo: {generalProfile: {}},
+			doctors: [],
 		}
 		
 		// binding functions
@@ -109,7 +124,7 @@ class AdminPatientView extends React.Component {
 									{this.state.edit ? <td><input name="email" value={this.state.email} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.generalProfile.email}</td>}
 									{this.state.edit ? <td><input name="address" value={this.state.address} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.address}</td>}
 									{this.state.edit ? <td><input name="postalCode" value={this.state.postalCode} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.postalCode}</td>}
-									{this.state.edit ? <td><input name="doctorID" value={this.state.doctorID} onChange={this.handleInputChange}></input></td> : <td>{this.state.patientInfo.doctorName}</td>}
+									{this.state.edit ? <td><select name="doctorID" value={this.state.doctorID} onChange={this.handleInputChange}>{this.state.doctors.map(doctor => (<option key={uid(doctor)} value={doctor._id}>{doctor.generalProfile.firstName + " " + doctor.generalProfile.lastName}</option>))}</select></td> : <td>{this.state.patientInfo.doctorName}</td>}
 									{this.state.edit ? <td><Button type="primary" onClick={() => { updatePatient(this.createPatient()); this.toggleEdit(); }}>Submit</Button></td> : <td><Button type="primary" onClick={() => this.toggleEdit()}>Edit</Button></td>}
 									{this.state.edit ? <td><Button type="danger" onClick={() => { this.resetInputs(); this.toggleEdit(); }} >Cancel</Button></td> : null}
 								</tr>
