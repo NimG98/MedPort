@@ -32,3 +32,29 @@ export const addPatient = (patient) => {
 	});
 	
 };
+
+/* 
+	Returns a list of patients obtained from the server
+*/
+export const getPatients = () => {
+	const url = ApiRoutes.patient;
+	
+	return fetch(url).then(res => {
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(patients => {
+		return patients;
+	}).catch(error => {
+		console.log(error);
+	});
+}
+
+/*
+	sends server request to delete patient
+	Note: admin functionality
+*/
+export const deletePatient = (patientID) => {
+	// code below requires server call
+	return true;
+}

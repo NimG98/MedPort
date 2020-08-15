@@ -7,7 +7,7 @@ import "./styles.css";
 import 'antd/dist/antd.css';
 
 // importing actions/required methods
-import { getPatients, deletePatient } from "../../actions/app";
+import { getPatients, deletePatient } from "../../actions/patient";
 import { redirect } from "../../actions/router"
 
 // importing components
@@ -17,11 +17,17 @@ class AdminPatientsOverview extends React.Component {
 	headers = ["Health Card", "First Name", "Last Name", "Email", "Address", "Postal Code", "Doctor"];
 	
 	componentDidMount() {
-		const data = getPatients();
-		
-		
-		this.setState({
-			patients: data
+		getPatients().then(patients => {
+			if (patients || patients === []) {
+				this.setState({
+					patients: patients
+				});
+			} else {
+				this.setError(true, "An error occurred, please try again.");
+			}
+		}).catch(error => {
+			console.log(error);
+			this.setError(true, "An error occurred, please try again.");
 		});
 	}
 	
@@ -94,12 +100,12 @@ class AdminPatientsOverview extends React.Component {
 			tableRows.push(
 				<tr key={uid(patient)}>
 					<td>{patient.HCN}</td>
-					<td>{patient.firstName}</td>
-					<td>{patient.lastName}</td>
-					<td>{patient.email}</td>
+					<td>{patient.generalProfile.firstName}</td>
+					<td>{patient.generalProfile.lastName}</td>
+					<td>{patient.generalProfile.email}</td>
 					<td>{patient.address}</td>
 					<td>{patient.postalCode}</td>
-					<td>{patient.doctorID}</td>
+					<td>{patient.doctor}</td>
 					<td><Button
 							type="primary"
 							onClick={() => {redirect(this, "/admin/patients/" + patient.id)}}
