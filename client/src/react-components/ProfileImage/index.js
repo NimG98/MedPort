@@ -19,7 +19,9 @@ class ProfileImage extends React.Component {
     }
 
     componentDidMount() {
-        if(this.props.appComponent.state.userType !== UserType.admin){
+        if(this.props.appComponent && this.props.appComponent.state.userType === UserType.admin){
+            return;
+        } else {
             this.getUserProfileImage();
         }
     }
