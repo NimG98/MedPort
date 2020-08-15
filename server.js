@@ -500,7 +500,7 @@ app.post("/api/patients", mongoChecker, (req, res) => {
 
 // A route to get list of all patients
 // Note: admin route
-app.get("/api/patients", mongoChecker, authenticate, isAdmin, (req, res) => {
+app.get("/api/patients", mongoChecker, authenticate, (req, res) => {
 	// query for all patients
 	Patient.find().then(patients => {
 		res.send(patients);
@@ -1149,28 +1149,28 @@ app.get("/api/files/uploaded", mongoChecker, authenticate, (req, res) => {
 })
 
 // get files about the curent logged in patient
-app.get("/api/files/patient", mongoChecker, authenticate, (req, res) => {
+app.get("/api/files/patients", mongoChecker, authenticate, (req, res) => {
 	Patient.findOne({user: req.user._id}).then( (patient) => {
-            if(!patient){
-                res.status(404).send('Resource not found')  // could not find this patient
+		if(!patient){
+			res.status(404).send('Resource not found')  // could not find this patient
+			return;
+		} else {
+			return patient._id;
+		}
+	// Find all files uploaded by this patient, by checking if "uploader" is the same as the patient's id
+	}).then( patientID => {
+		File.find({ patient: patientID }).then( (files) => {
+			if (!files) {
+				res.status(404).send('Resource not found')
 				return;
-            } else {
-                return patient._id;
-            }
-        // Find all files uploaded by this patient, by checking if "uploader" is the same as the patient's id
-        }).then( patientID => {
-            File.find({ patient: patientID }).then( (files) => {
-				if (!files) {
-					res.status(404).send('Resource not found')
-					return;
-				} else {
-					res.send(files);
-				}  
-            })
-        }).catch(error => {
-            log(error);
-            res.status(500).send("Internal Server Error");
-        })
+			} else {
+				res.send(files);
+			}  
+		})
+	}).catch(error => {
+		log(error);
+		res.status(500).send("Internal Server Error");
+	})
 })
 
 // A route to get all files that are about a specific patient

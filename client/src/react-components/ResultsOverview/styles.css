@@ -1,0 +1,39 @@
+@import '~antd/dist/antd.css';
+
+.ResultsOverview .container {
+	margin-top: 10px;
+	margin-left: 280px;
+}
+
+.ResultsOverview .container .title {
+	display: inline-block;
+	margin-bottom: 20px;
+}
+
+.ResultsOverview .container table {
+    background-color: white;
+    margin-right: 20px;
+}
+  
+.ResultsOverview .container th, td {
+    padding: 10px 10px 10px 30px;
+    height: 55px;
+}
+
+.ResultsOverview .container th, tr {
+    border-bottom: 1px solid rgb(231, 231, 231);
+}
+
+.ResultsOverview .container th:first-child, td:first-child {
+    padding-left:20px;
+}
+
+.ResultsOverview .container th:last-child, td:last-child {
+    padding-right:20px;
+}
+
+.ResultsOverview .alert {
+	max-width: 300px;
+	margin: auto;
+	padding: auto;
+}

@@ -77,3 +77,33 @@ export const getPatientFiles = (patientId, component) => {
             console.log(error);
         });
 }
+
+/* Get all files that are associated with a specific patient */
+export const getFilesForPatient = (patientId) => {
+    const url = ApiRoutes.files + "patients/" + patientId;
+
+    return fetch(url).then(res => {
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(files => {
+		return files;
+	}).catch(error => {
+		console.log(error);
+	});
+}
+
+// Get all files that are associated with the logged in patient
+export const getLoggedInPatientFiles = () => {
+	const url = ApiRoutes.files + "patients";
+	
+	return fetch(url).then(res => {
+		if (res.status === 200) {
+			return res.json();
+		}
+	}).then(files => {
+		return files;
+	}).catch(error => {
+		console.log(error);
+	});
+}

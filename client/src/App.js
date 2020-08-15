@@ -14,7 +14,7 @@ import AdminDoctors from "./react-components/AdminDoctors";
 import AdminDoctorView from "./react-components/AdminDoctorView";
 import AdminPatients from "./react-components/AdminPatients";
 import AdminPatientView from "./react-components/AdminPatientView";
-import Result from './react-components/Results';
+import ResultsOverview from './react-components/ResultsOverview';
 import Profile from './react-components/Profile';
 import { readCookie, getUserType } from './actions/user';
 import { UserType } from './constants/userType';
@@ -103,7 +103,10 @@ class App extends React.Component {
                     <Route exact path='/admin/patients/:id' render={({ history }) =>
                               (<AdminPatientView history={this.history} appComponent={this} />)}/>
                     }
-                    
+					
+					<Route exact path='/results' render={() =>
+                        (<ResultsOverview history={this.history} appComponent={this} />)}/>
+						
                     {/* <Route exact path='/' render={() =>
                         (<Home appComponent={this}/>)}/>
                     <Route exact path='/dashboard' render={() =>
