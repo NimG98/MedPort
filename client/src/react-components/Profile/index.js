@@ -97,15 +97,16 @@ class Profile extends React.Component {
                             {this.state.generalProfile && this.state.generalProfile.email &&
                                 <ProfileDetail detailName="Email" detailValue={this.state.generalProfile.email} isEditable={true} detail="generalProfile.email" profileComponent={this}/>
                             }
-                            {this.state.userType === UserType.patient && this.state.address && this.state.postalCode && this.state.HCN && this.state.doctor &&
-                            this.state.doctor.firstName && this.state.doctor.lastName &&
+                            {this.state.userType === UserType.patient && this.state.address && this.state.postalCode && this.state.HCN &&
                                 <div className="specificUserTypeDetails">
                                     <ProfileDetail detailName="Address" detailValue={this.state.address} isEditable={true} detail="address" profileComponent={this}/>
                                     <ProfileDetail detailName="Postal Code" detailValue={this.state.postalCode} isEditable={true} detail="postalCode" profileComponent={this}/>
                                     <ProfileDetail detailName="Health Card Number" detailValue={this.state.HCN} isEditable={false}/>
-                                    <ProfileDetail detailName="Doctor" 
-                                                   detailValue={this.state.doctor.firstName + " " + this.state.doctor.lastName}
-                                                   isEditable={false}/>
+                                    {this.state.doctor && this.state.doctor.firstName && this.state.doctor.lastName &&
+                                        <ProfileDetail detailName="Doctor" 
+                                                    detailValue={this.state.doctor.firstName + " " + this.state.doctor.lastName}
+                                                    isEditable={false}/>
+                                    }
                                 </div>
                             }
                             {this.state.userType === UserType.doctor && this.state.MID &&
