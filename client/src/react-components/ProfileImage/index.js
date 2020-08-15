@@ -3,6 +3,7 @@ import { withRouter } from "react-router";
 
 import defaultProfileImage from "./static/default-profile-icon.png";
 import { getUserProfileImage, updateUserProfileImage } from '../../actions/user';
+import { UserType } from '../../constants/userType';
 
 class ProfileImage extends React.Component {
     
@@ -18,7 +19,9 @@ class ProfileImage extends React.Component {
     }
 
     componentDidMount() {
-        this.getUserProfileImage();
+        if(this.props.appComponent.state.userType !== UserType.admin){
+            this.getUserProfileImage();
+        }
     }
    
     componentDidUpdate(prevProps) {
