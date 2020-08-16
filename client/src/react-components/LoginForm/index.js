@@ -7,10 +7,6 @@ import 'antd/dist/antd.css';
 import { Row, Card, Form, Input, Button} from "antd";
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
-//import { validateLogin } from "../../actions/app";
-//import { redirect } from "../../actions/router";
-
-//import { getUserType} from "../../actions/app";
 import { UserType } from "../../constants/userType";
 import { login, updateLoginForm } from "../../actions/user";
 

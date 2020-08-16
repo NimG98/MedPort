@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 import "./styles.css";
 
-import { getUserProfileImageUrl } from '../../actions/app';
 import { redirect } from '../../actions/router';
 import { logout } from '../../actions/user';
 import { UserType } from '../../constants/userType';
