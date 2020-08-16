@@ -9,8 +9,9 @@ URL: https://stark-headland-93903.herokuapp.com/
 
 - Upload Test Results
     - Both doctors and patients can upload test reports, and see previous files that they uploaded
-- View Test Results and Communicate
-    - Underneath a test report, a doctor can add notes for further explanation for the patient to see
+- View Test Results
+    - A doctor can view the test results which they and their patient uploaded, and can filter per patient
+    - A patient can view all test results they and thier doctor uploaded
 - Requests
     - Patients and doctors can send requests to each other to set appointments for phone calls, in-person appointments, or for another medical test.
 - Profile
@@ -22,7 +23,7 @@ URL: https://stark-headland-93903.herokuapp.com/
 - Admin
     - Can create new institutions, doctors, patients
     - view all institutions and its doctors and their patients
-    - modify any info for a institution, doctor, patient
+    - modify info for an institution, doctor, patient
     - delete an institution, doctor, patient
 
 # Overview of routes in the Express server
@@ -129,8 +130,7 @@ Starting at the home page, read the website description features on the bottom o
 ### Sign-up
 1. Click `Sign up` in the "Don't have an account? Sign up" statement (underneath the login box).
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-2. Enter `P001` as the patient referral code , and then press `Next`.
+2. Enter `KWNZLS` as the patient referral code , and then press `Next`.
 
 3. Enter in random information for the patient's profile details and then press `Submit`\
 (you must input something for every field, otherwise it will notify you and block you from proceeding).\
@@ -192,10 +192,9 @@ Starting at the home page, read the website description features on the bottom o
 ### See Results
 
 1. Click `Results` on the navbar on the left-hand side.
-2. Select which test result you want to look at
-3. You can see there are doctor's notes attached to a file (which is your medical test report file).
+2. You can see all of the results both you and your doctor have uploaded
+3. Click on a blue download button to download the test result
     
-
 Hover over the user profile icon on the top right of the site, and click `Log out`.
 
 
@@ -272,9 +271,8 @@ Hover over the user profile icon on the top right of the site, and click `Log ou
 ### See Results
 
 1. Click `Results` on the navbar on the left-hand side.
-2. Select which patient and which test result from that patient that you want to look at
-3. You can see there your notes as a doctor attached to the patient's medical file.
-4. Add another note. This note will appear under your other notes for the patient to see.
+2. Select which patient that you want to view the results for from the patient dropdown
+3. Click a blue download button on one of the test results to download the PDF
 
 
 Hover over the user profile icon on the top right of the site, and click `Log out`.
@@ -283,16 +281,71 @@ Hover over the user profile icon on the top right of the site, and click `Log ou
 ## Admin
 
 1. Log in using the [admin credentials](#admin-credentials) and you will be taken to the admin dashboard.
-2. Press Red Delete button on St. Josephs Hospital
-3. Press the Blue Create Insitution Button on the top-right corner of the view
-4. Fill out info and click submit
-5. Click Blue View button on top institution (Hospital A)
-6. Click Blue Edit button on institution info table
-7. Play around with the info 
-8. Click Submit
-9. Click Blue View button on first doctor (Bob)
-10. Click Blue View button on first patient (UserFn)
-11. Click Blue Edit button on patient info table
-12. Edit info and Cancel
-13. Click Red Delete Patient button on top-right corner
-14. Done
+Note: all of the instructions are to be done sequentially
+
+### Create Institution
+
+2. Click the blue `Create Institution` button on the top right hand corner of the screen
+3. Enter valid information into the institution creation form and press submit
+
+### View Institution 
+
+4. Click on the blue `View` button for Sunnybrooke Hospital
+
+### Edit Institution Info
+
+5. Click on the blue `Edit` button on the right side of the hospital information
+6. Edit the fields and click the blue 'Submit' button (Ensure proper information is entered due to validators)
+
+### Delete Institution
+
+7. Click the red `Delete` Button on the top right corner
+8. Click `Yes` when prompted for confirmation
+
+### View Doctors
+
+9. Click on the `Doctors` tab in the left nav-bar
+
+### Create Doctor
+
+10. Click on the blue `Create Doctor` button 
+11. Enter valid information into the doctor creation form and press next
+12. Select an institution from the dropdown list
+13. Click the blue `Submit` button
+
+### View Doctor
+
+14. Click the blue `View` button beside `John Beiber`
+
+### Edit Doctor Info
+Note: Notice the red popup message alerting you to the doctor without an institution, this is due to the doctor's institution being deleted at the beginning of this tutorial
+
+15. Click the `X` beside the popup message
+16. Click the blue `Edit` button beside the doctor info
+17. Select a new institution from the dropdown under the `Institution` header
+18. Click submit
+
+### View Patients
+
+19. Click the blue `Patients` tab in the left nav-bar
+
+### Delete Patient
+
+20. Click the red `Delete` button beside `Terry Brown`
+21. Click `Yes` when prompted
+
+### Create Patient
+
+23. Click the blue `Create Patient` button in the top right corner
+24. Choose the patients doctor from the dropdown list
+25. Click the blue `Submit` button on the right 
+26. Enter valid information into the patient creation form and press submit
+
+### Edit Patient
+
+27. Click the blue `View` button beside any patient in the list
+28. Click the blue `Edit` button on the right of the patient information
+29. Enter invalid information and press the blue `Submit` button
+30. Press the `X` beside the error message popup
+31. Enter valid information into the patient info fields
+32. Click the blue `Submit` button on the right of the patient information
