@@ -7,19 +7,7 @@ const cors = require('cors');
 // starting the express server
 const app = express();
 
-var whitelist = ['https://newsapi.org/v2/top-headlines?country=ca&category=health&apiKey=64a619f995b14d4cad1e409027ef7f4b', 'https://newsapi.org', 'https://newsapi.org/v2']
-var corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  }
-}
-
-// Then pass them to cors:
-app.use(cors(corsOptions));
+app.use(cors());
 
 // mongoose and mongo connection
 const { mongoose } = require("./db/mongoose");
