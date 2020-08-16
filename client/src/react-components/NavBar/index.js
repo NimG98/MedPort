@@ -55,10 +55,6 @@ class NavBar extends React.Component{
                         <Nav.Item>
                             <Nav.Link onClick={() => this.redirectRequest("/results")}>Results</Nav.Link>
                         </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link href="/profiles" disabled="true">Profiles</Nav.Link>
-                        </Nav.Item>
-                        
                         <div className="fixed-bottom">
                         <Nav.Item>
                             <Nav.Link onClick={() => this.redirectRequest("/upload")}>
@@ -76,10 +72,6 @@ class NavBar extends React.Component{
                         <Nav.Item>
                             <Nav.Link onClick={() => this.redirectRequest("/results")}>Results</Nav.Link>
                         </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link href="/profiles" disabled="true">Profiles</Nav.Link>
-                        </Nav.Item>
-                        
                         <div className="fixed-bottom">
                         <Nav.Item>
                             <Nav.Link onClick={() => this.redirectRequest("/upload")}>

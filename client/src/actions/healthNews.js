@@ -5,13 +5,7 @@
 export const getTopHealthNews = (component) => {
     const url = "https://newsapi.org/v2/top-headlines?country=ca&category=health&apiKey=64a619f995b14d4cad1e409027ef7f4b"
 
-    const request = new Request(url, {
-		method: "GET",
-		headers: {
-			"Access-Control-Allow-Origin": "*"
-		},
-	});
-    return fetch(request)
+    return fetch(url)
         .then(res => {
             if (res.status === 200) {
                 return res.json();
