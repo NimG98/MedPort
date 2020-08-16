@@ -795,21 +795,17 @@ app.patch("/api/doctors/:id", mongoChecker, authenticate, isAdmin, (req, res) =>
 app.get("/api/doctors/patients", mongoChecker, authenticate, (req, res) => {
     Doctor.findOne({user: req.user._id}).then(doctor => {
 		if(!doctor){
-			console.log("doctor404", doctor)
 			res.status(404).send('Resource not found')
 			return;
 		} else {
-			console.log("doctor", doctor);
 			return doctor._id;
 		}
 	}).then(doctorID => {
 		Patient.find({doctor: doctorID}).then(patients => {
 			if (!patients) {
-				console.log("patient 404", patient)
 				res.status(404).send('Resource not found')
 				return;
 			} else {
-				console.log("patients", patients);
 				res.send(patients);
 			}  
 		})

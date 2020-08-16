@@ -4,7 +4,7 @@ import { uid } from 'react-uid';
 import './styles.css';
 
 // importing actions/required methods
-import { getPatients } from "../../actions/patient";
+import { getPatientsByLoggedInDoctor } from "../../actions/doctor";
 
 // importing form validators
 import { validatePatientID } from "../../validators/form-validators";
@@ -35,7 +35,7 @@ class PatientSelector extends React.Component {
 	
 	componentDidMount() {
 		// a promise
-		getPatients().then(data => {
+		getPatientsByLoggedInDoctor().then(data => {
 			this.setState({
 				patients: data
 			});

@@ -40,23 +40,7 @@ class ResultsOverview extends React.Component {
 				console.log(error);
 				this.setError(true, "An error occurred, please try again");
 			})
-		} /* else if (this.props.appComponent.state.userType === UserType.doctor) {
-			
-			getUserUploadedFiles(this).then(files => {
-				if (files || files === []) {
-					this.setState({
-						files: files
-					});
-					
-					this.setError(false, '');
-				} else {
-					this.setError(true, "An error occurred, please try again");
-				}
-			}).catch(error => {
-				console.log(error);
-				this.setError(true, "An error occurred, please try again");
-			});
-		} */
+		}
 	}
 	
 	constructor(props) {
