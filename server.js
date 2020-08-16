@@ -9,12 +9,10 @@ const app = express();
 
 app.use(cors());
 
-let allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', "*");
-    res.header('Access-Control-Allow-Headers', "*");
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
     next();
-  }
-app.use(allowCrossDomain);
+});
 
 // mongoose and mongo connection
 const { mongoose } = require("./db/mongoose");
@@ -1250,6 +1248,19 @@ app.get("/api/files/patients/:patientId", mongoChecker, authenticate, (req, res)
         res.status(500).send("Internal Server Error");
     })
 })
+
+app.get('/api/news', (req, res) => {
+    request(
+      { url: 'https://newsapi.org/v2/top-headlines?country=ca&category=health&apiKey=64a619f995b14d4cad1e409027ef7f4b' },
+      (error, response, body) => {
+        if (error || response.statusCode !== 200) {
+          return res.status(500).json({ type: 'error', message: err.message });
+        }
+  
+        res.json(JSON.parse(body));
+      }
+    )
+  });
 
 
 /*** Webpage routes below **********************************/

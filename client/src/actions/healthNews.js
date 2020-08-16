@@ -3,7 +3,8 @@
 
 /* Get top health news articles in Canada */
 export const getTopHealthNews = (component) => {
-    const url = "https://newsapi.org/v2/top-headlines?country=ca&category=health&apiKey=64a619f995b14d4cad1e409027ef7f4b"
+    const url = "/api/news"
+    
 
     return fetch(url)
         .then(res => {
