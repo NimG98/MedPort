@@ -1,0 +1,84 @@
+.DoctorSignUpForm {
+	max-width: 280px;
+	margin: auto;
+	margin-bottom: 15px;
+	border-radius: 5px;
+	padding-bottom: 10px;
+	background-color: #ffffff;
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.DoctorSignUpForm .title {
+	font-size: 18px;
+	margin-left: 20px;
+	margin-top: 30px;
+	padding-top: 10px;
+}
+
+.DoctorSignUpForm .container {
+	display: grid;
+	margin-bottom: 10px;
+}
+
+.DoctorSignUpForm .container input {
+	border: 1px solid;
+	border-color: #ced4da;
+	border-radius: 3px;
+	width: 240px;
+	margin-left: 5px;
+}
+
+.DoctorSignUpForm .container input:focus {
+	border: 1px solid #1890ff;
+}
+
+.DoctorSignUpForm .container input.input-error {
+	border: 1px solid;
+	border-color: #dc3545;
+}
+
+.DoctorSignUpForm .container p.error-message {
+	margin-left: 5px;
+	margin-bottom: 0px;
+	color: #dc3545;
+}
+
+.DoctorSignUpForm .container label {
+	margin-left: 5px;
+	margin-top: 5px;
+	font-weight: bold;
+	font-size: 14px;
+	color: #212529;
+}
+
+.DoctorSignUpForm button {
+	/* styling */
+	padding-right: 6px;
+	padding-left: 6px;
+	border-radius: 3px;
+	border: 1px solid transparent;
+	font-weight: 400;
+	
+	/* colors */
+	color: #ffffff;
+	background-color: #1890ff;
+	box-shadow: 0 2px 4px 0 rgba(0,0,0,0.15);
+}
+
+.DoctorSignUpForm button:hover {
+	color: #077bff;
+	background-color: #e1e1e1;
+}
+
+.DoctorSignUpForm button:focus {
+	border: 1px solid #1890ff;
+}
+
+.DoctorSignUpForm .back {
+	margin-left: 10px;
+}
+
+.DoctorSignUpForm .next {
+	float: right;
+	margin-right: 10px;
+}

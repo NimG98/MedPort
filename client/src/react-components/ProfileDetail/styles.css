@@ -1,0 +1,43 @@
+.editProfileDetailButton {
+    padding: 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 27px;
+}
+
+.profileDetail {
+    margin-right: 20px;
+    float: left;
+    display: flex;
+
+}
+
+.profileDetail .ant-input {
+    display: inline-block;
+    width: fit-content;
+}
+
+.profilePageContent ul {
+    list-style-type:none;
+}
+
+.profilePageContent li {
+    min-height: 40px;
+}
+
+.profilePageContent h5 {
+    font-weight: bold;
+    padding-right: 10px;
+}
+
+.profilePageContent .profileDetailValue {
+    font-size: larger;
+}
+
+.invalidInputMessage {
+    color: red;
+    margin-bottom: 0px;
+    display: inline-block;
+    padding-left: 20px;
+}
