@@ -125,9 +125,20 @@ export const validateInstitutionID = (fieldName, institutionID, setError) => {
 	}
 }
 
-// validates the institutionID field
+// validates the doctorID field
 export const validateDoctorID = (fieldName, doctorID, setError) => {
 	if (!isRequired(doctorID)) {
+		setError(fieldName, true, 'Please fill out this field');
+		return false;
+	} else {
+		setError(fieldName, false, '');
+		return true;
+	}
+}
+
+// validates the patientID field
+export const validatePatientID = (fieldName, patientID, setError) => {
+	if (!isRequired(patientID)) {
 		setError(fieldName, true, 'Please fill out this field');
 		return false;
 	} else {

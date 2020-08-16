@@ -18,6 +18,7 @@ const { Patient } = require("./models/patient");
 const { Doctor } = require("./models/doctor");
 const { Institution } = require("./models/institution");
 const { Referral } = require("./models/referral");
+const { Result } = require("./models/result");
 
 // to validate object IDs
 const { ObjectID } = require("mongodb");
@@ -499,7 +500,7 @@ app.post("/api/patients", mongoChecker, (req, res) => {
 
 // A route to get list of all patients
 // Note: admin route
-app.get("/api/patients", mongoChecker, authenticate, isAdmin, (req, res) => {
+app.get("/api/patients", mongoChecker, authenticate, (req, res) => {
 	// query for all patients
 	Patient.find().then(patients => {
 		res.send(patients);
@@ -1056,7 +1057,7 @@ app.post("/api/files", mongoChecker, authenticate, (req, res) => {
 		return;
     }
 
-    // Create a new request
+    // Create a new file
 	const file = new File({
         uploader: req.body.uploader,
         patient: req.body.patient,
@@ -1065,6 +1066,12 @@ app.post("/api/files", mongoChecker, authenticate, (req, res) => {
         fileName: req.body.fileName,
         base64: req.body.base64
     });
+	
+	// Create a new result
+	const result = new Result({
+		file: file._id,
+		notes: []
+	});
 
     // Set the model schema type of objectId for "createdBy" and "reciever"
     if(req.user.userType === "patient") {
@@ -1073,9 +1080,23 @@ app.post("/api/files", mongoChecker, authenticate, (req, res) => {
         file.populate({path: 'uploader', model: 'Doctor'})
     }
     
-	// save the request
+	// save the file
 	file.save().then(file => {
-		res.send(file);
+		// save the result
+		result.save().then(result => {
+			res.send(file);
+		}).catch(error => {
+			// check for if mongo server suddenly disconnected before this request.
+			if (isMongoError(error)) { 
+				log(error);
+				res.status(500).send('Internal Server Error')
+				return;
+			} else {
+				log(error);
+				res.status(400).send('Bad Request')
+				return;
+			}
+		});
 	}).catch(error => {
 		// check for if mongo server suddenly disconnected before this request.
 		if (isMongoError(error)) { 
@@ -1125,6 +1146,31 @@ app.get("/api/files/uploaded", mongoChecker, authenticate, (req, res) => {
             res.status(500).send("Internal Server Error");
         })
     }
+})
+
+// get files about the curent logged in patient
+app.get("/api/files/patients", mongoChecker, authenticate, (req, res) => {
+	Patient.findOne({user: req.user._id}).then( (patient) => {
+		if(!patient){
+			res.status(404).send('Resource not found')  // could not find this patient
+			return;
+		} else {
+			return patient._id;
+		}
+	// Find all files uploaded by this patient, by checking if "uploader" is the same as the patient's id
+	}).then( patientID => {
+		File.find({ patient: patientID }).then( (files) => {
+			if (!files) {
+				res.status(404).send('Resource not found')
+				return;
+			} else {
+				res.send(files);
+			}  
+		})
+	}).catch(error => {
+		log(error);
+		res.status(500).send("Internal Server Error");
+	})
 })
 
 // A route to get all files that are about a specific patient
