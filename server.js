@@ -3,10 +3,19 @@
 const log = console.log;
 
 const express = require("express");
-// const cors = require('cors');
+const cors = require('cors');
 // starting the express server
 const app = express();
-// app.use(cors());
+app.use(cors());
+app.use(function (req, res, next) {
+
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', 'https://newsapi.org/v2/top-headlines?country=ca&category=health&apiKey=64a619f995b14d4cad1e409027ef7f4b');
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
+    // Pass to next layer of middleware
+    next();
+});
 
 // mongoose and mongo connection
 const { mongoose } = require("./db/mongoose");
