@@ -9,6 +9,13 @@ const app = express();
 
 app.use(cors());
 
+let allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', "*");
+    res.header('Access-Control-Allow-Headers', "*");
+    next();
+  }
+app.use(allowCrossDomain);
+
 // mongoose and mongo connection
 const { mongoose } = require("./db/mongoose");
 mongoose.set('useFindAndModify', false); // for some deprecation issues
